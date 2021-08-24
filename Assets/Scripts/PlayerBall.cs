@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBall : MonoBehaviour
+public class PlayerBall : Balls
 {
-    public float normalSpeed = 5f;
     private Rigidbody2D rb;
     private Vector2 lastFrameVelocity;
 
-
-    private void Start() {
+    public override void behaviour(){
+        Debug.Log("Player init");
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -23,5 +22,4 @@ public class PlayerBall : MonoBehaviour
         var direction = Vector2.Reflect(lastFrameVelocity.normalized, inNormal);
         rb.velocity = direction * Mathf.Max(lastSpeed, normalSpeed);
     }
-    
 }
