@@ -7,10 +7,10 @@ public class PlayerControl : MonoBehaviour
     public float powerShoot = 10f;
     public int maxControlDrag = 3;
     [Space]
-    [Range(1, 5)]
-    [SerializeField] private int _maxIterations = 3;
-    [SerializeField] private float _maxDistance = 10f;
-    public int _count;
+    [Range(1, 3)]
+    [SerializeField] private int maxIterations = 3;
+    [SerializeField] private float maxDistance = 10f;
+    private int count;
 
     private SpriteRenderer sprite;
     private Rigidbody2D rb;
@@ -19,6 +19,7 @@ public class PlayerControl : MonoBehaviour
     private Camera cam;
     private LineRenderer lr;
     private LineRenderer trajectory;
+    private ParticleSystem dust;
 
     private Vector2 minPower = new Vector2(-8, -8);
     private Vector2 maxPower = new Vector2(8, 8);
@@ -26,21 +27,21 @@ public class PlayerControl : MonoBehaviour
     private Vector3 startPoint;
     private Vector3 endPoint;
     private Vector3 currentPoint;
-    private TimeManager timeMgr;
 
     // Start is called before the first frame update
     void Start()
     {
         cam = Camera.main;
-    
-        timeMgr = FindObjectOfType<TimeManager>();
         player = FindObjectOfType<PlayerBall>();
         lr = GetComponent<LineRenderer>();
+
         rb = player.gameObject.GetComponent<Rigidbody2D>();
         col = player.gameObject.GetComponent<CircleCollider2D>();
+        dust = player.gameObject.GetComponentInChildren<ParticleSystem>();
+        trajectory = player.gameObject.GetComponent<LineRenderer>();
+
         sprite = GetComponent<SpriteRenderer>();
         sprite.enabled = false;
-        trajectory = player.gameObject.GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
@@ -51,7 +52,7 @@ public class PlayerControl : MonoBehaviour
             startPoint.z = -4;
             sprite.transform.position = startPoint;
             sprite.enabled = true;
-            timeMgr.EnterSlowmotion();
+            TimeManager.Instance.EnterSlowmotion();
         }
 
         if(Input.GetMouseButton(0)){
@@ -69,15 +70,17 @@ public class PlayerControl : MonoBehaviour
             Mathf.Clamp(startPoint.y - endPoint.y,minPower.y,maxPower.y));
             rb.AddForce(force * powerShoot, ForceMode2D.Impulse);
             HideLine();
-            timeMgr.ReleaseSlowmotion();
+            TimeManager.Instance.ReleaseSlowmotion();
         }
+
+        CheckPlayerMovement();
     }
 
     void ShowTrajectory(){
-        _count = 0;
+        count = 0;
         Vector3 playerPos = player.transform.position;
         Vector3 direction = startPoint - currentPoint;
-        
+
         trajectory.positionCount = 1;
 		trajectory.SetPosition(0, playerPos);
         DrawTrajectory(playerPos, direction);
@@ -85,21 +88,22 @@ public class PlayerControl : MonoBehaviour
 
    private bool DrawTrajectory(Vector2 position, Vector2 direction)
     {
-        RaycastHit2D hit = Physics2D.Raycast(position, direction, _maxDistance);
-        if (hit && _count <= _maxIterations - 1)
+       
+        RaycastHit2D hit = Physics2D.Raycast(position, direction, maxDistance);
+        if (hit && count <= maxIterations - 1)
         {
             if(hit.collider.tag == "Enemy"){
                 trajectory.startColor = Color.red;
                 trajectory.endColor = new Color(255,25,20, 0);
-                trajectory.positionCount = (_count + 2);
-                trajectory.SetPosition(_count + 1, position + direction);
+                trajectory.positionCount = (count + 2);
+                trajectory.SetPosition(count + 1, position + direction);
             }else{
-                _count++;
+                count++;
                 var reflectAngle = Vector2.Reflect(direction, hit.normal);
                 trajectory.startColor = Color.blue;
                 trajectory.endColor = new Color(16,207,255, 0);
-                trajectory.positionCount = (_count + 1);
-                trajectory.SetPosition(_count, hit.point);
+                trajectory.positionCount = (count + 1);
+                trajectory.SetPosition(count, hit.point);
                 DrawTrajectory(hit.point + reflectAngle, reflectAngle);
             }
             return true;
@@ -108,8 +112,8 @@ public class PlayerControl : MonoBehaviour
         if(hit == false){
             trajectory.startColor = Color.blue;
             trajectory.endColor = new Color(16,207,255, 0);
-            trajectory.positionCount = (_count + 2);
-            trajectory.SetPosition(_count + 1, position + direction);
+            trajectory.positionCount = (count + 2);
+            trajectory.SetPosition(count + 1, position + direction);
         }
         return false;
     }
@@ -130,10 +134,18 @@ public class PlayerControl : MonoBehaviour
     }
 
     void HideLine(){
-        _count = 0;
+        count = 0;
         lr.positionCount = 0;
         trajectory.positionCount = 0;
         sprite.enabled = false;
+    }
+
+    void CheckPlayerMovement(){
+        if(rb.velocity.magnitude >= 1f){
+            dust.Play();
+        }else{
+            dust.Stop();
+        }
     }
 
 }

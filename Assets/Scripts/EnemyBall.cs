@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class EnemyBall : Balls
 {
+    public int healthPoint = 3;
     private Rigidbody2D rb;
     private Vector2 lastFrameVelocity;
 
     public override void behaviour(){
         Debug.Log("Enemy init");
+        PlayerBall.OnDoDamage += DoDamage;
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -22,6 +24,16 @@ public class EnemyBall : Balls
             var lastSpeed = lastFrameVelocity.magnitude;
             var direction = Vector2.Reflect(lastFrameVelocity.normalized, inNormal);
             rb.velocity = direction * Mathf.Max(lastSpeed, normalSpeed);
+        }
+    }
+    public void DoDamage(int damage){
+        healthPoint -= damage;
+        CheckHp();
+    }
+
+    private void CheckHp(){
+        if(healthPoint <= 0){
+            Destroy(this.gameObject);
         }
     }
 }

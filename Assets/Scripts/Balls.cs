@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Balls : MonoBehaviour
 {
-    public float normalSpeed = 5f;
+    public float normalSpeed = 2f;
 
     private void Start() {
         behaviour();
