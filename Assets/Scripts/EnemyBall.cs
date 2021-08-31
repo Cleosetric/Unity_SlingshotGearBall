@@ -25,7 +25,14 @@ public class EnemyBall : Balls
             var direction = Vector2.Reflect(lastFrameVelocity.normalized, inNormal);
             rb.velocity = direction * Mathf.Max(lastSpeed, normalSpeed);
         }
+
+        //For Debug Only
+        if(hit != null && hit.gameObject.tag == "Player"){
+            Player player = hit.gameObject.GetComponent<Player>();
+            player.OnDamage(1);
+        }
     }
+
     public void DoDamage(int damage){
         healthPoint -= damage;
         CheckHp();

@@ -15,7 +15,7 @@ public class HitCounter : MonoBehaviour
     private float lastHitTime;
 
     private void Awake() {
-        PlayerBall.OnComboCounter += AddHitCounter;
+        Player.OnComboCounter += AddHitCounter;
     }
 
     private void Start() {

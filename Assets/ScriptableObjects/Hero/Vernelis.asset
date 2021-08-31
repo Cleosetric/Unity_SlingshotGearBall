@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79cd8502beb73c44d8301e3521de0d21, type: 3}
+  m_Name: Vernelis
+  m_EditorClassIdentifier: 
+  name: Vernelis
+  description: A prodigy of magic, master of fire
+  type: 2
+  heroSprite: {fileID: 8999996067587195337, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
+    type: 3}
+  heroFace: {fileID: 8999996067587195337, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
+    type: 3}
+  maxHp: 5
+  hp: 5
+  maxStamina: 50
+  stamina: 50
+  attack: 3
+  defense: 1
+  speed: 5
+  level: 1
+  exp: 1
+  range: 8
+  actionCost: 5

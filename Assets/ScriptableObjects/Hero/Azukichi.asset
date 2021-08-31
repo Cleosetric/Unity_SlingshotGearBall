@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19b1b7adbb36bd94db7b6f4610e1f67a, type: 3}
+  m_Name: Azukichi
+  m_EditorClassIdentifier: 
+  name: Azukichi
+  description: An Elf of darkwood territory
+  type: 1
+  heroSprite: {fileID: -3447010108014296370, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
+    type: 3}
+  heroFace: {fileID: -3447010108014296370, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
+    type: 3}
+  maxHp: 10
+  hp: 10
+  maxStamina: 100
+  stamina: 100
+  attack: 2
+  defense: 1
+  speed: 15
+  level: 1
+  exp: 1
+  range: 10
+  actionCost: 10

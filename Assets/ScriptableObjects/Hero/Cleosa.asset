@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b62a22ab51aae6b4c82aa9ac6ce191a4, type: 3}
+  m_Name: Cleosa
+  m_EditorClassIdentifier: 
+  name: Cleosa
+  description: A young knight dream to be a king
+  type: 0
+  heroSprite: {fileID: 3303528763351885255, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
+    type: 3}
+  heroFace: {fileID: 3303528763351885255, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
+    type: 3}
+  maxHp: 15
+  hp: 15
+  maxStamina: 75
+  stamina: 75
+  attack: 1
+  defense: 1
+  speed: 10
+  level: 1
+  exp: 1
+  range: 2
+  actionCost: 5

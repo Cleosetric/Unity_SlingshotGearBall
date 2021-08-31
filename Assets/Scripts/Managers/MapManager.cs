@@ -28,8 +28,7 @@ public class MapManager : MonoBehaviour
     
     private void Start() {
         cam = Camera.main;
-        player = FindObjectOfType<PlayerBall>().transform;
-        // player = FindGameObjectWithTag("Player").gameObject;
+        player = FindObjectOfType<Player>().transform;
         SpawnNewStage();
     }
 

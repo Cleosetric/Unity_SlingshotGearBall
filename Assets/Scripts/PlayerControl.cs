@@ -1,21 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerControl : MonoBehaviour
 {
     public float powerShoot = 10f;
-    public int maxControlDrag = 3;
+    public float maxDistance = 10f;
+
     [Space]
     [Range(1, 3)]
+    [SerializeField] private int maxControlDrag = 3;
+    [Range(1, 3)]
     [SerializeField] private int maxIterations = 3;
-    [SerializeField] private float maxDistance = 10f;
+    
     private int count;
 
     private SpriteRenderer sprite;
     private Rigidbody2D rb;
     private CircleCollider2D col;
-    private PlayerBall player;
+    private Player player;
     private Camera cam;
     private LineRenderer lr;
     private LineRenderer trajectory;
@@ -28,11 +32,13 @@ public class PlayerControl : MonoBehaviour
     private Vector3 endPoint;
     private Vector3 currentPoint;
 
+    private bool onSling = false;
+
     // Start is called before the first frame update
     void Start()
     {
         cam = Camera.main;
-        player = FindObjectOfType<PlayerBall>();
+        player = FindObjectOfType<Player>();
         lr = GetComponent<LineRenderer>();
 
         rb = player.gameObject.GetComponent<Rigidbody2D>();
@@ -42,38 +48,24 @@ public class PlayerControl : MonoBehaviour
 
         sprite = GetComponent<SpriteRenderer>();
         sprite.enabled = false;
+        onSling = false;
+
+        StartCoroutine(InputListener());
+        player.RefreshHero();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0)){
-            startPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-            startPoint.z = -4;
-            sprite.transform.position = startPoint;
-            sprite.enabled = true;
-            TimeManager.Instance.EnterSlowmotion();
-        }
-
-        if(Input.GetMouseButton(0)){
-            currentPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-            currentPoint.z = -4;
-            ShowLine(startPoint, currentPoint);
-            ShowTrajectory();
-        }
-
-        if(Input.GetMouseButtonUp(0)){
-            rb.velocity = Vector2.zero;
-            endPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-            endPoint.z = -4;
-            force = new Vector2(Mathf.Clamp(startPoint.x - endPoint.x,minPower.x,maxPower.x),
-            Mathf.Clamp(startPoint.y - endPoint.y,minPower.y,maxPower.y));
-            rb.AddForce(force * powerShoot, ForceMode2D.Impulse);
-            HideLine();
-            TimeManager.Instance.ReleaseSlowmotion();
-        }
-
+        CheckPlayerControl();
         CheckPlayerMovement();
+    }
+
+    private bool IsMouseOnArea(Vector3 MousePosition){
+        if(MousePosition.y > 200 && MousePosition.y < 1200){
+            return true;
+        }
+        return false;
     }
 
     void ShowTrajectory(){
@@ -88,7 +80,6 @@ public class PlayerControl : MonoBehaviour
 
    private bool DrawTrajectory(Vector2 position, Vector2 direction)
     {
-       
         RaycastHit2D hit = Physics2D.Raycast(position, direction, maxDistance);
         if (hit && count <= maxIterations - 1)
         {
@@ -141,11 +132,73 @@ public class PlayerControl : MonoBehaviour
     }
 
     void CheckPlayerMovement(){
-        if(rb.velocity.magnitude >= 1f){
+        if(rb.velocity.magnitude >= 1.5f){
             dust.Play();
         }else{
             dust.Stop();
         }
+    }
+
+    private IEnumerator InputListener(){
+        while(enabled){
+            if(Input.GetMouseButtonDown(0)){
+                yield return ClickEvent();
+            }
+            yield return null;
+        }
+    }
+
+    private IEnumerator ClickEvent(){
+        yield return new WaitForEndOfFrame();
+        float clickCount = 0f;
+        while (clickCount < 0.25f)
+        {
+            if(Input.GetMouseButtonDown(0)){
+                CheckPlayerUltimate();
+                yield break;
+            }
+            clickCount += Time.unscaledDeltaTime;
+            yield return null;
+        }
+    }
+
+    private void CheckPlayerControl(){
+        if(player.IsSlingable() && player.gameObject.activeSelf){
+            
+            if(Input.GetMouseButtonDown(0) && IsMouseOnArea(Input.mousePosition)){
+                startPoint = cam.ScreenToWorldPoint(Input.mousePosition);
+                startPoint.z = -4;
+                sprite.transform.position = startPoint;
+                sprite.enabled = true;
+            }
+
+            if(Input.GetMouseButton(0) && IsMouseOnArea(Input.mousePosition)){
+                TimeManager.Instance.EnterSlowmotion();
+                currentPoint = cam.ScreenToWorldPoint(Input.mousePosition);
+                currentPoint.z = -4;
+                ShowLine(startPoint, currentPoint);
+                ShowTrajectory();
+                onSling = true;
+            }
+
+            if(Input.GetMouseButtonUp(0) && onSling){
+                rb.velocity = Vector2.zero;
+                endPoint = cam.ScreenToWorldPoint(Input.mousePosition);
+                endPoint.z = -4;
+                force = new Vector2(Mathf.Clamp(startPoint.x - endPoint.x,minPower.x,maxPower.x),
+                Mathf.Clamp(startPoint.y - endPoint.y,minPower.y,maxPower.y));
+                rb.AddForce(force * powerShoot, ForceMode2D.Impulse);
+                HideLine();
+                TimeManager.Instance.ReleaseSlowmotion();
+                player.OnSlingshot();
+                onSling = false;
+            }
+
+        }
+    }
+
+    private void CheckPlayerUltimate(){
+        Debug.Log("Double Click");
     }
 
 }
