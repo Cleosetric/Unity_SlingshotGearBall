@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Enemy
   - Coin
+  - Wall
+  - Props
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - 
   - 
   - Props
-  - 
+  - Enemies
   - 
   - 
   - 
@@ -48,4 +50,7 @@ TagManager:
     locked: 0
   - name: Decoration
     uniqueID: 3180740773
+    locked: 0
+  - name: UI
+    uniqueID: 4145354827
     locked: 0

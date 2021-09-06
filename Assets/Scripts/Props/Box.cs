@@ -35,13 +35,14 @@ public class Box : MonoBehaviour
     //     SpawnPoolCoin(10);
     // }
 
-    private void OnCollisionEnter2D(Collision2D other) {
-        if(other.collider.tag == "Player"){
-            OnDamage(1);
-        }
-    }
+    // private void OnCollisionEnter2D(Collision2D other) {
+    //     if(other.collider.tag == "Player"){
+    //         OnDamage(1);
+    //     }
+    // }
 
-    void OnDamage(int value){
+    public void ApplyDamage(int value){
+        Debug.Log("Box Damaged!");
         durability -= value;
         slider.value = durability;
         anim.SetTrigger("GetHit");

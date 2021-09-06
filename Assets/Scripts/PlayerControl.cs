@@ -33,6 +33,9 @@ public class PlayerControl : MonoBehaviour
     private Vector3 currentPoint;
 
     private bool onSling = false;
+    private bool onDrag = false;
+    private float downClickTime;
+    private float delayDeltaTime = 0.175f;
 
     // Start is called before the first frame update
     void Start()
@@ -160,45 +163,78 @@ public class PlayerControl : MonoBehaviour
             clickCount += Time.unscaledDeltaTime;
             yield return null;
         }
+        CheckPlayerSkill();
     }
 
     private void CheckPlayerControl(){
         if(player.IsSlingable() && player.gameObject.activeSelf){
             
-            if(Input.GetMouseButtonDown(0) && IsMouseOnArea(Input.mousePosition)){
-                startPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-                startPoint.z = -4;
-                sprite.transform.position = startPoint;
-                sprite.enabled = true;
+            if(Input.GetMouseButtonDown(0)){
+                // if(EventSystem.current.IsPointerOverGameObject()) return;
+                if(IsMouseOnArea(Input.mousePosition)){
+                    downClickTime = Time.time;
+                    startPoint = cam.ScreenToWorldPoint(Input.mousePosition);
+                    startPoint.z = -4;
+                }else{
+                    downClickTime = Time.time;
+                    startPoint = new Vector2( cam.transform.position.x, cam.transform.position.y-3.5f);
+                    startPoint.z = -4;
+                }
+               
             }
 
-            if(Input.GetMouseButton(0) && IsMouseOnArea(Input.mousePosition)){
-                TimeManager.Instance.EnterSlowmotion();
-                currentPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-                currentPoint.z = -4;
-                ShowLine(startPoint, currentPoint);
-                ShowTrajectory();
-                onSling = true;
+            if(Input.GetMouseButton(0)){                
+                if((Time.time - downClickTime) >= delayDeltaTime){
+                    onSling = true;
+                    onDrag = true;
+                    sprite.transform.position = startPoint;
+                    sprite.enabled = true;
+                    TimeManager.Instance.EnterSlowmotion();
+                    currentPoint = cam.ScreenToWorldPoint(Input.mousePosition);
+                    currentPoint.z = -4;
+                    ShowLine(startPoint, currentPoint);
+                    ShowTrajectory();
+                }else{
+                    onDrag = false;
+                    onSling = false;
+
+                }
             }
 
             if(Input.GetMouseButtonUp(0) && onSling){
-                rb.velocity = Vector2.zero;
-                endPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-                endPoint.z = -4;
-                force = new Vector2(Mathf.Clamp(startPoint.x - endPoint.x,minPower.x,maxPower.x),
-                Mathf.Clamp(startPoint.y - endPoint.y,minPower.y,maxPower.y));
-                rb.AddForce(force * powerShoot, ForceMode2D.Impulse);
-                HideLine();
-                TimeManager.Instance.ReleaseSlowmotion();
-                player.OnSlingshot();
-                onSling = false;
+                if((Time.time - downClickTime) >= delayDeltaTime){
+                    Debug.Log("Movement");
+                    rb.velocity = Vector2.zero;
+                    endPoint = cam.ScreenToWorldPoint(Input.mousePosition);
+                    endPoint.z = -4;
+                    force = new Vector2(Mathf.Clamp(startPoint.x - endPoint.x,minPower.x,maxPower.x),
+                    Mathf.Clamp(startPoint.y - endPoint.y,minPower.y,maxPower.y));
+                    rb.AddForce(force * powerShoot, ForceMode2D.Impulse);
+                    HideLine();
+                    player.OnSlingshot();
+                    TimeManager.Instance.ReleaseSlowmotion();
+                    onSling = false;
+                    onDrag = false;
+                }
             }
 
         }
     }
 
     private void CheckPlayerUltimate(){
-        Debug.Log("Double Click");
+        if(EventSystem.current.IsPointerOverGameObject()) return;
+
+        if(player != null && IsMouseOnArea(Input.mousePosition)){
+            player.DoUltimate();
+        }
+    }
+
+    private void CheckPlayerSkill(){
+        if(EventSystem.current.IsPointerOverGameObject()) return;
+
+        if(player != null && !onDrag && IsMouseOnArea(Input.mousePosition)){
+            player.DoSkill();
+        }
     }
 
 }

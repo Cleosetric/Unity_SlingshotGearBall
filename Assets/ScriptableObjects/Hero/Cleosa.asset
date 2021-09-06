@@ -22,11 +22,19 @@ MonoBehaviour:
   maxHp: 15
   hp: 15
   maxStamina: 75
-  stamina: 75
-  attack: 1
+  stamina: 28
+  attack: 2
   defense: 1
   speed: 10
+  range: 0.8
   level: 1
   exp: 1
-  range: 2
+  sight: 10
   actionCost: 5
+  animCon: {fileID: 9100000, guid: 1f3b499da1718234ebede4c3db041c09, type: 2}
+  baseAttack: {fileID: 5195480451764164645, guid: e48de3473c8fc7a46bab9e514dd4b5a8,
+    type: 3}
+  baseSkill: {fileID: 7290333867056619030, guid: 7d50267f261eb054db7c6e0e1592b835,
+    type: 3}
+  baseUltimate: {fileID: 789856029015279649, guid: 07a76e35fcf44a34b812b1e768b62b5b,
+    type: 3}

@@ -11,38 +11,51 @@ public enum HeroType
 
 public class HeroBase : ScriptableObject {
 
+    [Header("Charachter Info")]
     public new string name;
     public string description;
     public HeroType type;
     public Sprite heroSprite;
     public Sprite heroFace;
+
+    [Space]
+    [Header("Base Parameter")]
     public int maxHp = 5;
     public int hp;
     public float maxStamina = 100;
     public float stamina;
+    [Space]
     public int attack = 1;
     public int defense = 1;
-    public int speed = 10;
+    public float speed = 10f;
+    public float range = 0.5f;
+
+    [Space]
+    [Header("Charachter Progress")]
     public int level = 1;
     public int exp = 1;
-    public int range = 10;
+
+    [Space]
+    [Header("Control Parameter")]
+    public int sight = 10;
     public int actionCost = 10;
+    public RuntimeAnimatorController animCon;
 
     public void OnEnable() {
-        Debug.Log("Awaken My Master! " + name);
+        // Debug.Log("Awaken My Master! " + name);
         hp = maxHp;
         stamina = maxStamina;
     }
 
-    public virtual void Attack(){
+    public virtual void Attack(GameObject obj){
         Debug.Log("Attack");
     }
 
-    public virtual void Skill(){
+    public virtual void Skill(GameObject obj){
         Debug.Log("Skill");
     }
 
-    public virtual void Ultimate(){
+    public virtual void Ultimate(GameObject obj){
         Debug.Log("Ultimate");
     }
 

@@ -6,7 +6,6 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     //Event
-    public static event Action<int> OnComboCounter = delegate { };
 
     //Reference 
     private HeroBase heroData;
@@ -14,26 +13,26 @@ public class Player : MonoBehaviour
     private PlayerUI playerUI;
 
     //Player Param
+    public Sprite spriteFace;
     public String name;
-    public int mhp;
+    public int maxHP;
+    public float maxStamina;
     public int hp;
     public float stamina;
-    public float mstamina;
-    public Sprite spriteFace;
-    
     private int attack;
     private int defense;
-    private int speed;
-    private int controlRange;
-    private int energyToSling;
+    private float speed;
+    private int actionCost;
 
     //Player Monobehaviour
     private SpriteRenderer spriteChar;
     private Rigidbody2D rb;
     private Vector2 lastFrameVelocity;
+    private Animator animator;
 
-    
-    private float timer;
+    //regen stamina
+    private WaitForSeconds regenTick = new WaitForSeconds(0.25f);
+    private Coroutine regen;
     [SerializeField] private float regenStamina = 10f;
     [SerializeField] private float regenCooldown = 2f;
 
@@ -45,6 +44,7 @@ public class Player : MonoBehaviour
         control = FindObjectOfType<PlayerControl>();
         playerUI = FindObjectOfType<PlayerUI>();
         spriteChar = GetComponentInChildren<SpriteRenderer>();
+        animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
 
         RefreshHero();
@@ -54,21 +54,20 @@ public class Player : MonoBehaviour
         name = hero.name;
         hp = hero.hp;
         stamina = hero.stamina;
-        mhp = hero.maxHp;
-        mstamina = hero.maxStamina;
-
+        maxHP = hero.maxHp;
+        maxStamina = hero.maxStamina;
         attack = hero.attack;
         defense = hero.defense;
         speed = hero.speed;
-
-        controlRange = hero.range;
-        energyToSling = hero.actionCost;
+        actionCost = hero.actionCost;
 
         spriteChar.sprite = hero.heroSprite;
         spriteFace = hero.heroFace;
 
         control.powerShoot = hero.speed;
-        control.maxDistance = hero.range;
+        control.maxDistance = hero.sight;
+        
+        animator.runtimeAnimatorController = hero.animCon;
 
         playerUI.DisplayUI(this);
     }
@@ -88,12 +87,18 @@ public class Player : MonoBehaviour
     }
 
     public void OnSlingshot(){
-        stamina -= energyToSling;
+        stamina -= actionCost;
         if(stamina < 0){
             stamina = 0;
         }
-        timer = regenCooldown;
+
+        StartRegen();
         updateHero();
+    }
+
+    public void StartRegen(){
+        if(regen != null) StopCoroutine(regen);
+        regen = StartCoroutine(RegenerateStamina());
     }
 
     public void OnDamage(int damage){
@@ -105,7 +110,7 @@ public class Player : MonoBehaviour
     }
 
     public bool IsSlingable(){
-        if(stamina >= energyToSling){
+        if(stamina >= actionCost){
             return true;
         }
         return false;
@@ -113,59 +118,51 @@ public class Player : MonoBehaviour
 
     public void DoAttack(){
         if(heroData != null){
-            heroData.Attack();
+            animator.SetTrigger("Attack");
+            heroData.Attack(this.gameObject);
         }
     }
 
     public void DoSkill(){
-        if(heroData != null){
-            heroData.Skill();
+        if(heroData != null && stamina >= actionCost){
+            animator.SetTrigger("Attack");
+            heroData.Skill(this.gameObject);
+            OnSlingshot();
         }
     }
 
     public void DoUltimate(){
-        if(heroData != null){
-            heroData.Ultimate();
+        if(heroData != null &&  stamina >= actionCost * 4){
+            stamina -= (actionCost * 4);
+            heroData.Ultimate(this.gameObject);
+            updateHero();
+            if(regen != null) StopCoroutine(regen);
+            Invoke("StartRegen", 5f);
         }
     }
 
-    void RegenStamina(float energy){
-        stamina = stamina + (Mathf.Round(energy * Time.deltaTime));
-        if(stamina >= mstamina){
-            stamina = mstamina;
-        }
-        updateHero();
-    }
 
     // Update is called once per frame
     void Update()
     {
         lastFrameVelocity = rb.velocity;
-
-        if(stamina < mstamina){
-            timer -= Time.deltaTime;
-            if(timer <= 0f){
-                RegenStamina(regenStamina);
-            }
-        }
-        
     }
 
     private void OnCollisionEnter2D(Collision2D hit) {
         float impulse = calculateImpulse(hit);
 
-        if(hit.collider.tag == "Enemy" && impulse > 30f){ 
+        if(hit.collider.tag == "Enemy" && impulse > 10f){ 
             TimeManager.Instance.StartImpactMotion();
-            EnemyBall enemy = hit.gameObject.GetComponent<EnemyBall>();
-            enemy.DoDamage(1);
-            OnComboCounter(1);
             DoAttack();
         }
+        
+        if(hit.collider.tag == "Props"){
+            hit.collider.GetComponent<Box>().ApplyDamage(attack);
+        }
 
-        Vector2 inNormal = hit.contacts[0].normal;		
-        var lastSpeed = lastFrameVelocity.magnitude;
+        Vector2 inNormal = hit.contacts[0].normal;
         var direction = Vector2.Reflect(lastFrameVelocity.normalized, inNormal);
-        rb.velocity = direction * Mathf.Max(lastSpeed, 5f);
+        rb.velocity = direction * Mathf.Max(lastFrameVelocity.magnitude, 5f);
     }
 
     private float calculateImpulse(Collision2D col){
@@ -174,6 +171,18 @@ public class Player : MonoBehaviour
                 impact += cp.normalImpulse;
         }
         return impact;
+    }
+
+    private IEnumerator RegenerateStamina(){
+        yield return new WaitForSeconds(regenCooldown);
+
+        while (stamina < maxStamina)
+        {
+            stamina += regenStamina;
+            updateHero();
+            yield return regenTick;
+        }
+        regen = null;
     }
 
     

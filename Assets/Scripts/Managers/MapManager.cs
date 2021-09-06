@@ -48,7 +48,7 @@ public class MapManager : MonoBehaviour
 
     IEnumerator MoveCameraToNewMap(Vector3 pos1, Vector3 pos2, float duration)
     {
-        Vector2 playerPos = new Vector2(pos2.x,pos2.y -4);
+        Vector2 playerPos = new Vector2(pos2.x,pos2.y -3.5f);
         player.position = playerPos;
         player.gameObject.SetActive(false);
 
@@ -60,7 +60,8 @@ public class MapManager : MonoBehaviour
         }
         cam.transform.position = pos2;
         player.gameObject.SetActive(true);
-
+        player.gameObject.GetComponent<Player>().StartRegen();
+        EnemyManager.Instance.SpawnEnemy();
     }
     
 }

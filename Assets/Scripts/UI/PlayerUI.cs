@@ -34,10 +34,10 @@ public class PlayerUI : MonoBehaviour
             heroName.text = player.name;
             heroFace.sprite = player.spriteFace;
 
-            heroHp.maxValue = player.mhp;
+            heroHp.maxValue = player.maxHP;
             heroHp.value = player.hp;
 
-            heroStamina.maxValue = player.mstamina;
+            heroStamina.maxValue = player.maxStamina;
             heroStamina.value = player.stamina;
 
             textHP.text = player.hp.ToString();

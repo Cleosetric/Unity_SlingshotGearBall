@@ -30,3 +30,4 @@ MonoBehaviour:
   exp: 1
   range: 8
   actionCost: 5
+  animCon: {fileID: 9100000, guid: 1f3b499da1718234ebede4c3db041c09, type: 2}

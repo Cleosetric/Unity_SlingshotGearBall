@@ -4,13 +4,28 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+    #region Singleton
+	private static EnemyManager _instance;
+	public static EnemyManager Instance { get { return _instance; } }
+
+	private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        } else {
+            _instance = this;
+        }
+    }
+	#endregion
+   
     public GameObject enemyPrefabs;
     private Camera camera;
     private int indexEnemySpawn = 0;
 
     private void Start() {
         camera = Camera.main;
-        SpawnEnemy();
+        // SpawnEnemy();
     }
 
     public void SpawnEnemy(){
