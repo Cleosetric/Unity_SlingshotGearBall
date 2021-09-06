@@ -20,11 +20,11 @@ public class EnemyManager : MonoBehaviour
 	#endregion
    
     public GameObject enemyPrefabs;
-    private Camera camera;
+    private Camera cam;
     private int indexEnemySpawn = 0;
 
     private void Start() {
-        camera = Camera.main;
+        cam = Camera.main;
         // SpawnEnemy();
     }
 
@@ -32,7 +32,7 @@ public class EnemyManager : MonoBehaviour
         GameObject enemy;
         enemy = Instantiate(enemyPrefabs) as GameObject;
         enemy.transform.SetParent(transform);
-        enemy.transform.position = new Vector2(camera.transform.position.x, camera.transform.position.y + 4);
+        enemy.transform.position = new Vector2(cam.transform.position.x, cam.transform.position.y + 4);
         enemy.gameObject.name = "Enemy "+indexEnemySpawn;
         indexEnemySpawn++;
     }

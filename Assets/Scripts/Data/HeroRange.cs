@@ -7,6 +7,7 @@ public class HeroRange : HeroBase
 {
     public override void Attack(GameObject obj){
         Debug.Log("Range Attack");
+        Rigidbody2D rb = obj.GetComponent<Rigidbody2D>();
     }
     
     public override void Skill(GameObject obj){
@@ -16,4 +17,6 @@ public class HeroRange : HeroBase
     public override void Ultimate(GameObject obj){
     //    base.Ultimate();
     }
+
+    
 }

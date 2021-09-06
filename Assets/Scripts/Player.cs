@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
 
     //Player Param
     public Sprite spriteFace;
-    public String name;
+    public new String name;
     public int maxHP;
     public float maxStamina;
     public int hp;
