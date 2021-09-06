@@ -42,7 +42,7 @@ public class Box : MonoBehaviour
     // }
 
     public void ApplyDamage(int value){
-        Debug.Log("Box Damaged!");
+        // Debug.Log("Box Damaged!");
         durability -= value;
         slider.value = durability;
         anim.SetTrigger("GetHit");

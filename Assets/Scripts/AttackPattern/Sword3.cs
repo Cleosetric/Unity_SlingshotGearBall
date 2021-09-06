@@ -18,6 +18,7 @@ public class Sword3 : AttackPatterns
 
         DrawCircleHitbox(player.transform.position, attack, range);
         StartCoroutine(HyperSpeed(new Vector2(1,1), duration, speed, rb));
+        Invoke("UltimateOff", duration - 0.1f);
         DestroySelf(gameObject, duration);
     }
 
@@ -31,6 +32,10 @@ public class Sword3 : AttackPatterns
     {
         // DrawCircleHitbox(player.transform.position, baseAttack, baseRange);
         transform.position = player.transform.position;
+    }
+
+    void UltimateOff(){
+        PlayerControl.Instance.SetOffUltimate();
     }
 
     void OnDrawGizmos() {

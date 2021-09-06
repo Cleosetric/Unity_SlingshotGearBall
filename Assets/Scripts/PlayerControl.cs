@@ -5,6 +5,21 @@ using UnityEngine.EventSystems;
 
 public class PlayerControl : MonoBehaviour
 {
+    #region Singleton
+	private static PlayerControl _instance;
+	public static PlayerControl Instance { get { return _instance; } }
+
+	private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        } else {
+            _instance = this;
+        }
+    }
+	#endregion
+
     public float powerShoot = 10f;
     public float maxDistance = 10f;
 
@@ -34,6 +49,8 @@ public class PlayerControl : MonoBehaviour
 
     private bool onSling = false;
     private bool onDrag = false;
+    private bool isDoUltimate = false;
+
     private float downClickTime;
     private float delayDeltaTime = 0.175f;
 
@@ -167,7 +184,7 @@ public class PlayerControl : MonoBehaviour
     }
 
     private void CheckPlayerControl(){
-        if(player.IsSlingable() && player.gameObject.activeSelf){
+        if(player.IsSlingable() && player.gameObject.activeSelf && !isDoUltimate){
             
             if(Input.GetMouseButtonDown(0)){
                 // if(EventSystem.current.IsPointerOverGameObject()) return;
@@ -203,7 +220,6 @@ public class PlayerControl : MonoBehaviour
 
             if(Input.GetMouseButtonUp(0) && onSling){
                 if((Time.time - downClickTime) >= delayDeltaTime){
-                    Debug.Log("Movement");
                     rb.velocity = Vector2.zero;
                     endPoint = cam.ScreenToWorldPoint(Input.mousePosition);
                     endPoint.z = -4;
@@ -226,6 +242,7 @@ public class PlayerControl : MonoBehaviour
 
         if(player != null && IsMouseOnArea(Input.mousePosition)){
             player.DoUltimate();
+            isDoUltimate = true;
         }
     }
 
@@ -235,6 +252,10 @@ public class PlayerControl : MonoBehaviour
         if(player != null && !onDrag && IsMouseOnArea(Input.mousePosition)){
             player.DoSkill();
         }
+    }
+
+    public void SetOffUltimate(){
+        isDoUltimate = false;
     }
 
 }

@@ -118,4 +118,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 768
   speed: 15
-  lifeTime: 0.3
+  lifeTime: 0.35
