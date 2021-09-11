@@ -10,7 +10,7 @@ public class Sword1 : AttackPatterns
     public void InitializeSkill(int attack, float range){
         tempRange = range;
         Start();
-        DrawCircleHitbox(transform.position, attack, range);
+        DrawCircleHitbox(transform.position, attack, range,false);
     }
 
     void Start()

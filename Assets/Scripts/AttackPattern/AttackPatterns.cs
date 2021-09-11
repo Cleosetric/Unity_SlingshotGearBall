@@ -9,18 +9,30 @@ public class AttackPatterns : MonoBehaviour
 
     public LayerMask enemyLayers;
 
-    protected void DrawCircleHitbox(Vector3 position, int attack, float range){
+    protected void DrawCircleHitbox(Vector3 position, int attack, float range, bool destroyInContact){
         Collider2D[] hitBox = Physics2D.OverlapCircleAll(position, range, enemyLayers);
         foreach (Collider2D hitObj in hitBox)
         {
             if(hitObj.CompareTag("Enemy")){
                 hitObj.GetComponent<Enemy>().ApplyDamage(attack);
                 OnComboCounter(1);
+                if(destroyInContact) Destroy(gameObject);
             }
 
             if(hitObj.CompareTag("Props")){
                hitObj.GetComponent<Box>().ApplyDamage(attack);
             }
+        }
+    }
+
+    protected void DrawRayHitBox(Vector2 pos, Vector2 dir, float length, int attack){
+        RaycastHit2D ray = Physics2D.Raycast(pos, dir, length, enemyLayers);
+        Debug.DrawRay(pos, dir, Color.red, length);
+
+        if(ray.collider != null && ray.collider.CompareTag("Enemy")){
+            ray.collider.GetComponent<Enemy>().ApplyDamage(attack);
+            OnComboCounter(1);
+            Destroy(gameObject);
         }
     }
 

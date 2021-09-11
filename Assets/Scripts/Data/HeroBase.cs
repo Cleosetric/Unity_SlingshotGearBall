@@ -51,6 +51,10 @@ public class HeroBase : ScriptableObject {
         Debug.Log("Attack");
     }
 
+    public virtual void DashAttack(GameObject obj){
+        Debug.Log("Dash Attack");
+    }
+
     public virtual void Skill(GameObject obj){
         Debug.Log("Skill");
     }

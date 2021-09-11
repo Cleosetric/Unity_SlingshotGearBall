@@ -27,25 +27,27 @@ public class Sword2 : AttackPatterns
 
     void Update()
     {
-        DrawCircleHitbox(transform.position, baseAttack, baseRange);
+        DrawCircleHitbox(transform.position, baseAttack, baseRange, true);
         transform.Translate(Vector2.up * speed * Time.deltaTime);
     }
 
     void SetAngleToEnemy()
     {
-        Transform closestEnemy = EnemyNearbyTransform(player.transform.position);
-        Vector3 direction;
+        if(player != null || player.gameObject.activeSelf){
+            Transform closestEnemy = EnemyNearbyTransform(player.transform.position);
+            Vector3 direction;
 
-        if (closestEnemy != null)
-        {
-            direction = closestEnemy.position - player.transform.position;
+            if (closestEnemy != null)
+            {
+                direction = closestEnemy.position - player.transform.position;
+            }
+            else
+            {
+                direction = Vector2.up;
+            }
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, angle + -90);
         }
-        else
-        {
-            direction = Vector2.up;
-        }
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle + -90);
     }
 
     void OnDrawGizmos() {

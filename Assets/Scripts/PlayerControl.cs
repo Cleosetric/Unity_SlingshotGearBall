@@ -28,9 +28,11 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private int maxControlDrag = 3;
     [Range(1, 3)]
     [SerializeField] private int maxIterations = 3;
-    
-    private int count;
+    public bool isDoUltimate = false;
 
+    private int count;
+    
+    private Touch touch;
     private SpriteRenderer sprite;
     private Rigidbody2D rb;
     private CircleCollider2D col;
@@ -40,16 +42,14 @@ public class PlayerControl : MonoBehaviour
     private LineRenderer trajectory;
     private ParticleSystem dust;
 
-    private Vector2 minPower = new Vector2(-8, -8);
-    private Vector2 maxPower = new Vector2(8, 8);
+    private Vector2 minPower = new Vector2(-3, -3);
+    private Vector2 maxPower = new Vector2(3, 3);
     private Vector2 force;
     private Vector3 startPoint;
     private Vector3 endPoint;
     private Vector3 currentPoint;
 
-    private bool onSling = false;
-    private bool onDrag = false;
-    private bool isDoUltimate = false;
+    private bool onSling = false;    
 
     private float downClickTime;
     private float delayDeltaTime = 0.175f;
@@ -70,14 +70,15 @@ public class PlayerControl : MonoBehaviour
         sprite.enabled = false;
         onSling = false;
 
-        StartCoroutine(InputListener());
+        // StartCoroutine(InputListener());
         player.RefreshHero();
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckPlayerControl();
+        CheckTouchControl();
+        // CheckMouseControl();
         CheckPlayerMovement();
     }
 
@@ -159,88 +160,87 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    private IEnumerator InputListener(){
-        while(enabled){
-            if(Input.GetMouseButtonDown(0)){
-                yield return ClickEvent();
-            }
-            yield return null;
-        }
-    }
-
-    private IEnumerator ClickEvent(){
-        yield return new WaitForEndOfFrame();
-        float clickCount = 0f;
-        while (clickCount < 0.25f)
+    private void CheckTouchControl(){
+        if (Input.touchCount > 0 && player.gameObject.activeSelf)
         {
-            if(Input.GetMouseButtonDown(0)){
-                CheckPlayerUltimate();
-                yield break;
+            touch = Input.GetTouch(0);
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    if(IsMouseOnArea(touch.position)){
+                        downClickTime = Time.time;
+                        startPoint = cam.ScreenToWorldPoint(touch.position);
+                        startPoint.z = -4;
+                    }else{
+                        downClickTime = Time.time;
+                        startPoint = new Vector2( cam.transform.position.x, cam.transform.position.y-3.5f);
+                        startPoint.z = -4;
+                    }
+                    break;
+
+                case TouchPhase.Moved:
+                    if(player.IsSlingable()){
+                        if((Time.time - downClickTime) >= delayDeltaTime){
+                            onSling = true;
+                            sprite.transform.position = startPoint;
+                            sprite.enabled = true;
+                            TimeManager.Instance.EnterSlowmotion();
+                            currentPoint = cam.ScreenToWorldPoint(touch.position);
+                            currentPoint.z = -4;
+                            ShowLine(startPoint, currentPoint);
+                            ShowTrajectory();
+                        }
+                    }else{
+                        onSling = false;
+                    }
+                    break;
+
+                case TouchPhase.Ended:
+                    if(onSling){
+                        rb.velocity = Vector2.zero;
+                        endPoint = cam.ScreenToWorldPoint(touch.position);
+                        endPoint.z = -4;
+
+                        force = new Vector2(Mathf.Clamp(startPoint.x - endPoint.x,minPower.x,maxPower.x),
+                        Mathf.Clamp(startPoint.y - endPoint.y,minPower.y,maxPower.y));
+                        bool isForceWeak = force.magnitude > 0.5f ? false : true;
+
+                        if(!isForceWeak){
+                            rb.AddForce(force * powerShoot, ForceMode2D.Impulse);
+                            if(!isDoUltimate) player.OnSlingshot();
+                        }else{
+                            if(isDoUltimate){
+                                rb.AddForce(force * powerShoot, ForceMode2D.Impulse);
+                            }else{
+                                rb.velocity = Vector2.zero;
+                            }
+                        }
+                        
+                        TimeManager.Instance.ReleaseSlowmotion();
+                        HideLine();
+                        onSling = false;
+                    }else{
+                        StartCoroutine("SkillOrUlti");
+                    }
+                    break;
             }
-            clickCount += Time.unscaledDeltaTime;
-            yield return null;
         }
-        CheckPlayerSkill();
     }
 
-    private void CheckPlayerControl(){
-        if(player.IsSlingable() && player.gameObject.activeSelf && !isDoUltimate){
-            
-            if(Input.GetMouseButtonDown(0)){
-                // if(EventSystem.current.IsPointerOverGameObject()) return;
-                if(IsMouseOnArea(Input.mousePosition)){
-                    downClickTime = Time.time;
-                    startPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-                    startPoint.z = -4;
-                }else{
-                    downClickTime = Time.time;
-                    startPoint = new Vector2( cam.transform.position.x, cam.transform.position.y-3.5f);
-                    startPoint.z = -4;
-                }
-               
-            }
-
-            if(Input.GetMouseButton(0)){                
-                if((Time.time - downClickTime) >= delayDeltaTime){
-                    onSling = true;
-                    onDrag = true;
-                    sprite.transform.position = startPoint;
-                    sprite.enabled = true;
-                    TimeManager.Instance.EnterSlowmotion();
-                    currentPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-                    currentPoint.z = -4;
-                    ShowLine(startPoint, currentPoint);
-                    ShowTrajectory();
-                }else{
-                    onDrag = false;
-                    onSling = false;
-
-                }
-            }
-
-            if(Input.GetMouseButtonUp(0) && onSling){
-                if((Time.time - downClickTime) >= delayDeltaTime){
-                    rb.velocity = Vector2.zero;
-                    endPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-                    endPoint.z = -4;
-                    force = new Vector2(Mathf.Clamp(startPoint.x - endPoint.x,minPower.x,maxPower.x),
-                    Mathf.Clamp(startPoint.y - endPoint.y,minPower.y,maxPower.y));
-                    rb.AddForce(force * powerShoot, ForceMode2D.Impulse);
-                    HideLine();
-                    player.OnSlingshot();
-                    TimeManager.Instance.ReleaseSlowmotion();
-                    onSling = false;
-                    onDrag = false;
-                }
-            }
-
+     IEnumerator SkillOrUlti(){
+        yield return new WaitForSeconds(0.25f);
+        if(touch.tapCount == 1)
+            CheckPlayerSkill();
+        else if(touch.tapCount == 2){
+            StopCoroutine("SkillOrUlti");
+            CheckPlayerUltimate();
         }
     }
 
     private void CheckPlayerUltimate(){
         if(EventSystem.current.IsPointerOverGameObject()) return;
 
-        if(player != null && IsMouseOnArea(Input.mousePosition)){
+        if(player != null && IsMouseOnArea(Input.mousePosition) && !isDoUltimate){
             player.DoUltimate();
             isDoUltimate = true;
         }
@@ -249,7 +249,7 @@ public class PlayerControl : MonoBehaviour
     private void CheckPlayerSkill(){
         if(EventSystem.current.IsPointerOverGameObject()) return;
 
-        if(player != null && !onDrag && IsMouseOnArea(Input.mousePosition)){
+        if(player != null && IsMouseOnArea(Input.mousePosition) && !isDoUltimate){
             player.DoSkill();
         }
     }

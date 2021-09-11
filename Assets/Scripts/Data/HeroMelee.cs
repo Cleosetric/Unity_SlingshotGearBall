@@ -8,6 +8,7 @@ public class HeroMelee : HeroBase
     [Space]
     [Header("Skills Prefab")]
     public GameObject baseAttack;
+    public GameObject baseDashAttack;
     public GameObject baseSkill;
     public GameObject baseUltimate;
 
@@ -16,6 +17,13 @@ public class HeroMelee : HeroBase
         GameObject attackPrefab = Instantiate(baseAttack, pos, Quaternion.identity);
         attackPrefab.transform.SetParent(obj.transform);
         attackPrefab.GetComponent<Sword1>().InitializeSkill(attack, range);
+    }
+
+    public override void DashAttack(GameObject obj){
+        Vector3 pos = obj.transform.position;
+        GameObject attackPrefab = Instantiate(baseDashAttack, pos, Quaternion.identity);
+        attackPrefab.transform.SetParent(obj.transform);
+        attackPrefab.GetComponent<Sword4>().InitializeSkill();
     }
     
     public override void Skill(GameObject obj){

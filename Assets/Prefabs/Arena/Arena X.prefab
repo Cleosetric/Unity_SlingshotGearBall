@@ -76,10 +76,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -158,10 +160,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -241,10 +245,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -323,10 +329,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -405,10 +413,12 @@ SpriteMask:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -529,10 +539,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -581,11 +593,11 @@ GameObject:
   - component: {fileID: 2797077327908032227}
   - component: {fileID: 2797077327908032224}
   m_Layer: 0
-  m_Name: Corner (2)
+  m_Name: Corner
   m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2797077327908032226
 Transform:
@@ -595,7 +607,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2797077327908032229}
   m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 3.0233, y: 0.37, z: 0}
+  m_LocalPosition: {x: 3.015, y: 0.37, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 1}
   m_Children: []
   m_Father: {fileID: 5762666746879966004}
@@ -612,10 +624,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -646,7 +660,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 1
   m_DrawMode: 2
-  m_Size: {x: 2.7087111, y: 0.079024}
+  m_Size: {x: 2.7087111, y: 0.079577364}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -670,7 +684,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.32, y: 0.08}
-    newSize: {x: 2.7087111, y: 0.079024}
+    newSize: {x: 2.7087111, y: 0.079577364}
     adaptiveTilingThreshold: 0.5
     drawMode: 2
     adaptiveTiling: 0
@@ -694,7 +708,7 @@ GameObject:
   m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2797077328114015450
 Transform:
@@ -721,10 +735,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -829,10 +845,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -949,10 +967,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1031,10 +1051,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1113,10 +1135,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1195,10 +1219,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1277,10 +1303,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1329,11 +1357,11 @@ GameObject:
   - component: {fileID: 2797077329016994608}
   - component: {fileID: 2797077329016994609}
   m_Layer: 0
-  m_Name: Corner (1)
+  m_Name: Corner
   m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2797077329016994611
 Transform:
@@ -1360,10 +1388,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1472,10 +1502,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1524,11 +1556,11 @@ GameObject:
   - component: {fileID: 2797077329236273271}
   - component: {fileID: 2797077329236273268}
   m_Layer: 0
-  m_Name: Corner (3)
+  m_Name: Corner
   m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2797077329236273270
 Transform:
@@ -1555,10 +1587,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1663,10 +1697,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1745,10 +1781,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1795,12 +1833,12 @@ PrefabInstance:
     - target: {fileID: 7295315832798218665, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7295315832798218665, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7295315833478310396, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
@@ -1862,6 +1900,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Small Box (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7295315833478310399, guid: 72da9a6e918dc0441a8c9144caddb85d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72da9a6e918dc0441a8c9144caddb85d, type: 3}
 --- !u!4 &8470356105816358123 stripped
@@ -1880,12 +1923,12 @@ PrefabInstance:
     - target: {fileID: 7295315832798218665, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7295315832798218665, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7295315833478310396, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
@@ -1947,6 +1990,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Small Box (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 7295315833478310399, guid: 72da9a6e918dc0441a8c9144caddb85d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72da9a6e918dc0441a8c9144caddb85d, type: 3}
 --- !u!4 &8087649144413570912 stripped
@@ -1962,6 +2010,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2797077327870044972}
     m_Modifications:
+    - target: {fileID: 898511927488674080, guid: 72da9a6e918dc0441a8c9144caddb85d,
+        type: 3}
+      propertyPath: m_SpriteSortPoint
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7295315832798218665, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2032,6 +2085,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Small Box (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7295315833478310399, guid: 72da9a6e918dc0441a8c9144caddb85d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72da9a6e918dc0441a8c9144caddb85d, type: 3}
 --- !u!4 &8349313958150779795 stripped
@@ -2050,12 +2108,12 @@ PrefabInstance:
     - target: {fileID: 7295315832798218665, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7295315832798218665, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7295315833478310396, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
@@ -2116,6 +2174,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Small Box (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7295315833478310399, guid: 72da9a6e918dc0441a8c9144caddb85d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72da9a6e918dc0441a8c9144caddb85d, type: 3}
@@ -2202,6 +2265,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Small Box (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7295315833478310399, guid: 72da9a6e918dc0441a8c9144caddb85d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72da9a6e918dc0441a8c9144caddb85d, type: 3}
 --- !u!4 &5259958310487951782 stripped
@@ -2287,6 +2355,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Small Box
       objectReference: {fileID: 0}
+    - target: {fileID: 7295315833478310399, guid: 72da9a6e918dc0441a8c9144caddb85d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72da9a6e918dc0441a8c9144caddb85d, type: 3}
 --- !u!4 &6703266786116416634 stripped
@@ -2305,12 +2378,12 @@ PrefabInstance:
     - target: {fileID: 7295315832798218665, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7295315832798218665, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7295315833478310396, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
@@ -2372,6 +2445,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Small Box (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 7295315833478310399, guid: 72da9a6e918dc0441a8c9144caddb85d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72da9a6e918dc0441a8c9144caddb85d, type: 3}
 --- !u!4 &2711209272567264110 stripped
@@ -2390,12 +2468,12 @@ PrefabInstance:
     - target: {fileID: 7295315832798218665, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7295315832798218665, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7295315833478310396, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
@@ -2457,6 +2535,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Small Box (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 7295315833478310399, guid: 72da9a6e918dc0441a8c9144caddb85d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72da9a6e918dc0441a8c9144caddb85d, type: 3}
 --- !u!4 &1036452565546544393 stripped
@@ -2472,6 +2555,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2797077327870044972}
     m_Modifications:
+    - target: {fileID: 898511927488674080, guid: 72da9a6e918dc0441a8c9144caddb85d,
+        type: 3}
+      propertyPath: m_SpriteSortPoint
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7295315832798218665, guid: 72da9a6e918dc0441a8c9144caddb85d,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2541,6 +2629,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Small Box (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7295315833478310399, guid: 72da9a6e918dc0441a8c9144caddb85d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72da9a6e918dc0441a8c9144caddb85d, type: 3}

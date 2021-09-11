@@ -9,6 +9,10 @@ public class HeroSpecial : HeroBase
         Debug.Log("Special Attack");
     }
     
+    public override void DashAttack(GameObject obj){
+        
+    }
+    
     public override void Skill(GameObject obj){
     //    base.Skill();
     }

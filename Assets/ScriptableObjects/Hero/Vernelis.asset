@@ -25,9 +25,10 @@ MonoBehaviour:
   stamina: 50
   attack: 3
   defense: 1
-  speed: 5
+  speed: 20
+  range: 8
   level: 1
   exp: 1
-  range: 8
+  sight: 10
   actionCost: 5
   animCon: {fileID: 9100000, guid: 1f3b499da1718234ebede4c3db041c09, type: 2}

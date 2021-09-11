@@ -16,12 +16,12 @@ public class Coin : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        player = GameObject.FindWithTag("Player").transform;
+        player = FindObjectOfType<Player>().transform;
     }
 
     public void CoinInit(){
         rb = GetComponent<Rigidbody2D>();
-        player = GameObject.FindWithTag("Player").transform;
+        player = FindObjectOfType<Player>().transform;
     }
 
     public void CoinSpawn(Vector2 spawnPos){
@@ -39,7 +39,7 @@ public class Coin : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(isSpawning) Invoke("MoveCoinToPlayer", 2f);
+        if(isSpawning) Invoke("MoveCoinToPlayer", 1.25f);
 
         // if(CoinInDistance()){
         //     gameObject.SetActive(false);

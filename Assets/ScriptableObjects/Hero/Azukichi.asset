@@ -23,11 +23,17 @@ MonoBehaviour:
   hp: 10
   maxStamina: 100
   stamina: 100
-  attack: 2
+  attack: 1
   defense: 1
-  speed: 15
+  speed: 30
+  range: 1
   level: 1
   exp: 1
-  range: 10
-  actionCost: 10
+  sight: 10
+  actionCost: 5
   animCon: {fileID: 9100000, guid: 1f3b499da1718234ebede4c3db041c09, type: 2}
+  baseAttack: {fileID: 259398985914303138, guid: a4e5b3038801a9b4c8ffa72e3faa9201,
+    type: 3}
+  baseDashAttack: {fileID: 0}
+  baseSkill: {fileID: 0}
+  baseUltimate: {fileID: 0}

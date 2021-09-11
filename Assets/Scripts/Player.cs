@@ -36,6 +36,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float regenStamina = 10f;
     [SerializeField] private float regenCooldown = 2f;
 
+    private bool isDashable = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -77,9 +79,11 @@ public class Player : MonoBehaviour
         if(heroData != null){
          LoadData(heroData);
         }
+        StartRegen();
+        isDashable = false;
     }
 
-    public void updateHero(){
+    public void UpdateHero(){
         heroData = PartyManager.Instance.GetActiveHero();
         heroData.hp = hp;
         heroData.stamina = stamina;
@@ -87,13 +91,14 @@ public class Player : MonoBehaviour
     }
 
     public void OnSlingshot(){
+        isDashable = false;
         stamina -= actionCost;
         if(stamina < 0){
             stamina = 0;
         }
 
         StartRegen();
-        updateHero();
+        UpdateHero();
     }
 
     public void StartRegen(){
@@ -106,41 +111,55 @@ public class Player : MonoBehaviour
         if(hp < 0){
             hp = 0;
         }
-        updateHero();
+        UpdateHero();
     }
 
     public bool IsSlingable(){
-        if(stamina >= actionCost){
+        if(control.isDoUltimate){
             return true;
+        }else{
+            if(stamina >= actionCost){
+                return true;
+            }
         }
         return false;
     }
 
     public void DoAttack(){
-        if(heroData != null){
+        if(heroData != null && !control.isDoUltimate){
+            isDashable = false;
             animator.SetTrigger("Attack");
             heroData.Attack(this.gameObject);
         }
     }
 
     public void DoSkill(){
-        if(heroData != null && stamina >= actionCost){
-            animator.SetTrigger("Attack");
-            heroData.Skill(this.gameObject);
-            OnSlingshot();
+        if(heroData != null){
+            if(isDashable){
+                heroData.DashAttack(this.gameObject);
+            }else{
+                if(stamina >= actionCost){
+                    stamina -= actionCost;
+                    animator.SetTrigger("Attack");
+                    heroData.Skill(this.gameObject);
+                    StartRegen();
+                    UpdateHero();
+                }
+            }
+            isDashable = false;
         }
     }
 
     public void DoUltimate(){
-        if(heroData != null &&  stamina >= actionCost * 4){
+        if(heroData != null && stamina >= (actionCost * 4)){
+            isDashable = false;
             stamina -= (actionCost * 4);
             heroData.Ultimate(this.gameObject);
-            updateHero();
             if(regen != null) StopCoroutine(regen);
             Invoke("StartRegen", 5f);
+            UpdateHero();
         }
     }
-
 
     // Update is called once per frame
     void Update()
@@ -158,6 +177,10 @@ public class Player : MonoBehaviour
         
         if(hit.collider.tag == "Props"){
             hit.collider.GetComponent<Box>().ApplyDamage(attack);
+        }
+ 
+        if(hit.collider.CompareTag("Props") || hit.collider.CompareTag("Wall")){
+            isDashable = true;
         }
 
         Vector2 inNormal = hit.contacts[0].normal;
@@ -179,7 +202,7 @@ public class Player : MonoBehaviour
         while (stamina < maxStamina)
         {
             stamina += regenStamina;
-            updateHero();
+            UpdateHero();
             yield return regenTick;
         }
         regen = null;

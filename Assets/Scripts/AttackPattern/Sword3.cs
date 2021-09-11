@@ -16,9 +16,9 @@ public class Sword3 : AttackPatterns
         baseRange = range;
         baseAttack = attack;
 
-        DrawCircleHitbox(player.transform.position, attack, range);
+        // DrawCircleHitbox(player.transform.position, attack, range);
         StartCoroutine(HyperSpeed(new Vector2(1,1), duration, speed, rb));
-        Invoke("UltimateOff", duration - 0.1f);
+        Invoke("UltimateOff", duration - 0.5f);
         DestroySelf(gameObject, duration);
     }
 
@@ -30,8 +30,8 @@ public class Sword3 : AttackPatterns
 
     void Update()
     {
-        // DrawCircleHitbox(player.transform.position, baseAttack, baseRange);
         transform.position = player.transform.position;
+        DrawCircleHitbox(transform.position, baseAttack, baseRange, false);
     }
 
     void UltimateOff(){
