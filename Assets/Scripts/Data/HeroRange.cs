@@ -20,12 +20,24 @@ public class HeroRange : HeroBase
     }
 
     public override void DashAttack(GameObject obj){
+        Vector3 pos = obj.transform.position;
+        GameObject attackPrefab = Instantiate(baseDashAttack, pos, Quaternion.identity);
+        attackPrefab.transform.SetParent(obj.transform);
+        attackPrefab.GetComponent<Bow2>().ShootBow(attack);
     }
     
     public override void Skill(GameObject obj){
+        Vector3 pos = obj.transform.position;
+        GameObject attackPrefab = Instantiate(baseSkill, pos, Quaternion.identity);
+        attackPrefab.transform.SetParent(obj.transform);
+        attackPrefab.GetComponent<Bow3>().ShootBow(attack);
     }
     
     public override void Ultimate(GameObject obj){
+        Vector3 pos = obj.transform.position;
+        GameObject attackPrefab = Instantiate(baseUltimate, pos, Quaternion.identity);
+        attackPrefab.transform.SetParent(obj.transform);
+        attackPrefab.GetComponent<Bow4>().InitializeSkill(attack, 5f);
     }
 
     

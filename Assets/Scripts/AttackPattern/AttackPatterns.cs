@@ -9,6 +9,10 @@ public class AttackPatterns : MonoBehaviour
 
     public LayerMask enemyLayers;
 
+    protected void OnComboAdd(int value){
+        OnComboCounter(value);
+    }
+
     protected void DrawCircleHitbox(Vector3 position, int attack, float range, bool destroyInContact){
         Collider2D[] hitBox = Physics2D.OverlapCircleAll(position, range, enemyLayers);
         foreach (Collider2D hitObj in hitBox)
@@ -25,13 +29,20 @@ public class AttackPatterns : MonoBehaviour
         }
     }
 
-    protected void DrawRayHitBox(Vector2 pos, Vector2 dir, float length, int attack){
+    protected void DrawRayHitBox(Vector2 pos, Vector2 dir, float length, int attack, bool knockback){
         RaycastHit2D ray = Physics2D.Raycast(pos, dir, length, enemyLayers);
         Debug.DrawRay(pos, dir, Color.red, length);
 
         if(ray.collider != null && ray.collider.CompareTag("Enemy")){
             ray.collider.GetComponent<Enemy>().ApplyDamage(attack);
             OnComboCounter(1);
+            if(knockback){
+                Vector2 enemyPos = new Vector2(ray.collider.transform.position.x, ray.collider.transform.position.y);
+                Vector2 difference = (enemyPos - pos).normalized;
+                Vector2 force = difference * 5f;
+                Rigidbody2D rb = ray.collider.GetComponent<Rigidbody2D>();
+                rb.AddForce(force, ForceMode2D.Impulse);
+            }
             Destroy(gameObject);
         }
     }
@@ -45,11 +56,9 @@ public class AttackPatterns : MonoBehaviour
             {
                 enemyList.Add(enemy.transform);
             }
-
             enemyList.Sort(delegate(Transform t1, Transform t2){ 
                 return Vector3.Distance(t1.position,position).CompareTo(Vector3.Distance(t2.position, position));
             });
-
             return enemyList[0];
         }else{
             return null;

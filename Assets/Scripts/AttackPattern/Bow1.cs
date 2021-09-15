@@ -33,7 +33,7 @@ public class Bow1 : MonoBehaviour
         for (int i = 0; i < shootTime; i++)
         {
             GameObject arrow = Instantiate(arrowPrefabs, player.transform.position, Quaternion.identity) as GameObject;
-            arrow.GetComponent<Arrow>().Initialize(baseAttack);
+            arrow.GetComponent<Arrow>().Initialize(player, baseAttack, -90, false);
             yield return new WaitForSeconds(0.5f);
         }
         yield return new WaitForEndOfFrame();

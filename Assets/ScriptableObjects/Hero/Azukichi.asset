@@ -34,6 +34,9 @@ MonoBehaviour:
   animCon: {fileID: 9100000, guid: 1f3b499da1718234ebede4c3db041c09, type: 2}
   baseAttack: {fileID: 259398985914303138, guid: a4e5b3038801a9b4c8ffa72e3faa9201,
     type: 3}
-  baseDashAttack: {fileID: 0}
-  baseSkill: {fileID: 0}
-  baseUltimate: {fileID: 0}
+  baseDashAttack: {fileID: 8188049273759366252, guid: 913abda03ec415d478d88329c1aac674,
+    type: 3}
+  baseSkill: {fileID: 697052078600965960, guid: 03fc49197059f174287ae1c35470af46,
+    type: 3}
+  baseUltimate: {fileID: 8161050440533701175, guid: 1a3e7d72731357447a7a3c6ee68bace4,
+    type: 3}

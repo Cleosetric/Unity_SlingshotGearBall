@@ -6,32 +6,31 @@ public class Arrow : AttackPatterns
 {
     public float speed;
     public float lifeTime;
-
-    private Player player;
     private SpriteRenderer sprite;
     private Vector2 direction;
 
     private int baseAttack;
+    private bool knockback;
 
-    public void Initialize(int atk){
+    public void Initialize(Player player, int atk, float offset, bool knock){
         Start();
         baseAttack = atk;
-        SetAngleToEnemy();
-        Destroy(gameObject, lifeTime);
+        knockback = knock;
+        SetAngleToEnemy(player, offset);
     }
 
     void Start(){
-        player = FindObjectOfType<Player>();
         sprite = GetComponent<SpriteRenderer>();
         sprite.enabled = true;
+        Destroy(gameObject, lifeTime);
     }
 
     void Update(){
         transform.Translate(Vector2.up * speed * Time.deltaTime);
-        DrawRayHitBox(transform.position, direction, 0.3f, baseAttack);
+        DrawRayHitBox(transform.position, transform.up, 0.3f, baseAttack, knockback);
     }
 
-    void SetAngleToEnemy()
+    void SetAngleToEnemy(Player player, float offset)
     {
         if(player != null && player.gameObject.activeSelf){
             Transform closestEnemy = EnemyNearbyTransform(player.transform.position);
@@ -39,7 +38,7 @@ public class Arrow : AttackPatterns
             {
                 direction = closestEnemy.position - player.transform.position;
                 float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0, 0, angle + -90);
+                transform.rotation = Quaternion.Euler(0, 0, angle + offset);
             }else{
                 direction = Vector2.up;
             }
