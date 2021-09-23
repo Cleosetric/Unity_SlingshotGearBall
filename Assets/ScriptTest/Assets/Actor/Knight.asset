@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ebabd7a710c9c8449b6ff360564833a, type: 3}
+  m_Name: Knight
+  m_EditorClassIdentifier: 
+  MHP:
+    baseValue: 200
+  MSP:
+    baseValue: 100
+  ATK:
+    baseValue: 10
+  DEF:
+    baseValue: 5
+  AGI:
+    baseValue: 5
+  HRG:
+    baseValue: 5
+  SRG:
+    baseValue: 1
+  HIT:
+    baseValue: 0.1
+  CRI:
+    baseValue: 0.1
+  HRR:
+    baseValue: 0.25
+  SRR:
+    baseValue: 0.5
+  name: Sir Ian Phage
+  description: A Knight
+  actorSprite: {fileID: 3303528763351885255, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
+    type: 3}
+  actorFace: {fileID: 3303528763351885255, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
+    type: 3}
+  level: 0
+  actionSight: 5
+  actionCost: 5

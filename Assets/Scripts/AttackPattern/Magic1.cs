@@ -39,9 +39,9 @@ public class Magic1 : AttackPatterns
         GameObject[] enemyGO = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (GameObject enemy in enemyGO)
         {
-            enemyList.Add(enemy);
+            if( enemy != null) enemyList.Add(enemy);
         }
-
+        
         enemyList.Sort(delegate(GameObject t1, GameObject t2){ 
             return Vector3.Distance(t1.transform.position,player.transform.position).CompareTo(Vector3.Distance(t2.transform.position, player.transform.position));
         });
@@ -49,7 +49,7 @@ public class Magic1 : AttackPatterns
         List<GameObject> enemyInRange = new List<GameObject>();
         foreach (GameObject enemy in enemyList)
         {
-            if(Vector3.Distance(enemy.transform.position, player.transform.position) < maxDistance){
+            if( enemy != null && Vector3.Distance(enemy.transform.position, player.transform.position) < maxDistance){
                 enemyInRange.Add(enemy);
             }
         }
@@ -80,6 +80,7 @@ public class Magic1 : AttackPatterns
                     endPos = player.transform.position;
                     projectile.GetComponent<SpriteRenderer>().enabled = false;
                     Destroy(projectile);
+                    Destroy(gameObject);
                     DrawRaycastHit(startPos, Vector2.zero, maxRayLength);
                 }else{
                     startPos = enemyInRange[i].transform.position;
@@ -94,14 +95,11 @@ public class Magic1 : AttackPatterns
                     pos = Vector3.Lerp(startPos, endPos, t);
                     projectile.transform.position = pos;
                     float angle = Mathf.Atan2(endPos.y, endPos.x) * Mathf.Rad2Deg;
-                    transform.rotation = Quaternion.Euler(0, 0, angle -90);
+                    projectile.transform.rotation = Quaternion.Euler(0, 0, angle -90);
                     yield return null;
                 }
             }
-           
-            Destroy(gameObject);
-        }else{
-            Destroy(gameObject);
         }
+        Destroy(gameObject);
     }
 }
