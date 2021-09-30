@@ -9,6 +9,8 @@ public class Items : ScriptableObject
     public string description;
     public Sprite icon;
     public bool isDefaultItem = false;
+    public int sellingPrice;
+    public ItemRarity rarity;
 
     public virtual void Use(){
         Debug.Log("user Item "+ name);
@@ -18,3 +20,5 @@ public class Items : ScriptableObject
         InventoryManager.Instance.Remove(this);
     }
 }
+
+public enum ItemRarity {Common, Uncommon, Rare, Epic, Legendary, Unique}

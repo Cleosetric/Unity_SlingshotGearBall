@@ -12,6 +12,7 @@ public class StatusUI : MonoBehaviour
     public Image spriteFace;
     public TextMeshProUGUI textName;
     public TextMeshProUGUI textLevel;
+    public TextMeshProUGUI textClass;
     public TextMeshProUGUI hp;
     public TextMeshProUGUI sp;
     public TextMeshProUGUI xp;
@@ -20,8 +21,11 @@ public class StatusUI : MonoBehaviour
     public TextMeshProUGUI agi;
     public TextMeshProUGUI hit;
     public TextMeshProUGUI cri;
+    public TextMeshProUGUI eva;
     public TextMeshProUGUI srg;
     public TextMeshProUGUI hrg;
+    public TextMeshProUGUI hrr;
+    public TextMeshProUGUI srr;
 
     public Slider hpSlider;
     public Slider spSlider;
@@ -30,11 +34,17 @@ public class StatusUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        actor = Actor.Instance;
-        actor.onActorStatChanged += UpdateUI;
-
+        actor = Party.Instance.getActiveActor();
         inventory = InventoryManager.Instance;
+
+        actor.onActorStatChanged += UpdateUI;
         inventory.onItemChangedCallback += UpdateUI;
+        Party.Instance.partyOnActorChanged += UpdateActor;
+        RefreshData();
+    }
+
+    void UpdateActor(){
+        actor = Party.Instance.getActiveActor();
         RefreshData();
     }
 
@@ -49,6 +59,7 @@ public class StatusUI : MonoBehaviour
             spriteFace.sprite = actor.actorFace;
             textName.SetText(actor.actorName);
             textLevel.SetText("(Level "+actor.currentLevel+")");
+            textClass.SetText("["+actor.actorClass.ToString()+"]");
             hp.SetText(actor.currentHP+"/"+actor.statMHP.getValue());
             sp.SetText(actor.currentSP+"/"+actor.statMSP.getValue());
             xp.SetText(actor.currentExp+"/"+actor.nextLevelExp[actor.currentLevel]);
@@ -57,8 +68,11 @@ public class StatusUI : MonoBehaviour
             agi.SetText("AGI\t: "+actor.statAGI.getValue());
             hit.SetText("HIT\t: "+actor.statHIT.getValue());
             cri.SetText("CRI\t: "+actor.statCRI.getValue());
+            eva.SetText("EVA\t: "+actor.statEVA.getValue());
             hrg.SetText("HRG\t: "+actor.statHRG.getValue());
             srg.SetText("SRG\t: "+actor.statSRG.getValue());
+            hrr.SetText("HRR\t: "+actor.statHRR.getValue());
+            srr.SetText("SRR\t: "+actor.statSRR.getValue());
 
             hpSlider.maxValue = actor.statMHP.getValue();
             hpSlider.value = actor.currentHP;

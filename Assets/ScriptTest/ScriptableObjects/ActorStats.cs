@@ -9,9 +9,10 @@ public class ActorStats : CharachterStats
     [Header("Charachter")]
     public new string name;
     public string description;
+    public ActorClass actorClass;
     public Sprite actorSprite;
     public Sprite actorFace;
-    public int level;
+    public float growthCurve;
 
     [Space]
     [Header("Controller")]

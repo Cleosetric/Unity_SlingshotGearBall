@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Knight Sword
   description: a Knight Sword
-  icon: {fileID: 4230347591139482879, guid: 6200657b8a51e6c46ba7e7a7862b0146, type: 3}
+  icon: {fileID: -7919126669103867979, guid: 4e5b334b874aef74b99453be2af7c4ed, type: 3}
   isDefaultItem: 0
+  sellingPrice: 300
+  rarity: 3
   equipSlot: 0
+  equipClass: 1
   modMHP: 0
   modMSP: 0
   modATK: 5
@@ -26,5 +29,6 @@ MonoBehaviour:
   modSRG: 0
   modHIT: 0
   modCRI: 0
+  modEVA: 0
   modHRR: 0
   modSRR: 0

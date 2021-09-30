@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Knight Plate
   description: a Knight Plate
-  icon: {fileID: -1241261289153872356, guid: 6200657b8a51e6c46ba7e7a7862b0146, type: 3}
+  icon: {fileID: 4164057851018822032, guid: f54c9b70a4ca5554ebe5cca55ea59f75, type: 3}
   isDefaultItem: 0
+  sellingPrice: 300
+  rarity: 2
   equipSlot: 1
+  equipClass: 1
   modMHP: 0
   modMSP: 0
   modATK: 0
@@ -26,5 +29,6 @@ MonoBehaviour:
   modSRG: 0
   modHIT: 0
   modCRI: 0
+  modEVA: 0
   modHRR: 0
   modSRR: 0

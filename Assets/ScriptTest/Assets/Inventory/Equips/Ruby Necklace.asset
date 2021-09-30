@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Ruby Necklace
   description: Necklace made of fake ruby
-  icon: {fileID: 5848064539680731454, guid: 7e0976cea8eeef34bafd85621713e113, type: 3}
+  icon: {fileID: -3720291315290247637, guid: f54c9b70a4ca5554ebe5cca55ea59f75, type: 3}
   isDefaultItem: 0
+  sellingPrice: 500
+  rarity: 5
   equipSlot: 3
+  equipClass: 0
   modMHP: 15
   modMSP: 5
   modATK: 0
@@ -26,5 +29,6 @@ MonoBehaviour:
   modSRG: 0
   modHIT: 0
   modCRI: 0
+  modEVA: 0
   modHRR: 0
   modSRR: 0

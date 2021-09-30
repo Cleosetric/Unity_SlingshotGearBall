@@ -5,33 +5,18 @@ using UnityEngine;
 
 public class Actor : Charachter
 {
-    #region Singleton
-	private static Actor _instance;
-	public static Actor Instance { get { return _instance; } }
-
-	private void Awake()
-    {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        } else {
-            _instance = this;
-        }
-        LoadData();
-    }
-	#endregion
-
     public delegate void OnActorStatChanged();
     public OnActorStatChanged onActorStatChanged;
 
     [Space]
     [Header("Actor Info")]
     public ActorStats charachter;
+    public ActorClass actorClass;
     public string actorName;
     public string actorDesc;
     public Sprite actorSprite;
     public Sprite actorFace;
-    public float curveStat = 1.15f;
+    public float curveStat;
 
     [Space]
     [Header("Actor Status")]
@@ -43,36 +28,50 @@ public class Actor : Charachter
     public int[] nextLevelExp;
 
     [Space]
+    [Header("Actor Equipment")]
+    public Equipment[] equipment;
+
+    [Space]
     [Header("Control Parameter")]
     public int actionSight;
     public int actionCost;
 
     private Coroutine regen;
 
+    private void Awake()
+    {
+        LoadData();
+    }
+
     private void LoadData() {
         //Setup Info
         actorName = charachter.name;
         actorDesc = charachter.description;
+        actorClass = charachter.actorClass;
         actorSprite = charachter.actorSprite;
         actorFace = charachter.actorFace;
+        curveStat = charachter.growthCurve;
 
         //Setup Stats
-        statMHP = charachter.MHP;
-        statMSP = charachter.MSP;
-        statATK = charachter.ATK;
-        statDEF = charachter.DEF;
-        statAGI = charachter.AGI;
-        statHRG = charachter.HRG;
-        statSRG = charachter.SRG;
+        statMHP.SetValue(charachter.MHP.getValue());
+        statMSP.SetValue(charachter.MSP.getValue());
+        statATK.SetValue(charachter.ATK.getValue());
+        statDEF.SetValue(charachter.DEF.getValue());
+        statAGI.SetValue(charachter.AGI.getValue());
+        statHRG.SetValue(charachter.HRG.getValue());
+        statSRG.SetValue(charachter.SRG.getValue());
 
-        statHIT = charachter.HIT;
-        statCRI = charachter.CRI;
-        statHRR = charachter.HRR;
-        statSRR = charachter.SRR;
+        statHIT.SetValue(charachter.HIT.getValue());
+        statCRI.SetValue(charachter.CRI.getValue());
+        statEVA.SetValue(charachter.EVA.getValue());
+        statHRR.SetValue(charachter.HRR.getValue());
+        statSRR.SetValue(charachter.SRR.getValue());
 
         currentHP = statMHP.getValue();
         currentSP = statMSP.getValue();
-        currentLevel = charachter.level;
+
+        int numSlot = System.Enum.GetNames(typeof(EquipmentSlot)).Length;
+        equipment= new Equipment[numSlot];
 
         //Setup Control Param
         actionSight = charachter.actionSight;
@@ -87,7 +86,7 @@ public class Actor : Charachter
     }
 
     private void Start() {
-        EquipManager.Instance.onEquipmentChanged += OnEquipsChanged;
+        // EquipManager.Instance.onEquipmentChanged += OnEquipsChanged;
     }
 
     public override void ApplyDamage(int damage)
@@ -111,9 +110,9 @@ public class Actor : Charachter
         }
     }
 
-    private void OnEquipsChanged(Equipment newItem, Equipment oldItem)
+    public void OnItemEquiped(Equipment newItem)
     {
-        if(newItem != null){
+        if(newItem != null ){
             statMHP.AddModifier(newItem.modMHP);
             statMSP.AddModifier(newItem.modMSP);
             statATK.AddModifier(newItem.modATK);
@@ -124,10 +123,15 @@ public class Actor : Charachter
 
             statHIT.AddModifier(newItem.modHIT);
             statCRI.AddModifier(newItem.modCRI);
+            statEVA.AddModifier(newItem.modEVA);
             statHRR.AddModifier(newItem.modHRR);
             statSRR.AddModifier(newItem.modSRR);
         }
+        if(onActorStatChanged != null) onActorStatChanged.Invoke();
+    }
 
+    public void OnItemUnequiped(Equipment oldItem){
+        
         if(oldItem != null){
             statMHP.RemoveModifier(oldItem.modMHP);
             statMSP.RemoveModifier(oldItem.modMSP);
@@ -139,10 +143,10 @@ public class Actor : Charachter
 
             statHIT.RemoveModifier(oldItem.modHIT);
             statCRI.RemoveModifier(oldItem.modCRI);
+            statEVA.RemoveModifier(oldItem.modEVA);
             statHRR.RemoveModifier(oldItem.modHRR);
             statSRR.RemoveModifier(oldItem.modSRR);
         }
-
         if(onActorStatChanged != null) onActorStatChanged.Invoke();
     }
 
@@ -168,6 +172,7 @@ public class Actor : Charachter
 
         if(currentLevel >= maxLevel) currentExp = 0;
         if(onActorStatChanged != null) onActorStatChanged.Invoke();
+        Debug.Log(actorName+" gainExp!");
     }
 
     private void LevelUp()
@@ -187,7 +192,6 @@ public class Actor : Charachter
 
         currentHP = statMHP.getValue();
         currentSP = statMSP.getValue();
-        charachter.level = currentLevel;
     }
 
     private void StartRegen(){

@@ -8,6 +8,7 @@ public class InventoryUI : MonoBehaviour
 
     InventoryManager inventory;
     EquipManager equipment;
+    Party party;
 
     public Transform slotParentInventory;
     public Transform slotParentEquipment;
@@ -22,8 +23,10 @@ public class InventoryUI : MonoBehaviour
     {
         inventory = InventoryManager.Instance;    
         equipment = EquipManager.Instance;    
+        party = Party.Instance;    
 
         inventory.onItemChangedCallback += UpdateUI;
+        Party.Instance.partyOnActorChanged += setEquipUI;
         equipment.onEquipmentChanged += UpdateEquipUI;
 
         inventorySlotUI = slotParentInventory.GetComponentsInChildren<InventroySlotUI>();
@@ -38,6 +41,19 @@ public class InventoryUI : MonoBehaviour
                 inventorySlotUI[i].AddItem(inventory.items[i]);
             }else{
                 inventorySlotUI[i].ClearSlot();
+            }
+        }
+    }
+
+    void setEquipUI(){
+        Equipment[] equips = party.getActiveActor().equipment;
+        for (int i = 0; i < equips.Length; i++)
+        {
+            if(equips[i] != null){
+                int slotIndex = (int)equips[i].equipSlot;
+                equipmentSlotUI[slotIndex].AddItem(equips[i]);
+            }else{
+                equipmentSlotUI[i].ClearSlot();
             }
         }
     }

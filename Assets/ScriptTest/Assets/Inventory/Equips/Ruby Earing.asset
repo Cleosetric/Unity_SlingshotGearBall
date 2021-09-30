@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Ruby Earing I
   description: Earing made of fake ruby
-  icon: {fileID: -3338749442709606003, guid: 7e0976cea8eeef34bafd85621713e113, type: 3}
+  icon: {fileID: 6147074574691459283, guid: f54c9b70a4ca5554ebe5cca55ea59f75, type: 3}
   isDefaultItem: 0
+  sellingPrice: 500
+  rarity: 4
   equipSlot: 5
+  equipClass: 0
   modMHP: 0
   modMSP: 0
   modATK: 0
@@ -24,7 +27,8 @@ MonoBehaviour:
   modAGI: 0
   modHRG: 0
   modSRG: 0
-  modHIT: 0.1
-  modCRI: 0.1
+  modHIT: 1
+  modCRI: 1
+  modEVA: 1
   modHRR: 0
   modSRR: 0

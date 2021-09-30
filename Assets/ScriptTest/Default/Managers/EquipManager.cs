@@ -23,14 +23,16 @@ public class EquipManager : MonoBehaviour
     public OnEquipmentChanged onEquipmentChanged;
 
     InventoryManager inventory;
-    public Equipment[] currentEquipment;
+    Party party;
+    // public Equipment[] currentEquipment;
 
     // Start is called before the first frame update
     void Start()
     {
         inventory = InventoryManager.Instance;
+        party = Party.Instance;
         int numSlot = System.Enum.GetNames(typeof(EquipmentSlot)).Length;
-        currentEquipment = new Equipment[numSlot];
+        // currentEquipment = new Equipment[numSlot];
     }
 
     public void Equip(Equipment newItem){
@@ -38,34 +40,76 @@ public class EquipManager : MonoBehaviour
         int slotIndex = (int)newItem.equipSlot;
         Equipment oldItem = null;
 
-        if(currentEquipment[slotIndex] != null){
+        if(party.getActiveActor().equipment[slotIndex] != null){
             if(inventory.items.Count < inventory.maxSlot){ 
-                oldItem = currentEquipment[slotIndex];
+                oldItem = party.getActiveActor().equipment[slotIndex];
                 inventory.Add(oldItem);
-                currentEquipment[slotIndex] = newItem;
+                
+                party.getActiveActor().OnItemUnequiped(oldItem);
+                party.getActiveActor().equipment[slotIndex] = newItem;
+                party.getActiveActor().OnItemEquiped(newItem);
             }
         }else{
-            currentEquipment[slotIndex] = newItem;
+            party.getActiveActor().equipment[slotIndex] = newItem;
+            party.getActiveActor().OnItemEquiped(newItem);
         }
 
-        if(onEquipmentChanged != null) onEquipmentChanged.Invoke(newItem, oldItem);
+        // if(party.getActiveActor().equipment[slotIndex] == null && party.getActiveActor().equipment[slotIndex] != newItem)
+           
+
+        if(onEquipmentChanged != null) 
+            onEquipmentChanged.Invoke(newItem, oldItem);
     }
 
     public void Unequip(int slotIndex){
         if(inventory.items.Count < inventory.maxSlot){
-            if(currentEquipment[slotIndex] != null){
-                Equipment oldItem = currentEquipment[slotIndex];
+            if(party.getActiveActor().equipment[slotIndex] != null){
+                Equipment oldItem = party.getActiveActor().equipment[slotIndex];
                 inventory.Add(oldItem);
-                currentEquipment[slotIndex] = null;
+                party.getActiveActor().equipment[slotIndex] = null;
+                party.getActiveActor().OnItemUnequiped(oldItem);
                 if(onEquipmentChanged != null) onEquipmentChanged.Invoke(null, oldItem);
             }
         }
     }
 
     public void UnequipAll(){
-        for (int i = 0; i < currentEquipment.Length; i++)
+        for (int i = 0; i < party.getActiveActor().equipment.Length; i++)
         {
             Unequip(i);
+        }
+    }
+
+    public void RecomendedEquip(){
+        // UnequipAll();
+        // Debug.Log("Total Inventory"+ inventory.items.Count);
+        // for (int i = 0; i < inventory.items.Count; i++)
+        // {
+        //     Debug.Log("Index "+ i + " | name "+inventory.items[i].name);
+        //     if(inventory.items[i] is Equipment){
+        //         Equipment equip = inventory.items[i] as Equipment;
+        //         // Debug.Log("Index "+ i + " | equip "+equip.name);
+        //         if((int)equip.equipClass == 0 || (int)equip.equipClass == (int)party.getActiveActor().actorClass){
+        //             Debug.Log("Index "+ i + " | "+equip.name + " Succesfuly Equiped");
+        //             Equip(equip);
+        //             // equip.RemoveItem();
+        //             // continue;
+        //         }
+        //     }
+        // }
+
+        for (int i = inventory.items.Count - 1; i >= 0; i--)
+        {
+            if(inventory.items[i] is Equipment){
+                Equipment equip = inventory.items[i] as Equipment;
+                // Debug.Log("Index "+ i + " | equip "+equip.name);
+                if((int)equip.equipClass == 0 || (int)equip.equipClass == (int)party.getActiveActor().actorClass){
+                    Debug.Log("Index "+ i + " | "+equip.name + " Succesfuly Equiped");
+                    Equip(equip);
+                    equip.RemoveItem();
+                    // continue;
+                }
+            }
         }
     }
 }

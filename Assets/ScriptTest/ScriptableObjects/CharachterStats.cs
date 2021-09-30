@@ -16,9 +16,10 @@ public class CharachterStats : ScriptableObject
 
     [Space]
     [Header("Ex Parameter")]
-    [Tooltip("Hit Rate")] public Statf HIT;
-    [Tooltip("Critical Rate")] public Statf CRI;
-    [Tooltip("Health Regeneration Rate")] public Statf HRR;
-    [Tooltip("Stamina Regeneration Rate")] public Statf SRR;
+    [Tooltip("Hit Rate")] public Stat HIT;
+    [Tooltip("Critical Rate")] public Stat CRI;
+    [Tooltip("Critical Rate")] public Stat EVA;
+    [Tooltip("Health Regeneration Rate")] public Stat HRR;
+    [Tooltip("Stamina Regeneration Rate")] public Stat SRR;
 
 }

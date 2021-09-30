@@ -17,10 +17,11 @@ public class Charachter : MonoBehaviour, IDamagable
 
     [Space]
     [Header("Ex Parameter")]
-    [Tooltip("Hit Rate")] public Statf statHIT;
-    [Tooltip("Critical Rate")] public Statf statCRI;
-    [Tooltip("Health Regeneration Rate")] public Statf statHRR;
-    [Tooltip("Stamina Regeneration Rate")] public Statf statSRR;
+    [Tooltip("Hit Rate")] public Stat statHIT;
+    [Tooltip("Critical Rate")] public Stat statCRI;
+    [Tooltip("Critical Rate")] public Stat statEVA;
+    [Tooltip("Health Regeneration Rate")] public Stat statHRR;
+    [Tooltip("Stamina Regeneration Rate")] public Stat statSRR;
 
     public virtual void ApplyDamage(int damage)
     {

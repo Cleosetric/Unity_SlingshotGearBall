@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Ruby Ring
   description: Ring made of fake ruby
-  icon: {fileID: -2652133911391862278, guid: 7e0976cea8eeef34bafd85621713e113, type: 3}
+  icon: {fileID: 1714113527348785075, guid: f54c9b70a4ca5554ebe5cca55ea59f75, type: 3}
   isDefaultItem: 0
+  sellingPrice: 500
+  rarity: 0
   equipSlot: 4
+  equipClass: 0
   modMHP: 0
   modMSP: 0
   modATK: 0
@@ -26,5 +29,6 @@ MonoBehaviour:
   modSRG: 2
   modHIT: 0
   modCRI: 0
+  modEVA: 0
   modHRR: 0
   modSRR: 0

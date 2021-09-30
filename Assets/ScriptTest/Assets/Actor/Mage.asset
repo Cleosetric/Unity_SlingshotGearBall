@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ebabd7a710c9c8449b6ff360564833a, type: 3}
-  m_Name: Knight
+  m_Name: Mage
   m_EditorClassIdentifier: 
   MHP:
-    baseValue: 200
-  MSP:
     baseValue: 100
+  MSP:
+    baseValue: 80
   ATK:
-    baseValue: 10
-  DEF:
     baseValue: 5
+  DEF:
+    baseValue: 2
   AGI:
     baseValue: 5
   HRG:
-    baseValue: 5
+    baseValue: 2
   SRG:
-    baseValue: 1
+    baseValue: 2
   HIT:
     baseValue: 20
   CRI:
@@ -33,16 +33,16 @@ MonoBehaviour:
   EVA:
     baseValue: 20
   HRR:
-    baseValue: 5
+    baseValue: 3
   SRR:
-    baseValue: 5
-  name: Sir Ian Phage
-  description: A Knight
-  actorClass: 1
-  actorSprite: {fileID: 3303528763351885255, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
+    baseValue: 3
+  name: Vernes
+  description: a mage of ancient tower
+  actorClass: 3
+  actorSprite: {fileID: 8999996067587195337, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
     type: 3}
-  actorFace: {fileID: 3303528763351885255, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
+  actorFace: {fileID: 8999996067587195337, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
     type: 3}
-  growthCurve: 1.125
+  growthCurve: 1.2
   actionSight: 5
   actionCost: 5

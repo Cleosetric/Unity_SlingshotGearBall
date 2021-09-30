@@ -13,7 +13,7 @@ public class InventroySlotUI : MonoBehaviour
         item = newItem;
         icon.sprite = item.icon;
         icon.enabled = true;
-        remove.gameObject.SetActive(true);
+        remove.gameObject.SetActive(false);
         remove.interactable = true;
     }
 
