@@ -36,11 +36,11 @@ public class ItemHelpUI : MonoBehaviour
     public Button btnSell;
 
     private void Start() {
-        actor = Party.Instance.getActiveActor();
+        actor = Party.Instance.GetActiveActor();
         ResetUI();
     }
 
-    private void ResetUI()
+    public void ResetUI()
     {
         equip = null;
         icon.enabled = false;
@@ -100,16 +100,31 @@ public class ItemHelpUI : MonoBehaviour
 
     private void DrawItemStat()
     {
-        int[] allStat = {equip.modMHP,equip.modMSP,equip.modATK,equip.modDEF,equip.modAGI,equip.modHRG,
-        equip.modSRG,equip.modHIT, equip.modCRI,equip.modEVA, equip.modHRR, equip.modSRR};
-        string[] statLabel = {"MHP","MSP","ATK","DEF","AGI","HRG","SRG","HIT","CRI","EVA","HRR","SRR"};
+        float[] allStat = {
+            equip.modMHP.value,
+            equip.modMSP.value,
+            equip.modATK.value,
+            equip.modDEF.value,
+            equip.modMATK.value,
+            equip.modMDEF.value,
+            equip.modAGI.value,
+            equip.modLUK.value,
+            equip.modHRG.value,
+            equip.modSRG.value,
+            equip.modHIT.value, 
+            equip.modCRI.value,
+            equip.modEVA.value,
+            equip.modHRR.value,
+            equip.modSRR.value
+        };
+        string[] statLabel = {"MHP","MSP","ATK","DEF","MATK","MDEF","AGI","LUK","HRG","SRG","HIT","CRI","EVA","HRR","SRR"};
         string allstring = "";
         int counter = 0;
         for (int i = 0; i < allStat.Length; i++)
         {
             if(allStat[i] != 0){
                 counter += 1;
-                allstring += statLabel[i]+"\t: "+"<color=#2d940e>+"+allStat[i]+"</color>\t";
+                allstring += statLabel[i]+"\t: "+"<color=#2d940e>+"+Mathf.RoundToInt(allStat[i])+"</color>\t";
                 if(counter >= 2){
                     counter = 0;
                     allstring += "\n";
@@ -121,7 +136,7 @@ public class ItemHelpUI : MonoBehaviour
 
     public void EquipItem(){
         if(equip != null){
-            actor = Party.Instance.getActiveActor();
+            actor = Party.Instance.GetActiveActor();
             if((int)equip.equipClass == 0 || (int)equip.equipClass == (int)actor.actorClass){
                 Debug.Log("Equip " + equip.name);
                 EquipManager.Instance.Equip(equip);

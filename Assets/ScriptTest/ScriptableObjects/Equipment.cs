@@ -7,19 +7,22 @@ public class Equipment : Items
 {
     public EquipmentSlot equipSlot;
     public ActorClass equipClass;
-    public int modMHP;
-    public int modMSP;
-    public int modATK;
-    public int modDEF;
-    public int modAGI;
-    public int modHRG;
-    public int modSRG;
+    public StatModifier modMHP;
+    public StatModifier modMSP;
+    public StatModifier modATK;
+    public StatModifier modDEF;
+    public StatModifier modMATK;
+    public StatModifier modMDEF;
+    public StatModifier modAGI;
+    public StatModifier modLUK;
+    public StatModifier modHRG;
+    public StatModifier modSRG;
 
-    public int modHIT;
-    public int modCRI;
-    public int modEVA;
-    public int modHRR;
-    public int modSRR;
+    public StatModifier modHIT;
+    public StatModifier modCRI;
+    public StatModifier modEVA;
+    public StatModifier modHRR;
+    public StatModifier modSRR;
 
     public override void Use()
     {
@@ -33,4 +36,4 @@ public class Equipment : Items
 
 public enum ActorClass {None, Knight, Archer, Mage, Lance, Gunner, Summoner}
 
-public enum EquipmentSlot {Weapon,Armor,Boots,Necklace,Ring,Earing}
+public enum EquipmentSlot {Weapon,Armor,Boots,Helmet,Necklace,Ring}

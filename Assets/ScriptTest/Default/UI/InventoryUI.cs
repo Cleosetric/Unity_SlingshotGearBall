@@ -46,7 +46,7 @@ public class InventoryUI : MonoBehaviour
     }
 
     void setEquipUI(){
-        Equipment[] equips = party.getActiveActor().equipment;
+        Equipment[] equips = party.GetActiveActor().equipment;
         for (int i = 0; i < equips.Length; i++)
         {
             if(equips[i] != null){

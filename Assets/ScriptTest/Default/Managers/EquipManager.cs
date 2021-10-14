@@ -40,21 +40,21 @@ public class EquipManager : MonoBehaviour
         int slotIndex = (int)newItem.equipSlot;
         Equipment oldItem = null;
 
-        if(party.getActiveActor().equipment[slotIndex] != null){
+        if(party.GetActiveActor().equipment[slotIndex] != null){
             if(inventory.items.Count < inventory.maxSlot){ 
-                oldItem = party.getActiveActor().equipment[slotIndex];
+                oldItem = party.GetActiveActor().equipment[slotIndex];
                 inventory.Add(oldItem);
                 
-                party.getActiveActor().OnItemUnequiped(oldItem);
-                party.getActiveActor().equipment[slotIndex] = newItem;
-                party.getActiveActor().OnItemEquiped(newItem);
+                party.GetActiveActor().OnItemUnequiped(oldItem);
+                party.GetActiveActor().equipment[slotIndex] = newItem;
+                party.GetActiveActor().OnItemEquiped(newItem);
             }
         }else{
-            party.getActiveActor().equipment[slotIndex] = newItem;
-            party.getActiveActor().OnItemEquiped(newItem);
+            party.GetActiveActor().equipment[slotIndex] = newItem;
+            party.GetActiveActor().OnItemEquiped(newItem);
         }
 
-        // if(party.getActiveActor().equipment[slotIndex] == null && party.getActiveActor().equipment[slotIndex] != newItem)
+        // if(party.GetActiveActor().equipment[slotIndex] == null && party.GetActiveActor().equipment[slotIndex] != newItem)
            
 
         if(onEquipmentChanged != null) 
@@ -63,47 +63,30 @@ public class EquipManager : MonoBehaviour
 
     public void Unequip(int slotIndex){
         if(inventory.items.Count < inventory.maxSlot){
-            if(party.getActiveActor().equipment[slotIndex] != null){
-                Equipment oldItem = party.getActiveActor().equipment[slotIndex];
+            if(party.GetActiveActor().equipment[slotIndex] != null){
+                Equipment oldItem = party.GetActiveActor().equipment[slotIndex];
                 inventory.Add(oldItem);
-                party.getActiveActor().equipment[slotIndex] = null;
-                party.getActiveActor().OnItemUnequiped(oldItem);
+                party.GetActiveActor().equipment[slotIndex] = null;
+                party.GetActiveActor().OnItemUnequiped(oldItem);
                 if(onEquipmentChanged != null) onEquipmentChanged.Invoke(null, oldItem);
             }
         }
     }
 
     public void UnequipAll(){
-        for (int i = 0; i < party.getActiveActor().equipment.Length; i++)
+        for (int i = 0; i < party.GetActiveActor().equipment.Length; i++)
         {
             Unequip(i);
         }
     }
 
     public void RecomendedEquip(){
-        // UnequipAll();
-        // Debug.Log("Total Inventory"+ inventory.items.Count);
-        // for (int i = 0; i < inventory.items.Count; i++)
-        // {
-        //     Debug.Log("Index "+ i + " | name "+inventory.items[i].name);
-        //     if(inventory.items[i] is Equipment){
-        //         Equipment equip = inventory.items[i] as Equipment;
-        //         // Debug.Log("Index "+ i + " | equip "+equip.name);
-        //         if((int)equip.equipClass == 0 || (int)equip.equipClass == (int)party.getActiveActor().actorClass){
-        //             Debug.Log("Index "+ i + " | "+equip.name + " Succesfuly Equiped");
-        //             Equip(equip);
-        //             // equip.RemoveItem();
-        //             // continue;
-        //         }
-        //     }
-        // }
-
         for (int i = inventory.items.Count - 1; i >= 0; i--)
         {
             if(inventory.items[i] is Equipment){
                 Equipment equip = inventory.items[i] as Equipment;
                 // Debug.Log("Index "+ i + " | equip "+equip.name);
-                if((int)equip.equipClass == 0 || (int)equip.equipClass == (int)party.getActiveActor().actorClass){
+                if((int)equip.equipClass == 0 || (int)equip.equipClass == (int)party.GetActiveActor().actorClass){
                     Debug.Log("Index "+ i + " | "+equip.name + " Succesfuly Equiped");
                     Equip(equip);
                     equip.RemoveItem();
@@ -111,5 +94,6 @@ public class EquipManager : MonoBehaviour
                 }
             }
         }
+        ItemHelpUI.Instance.ResetUI();
     }
 }

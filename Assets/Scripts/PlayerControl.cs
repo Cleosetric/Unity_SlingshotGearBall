@@ -161,7 +161,7 @@ public class PlayerControl : MonoBehaviour
     }
 
     private void CheckTouchControl(){
-        if (Input.touchCount > 0 && player.gameObject.activeSelf)
+        if (Input.touchCount > 0 && player.gameObject.activeSelf && !EventSystem.current.IsPointerOverGameObject())
         {
             touch = Input.GetTouch(0);
             switch (touch.phase)

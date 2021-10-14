@@ -12,30 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ebabd7a710c9c8449b6ff360564833a, type: 3}
   m_Name: Knight
   m_EditorClassIdentifier: 
-  MHP:
-    baseValue: 200
-  MSP:
+  statMHP:
     baseValue: 100
-  ATK:
+  statMSP:
+    baseValue: 50
+  statATK:
     baseValue: 10
-  DEF:
+  statDEF:
+    baseValue: 10
+  statMATK:
+    baseValue: 0
+  statMDEF:
+    baseValue: 0
+  statAGI:
+    baseValue: 10
+  statLUK:
+    baseValue: 0
+  statHRG:
     baseValue: 5
-  AGI:
+  statSRG:
     baseValue: 5
-  HRG:
+  statHIT:
+    baseValue: 95
+  statCRI:
+    baseValue: 10
+  statEVA:
     baseValue: 5
-  SRG:
-    baseValue: 1
-  HIT:
-    baseValue: 20
-  CRI:
-    baseValue: 20
-  EVA:
-    baseValue: 20
-  HRR:
-    baseValue: 5
-  SRR:
-    baseValue: 5
+  statHRR:
+    baseValue: 2
+  statSRR:
+    baseValue: 2
   name: Sir Ian Phage
   description: A Knight
   actorClass: 1
@@ -44,5 +50,5 @@ MonoBehaviour:
   actorFace: {fileID: 3303528763351885255, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
     type: 3}
   growthCurve: 1.125
-  actionSight: 5
+  actionSight: 1
   actionCost: 5

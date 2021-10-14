@@ -12,30 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ebabd7a710c9c8449b6ff360564833a, type: 3}
   m_Name: Mage
   m_EditorClassIdentifier: 
-  MHP:
+  statMHP:
     baseValue: 100
-  MSP:
-    baseValue: 80
-  ATK:
+  statMSP:
+    baseValue: 50
+  statATK:
     baseValue: 5
-  DEF:
-    baseValue: 2
-  AGI:
+  statDEF:
     baseValue: 5
-  HRG:
+  statMATK:
+    baseValue: 10
+  statMDEF:
+    baseValue: 10
+  statAGI:
+    baseValue: 10
+  statLUK:
+    baseValue: 0
+  statHRG:
+    baseValue: 5
+  statSRG:
+    baseValue: 5
+  statHIT:
+    baseValue: 85
+  statCRI:
+    baseValue: 15
+  statEVA:
+    baseValue: 5
+  statHRR:
     baseValue: 2
-  SRG:
+  statSRR:
     baseValue: 2
-  HIT:
-    baseValue: 20
-  CRI:
-    baseValue: 20
-  EVA:
-    baseValue: 20
-  HRR:
-    baseValue: 3
-  SRR:
-    baseValue: 3
   name: Vernes
   description: a mage of ancient tower
   actorClass: 3
@@ -44,5 +50,5 @@ MonoBehaviour:
   actorFace: {fileID: 8999996067587195337, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
     type: 3}
   growthCurve: 1.2
-  actionSight: 5
+  actionSight: 1
   actionCost: 5

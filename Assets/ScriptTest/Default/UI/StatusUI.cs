@@ -18,7 +18,10 @@ public class StatusUI : MonoBehaviour
     public TextMeshProUGUI xp;
     public TextMeshProUGUI atk;
     public TextMeshProUGUI def;
+    public TextMeshProUGUI matk;
+    public TextMeshProUGUI mdef;
     public TextMeshProUGUI agi;
+    public TextMeshProUGUI luk;
     public TextMeshProUGUI hit;
     public TextMeshProUGUI cri;
     public TextMeshProUGUI eva;
@@ -34,7 +37,7 @@ public class StatusUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        actor = Party.Instance.getActiveActor();
+        actor = Party.Instance.GetActiveActor();
         inventory = InventoryManager.Instance;
 
         actor.onActorStatChanged += UpdateUI;
@@ -44,7 +47,8 @@ public class StatusUI : MonoBehaviour
     }
 
     void UpdateActor(){
-        actor = Party.Instance.getActiveActor();
+        actor = Party.Instance.GetActiveActor();
+        actor.onActorStatChanged += UpdateUI;
         RefreshData();
     }
 
@@ -60,23 +64,26 @@ public class StatusUI : MonoBehaviour
             textName.SetText(actor.actorName);
             textLevel.SetText("(Level "+actor.currentLevel+")");
             textClass.SetText("["+actor.actorClass.ToString()+"]");
-            hp.SetText(actor.currentHP+"/"+actor.statMHP.getValue());
-            sp.SetText(actor.currentSP+"/"+actor.statMSP.getValue());
+            hp.SetText(actor.currentHP+"/"+actor.statMHP.GetValue());
+            sp.SetText(actor.currentSP+"/"+actor.statMSP.GetValue());
             xp.SetText(actor.currentExp+"/"+actor.nextLevelExp[actor.currentLevel]);
-            atk.SetText("ATK\t: "+actor.statATK.getValue());
-            def.SetText("DEF\t: "+actor.statDEF.getValue());
-            agi.SetText("AGI\t: "+actor.statAGI.getValue());
-            hit.SetText("HIT\t: "+actor.statHIT.getValue());
-            cri.SetText("CRI\t: "+actor.statCRI.getValue());
-            eva.SetText("EVA\t: "+actor.statEVA.getValue());
-            hrg.SetText("HRG\t: "+actor.statHRG.getValue());
-            srg.SetText("SRG\t: "+actor.statSRG.getValue());
-            hrr.SetText("HRR\t: "+actor.statHRR.getValue());
-            srr.SetText("SRR\t: "+actor.statSRR.getValue());
+            atk.SetText("ATK\t: "+actor.statATK.GetValue());
+            def.SetText("DEF\t: "+actor.statDEF.GetValue());
+            matk.SetText("MATK\t: "+actor.statMATK.GetValue());
+            mdef.SetText("MDEF\t: "+actor.statMDEF.GetValue());
+            agi.SetText("AGI\t: "+actor.statAGI.GetValue());
+            luk.SetText("LUK\t: "+actor.statLUK.GetValue());
+            hit.SetText("HIT\t: "+actor.statHIT.GetValue());
+            cri.SetText("CRI\t: "+actor.statCRI.GetValue());
+            eva.SetText("EVA\t: "+actor.statEVA.GetValue());
+            hrg.SetText("HRG\t: "+actor.statHRG.GetValue());
+            srg.SetText("SRG\t: "+actor.statSRG.GetValue());
+            hrr.SetText("HRR\t: "+actor.statHRR.GetValue());
+            srr.SetText("SRR\t: "+actor.statSRR.GetValue());
 
-            hpSlider.maxValue = actor.statMHP.getValue();
+            hpSlider.maxValue = actor.statMHP.GetValue();
             hpSlider.value = actor.currentHP;
-            spSlider.maxValue = actor.statMSP.getValue();
+            spSlider.maxValue = actor.statMSP.GetValue();
             spSlider.value = actor.currentSP;
             xpSlider.maxValue = actor.nextLevelExp[actor.currentLevel];
             xpSlider.value = actor.currentExp;

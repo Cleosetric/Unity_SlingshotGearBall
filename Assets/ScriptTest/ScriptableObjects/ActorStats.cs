@@ -16,6 +16,6 @@ public class ActorStats : CharachterStats
 
     [Space]
     [Header("Controller")]
-    public int actionSight;
+    public float actionSight;
     public int actionCost;
 }

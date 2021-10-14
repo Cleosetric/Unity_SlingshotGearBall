@@ -5,9 +5,9 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
     public float upForce = 1f;
-    public float sideForce = 0.03f;
+    public float sideForce = 0.045f;
     private Rigidbody2D rb;
-    private Transform player;
+    private Transform actor;
 
     [SerializeField]
     private bool isSpawning = false;
@@ -16,12 +16,12 @@ public class Coin : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        player = FindObjectOfType<Player>().transform;
+        actor = Party.Instance.GetActiveActor().transform;
     }
 
     public void CoinInit(){
         rb = GetComponent<Rigidbody2D>();
-        player = FindObjectOfType<Player>().transform;
+        actor = Party.Instance.GetActiveActor().transform;
     }
 
     public void CoinSpawn(Vector2 spawnPos){
@@ -33,23 +33,29 @@ public class Coin : MonoBehaviour
         Vector2 force = new Vector2(xForce *4, yForce * 4);
 
         rb.velocity = force;
+        Invoke("SetSpawned", 0.75f);
+    }
+
+    void SetSpawned(){
         isSpawning = true;
+    }
+
+    private void Update() {
+        if(isSpawning && CoinInDistance()){
+            gameObject.SetActive(false);
+            isSpawning = false;
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(isSpawning) Invoke("MoveCoinToPlayer", 1.25f);
-
-        // if(CoinInDistance()){
-        //     gameObject.SetActive(false);
-        //     isSpawning = false;
-        // }
+        if(isSpawning) Invoke("MoveCoinToPlayer", 3f);
     }
 
     void MoveCoinToPlayer()
     {
-        Vector3 moveVector  = (player.position - transform.position);
+        Vector3 moveVector  = (actor.position - transform.position);
         moveVector.Normalize();
         rb.MovePosition(transform.position + moveVector * Time.unscaledDeltaTime * 10f);
 
@@ -60,7 +66,7 @@ public class Coin : MonoBehaviour
     }
     
     private bool CoinInDistance(){
-        if (Vector3.Distance(player.position, transform.position) < 1f)
+        if (Vector3.Distance(actor.position, transform.position) < 0.5f)
         {
             return true;
         }

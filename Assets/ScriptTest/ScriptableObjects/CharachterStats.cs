@@ -6,20 +6,24 @@ public class CharachterStats : ScriptableObject
 {
     [Space]
     [Header("Base Parameter")]
-    [Tooltip("Max Health Point")] public Stat MHP;
-    [Tooltip("Max Stamina Point")] public Stat MSP;
-    [Tooltip("Base Attack")] public Stat ATK;
-    [Tooltip("Base Defense")] public Stat DEF;
-    [Tooltip("Base Agility")] public Stat AGI;
-    [Tooltip("Health Point Regeneration")] public Stat HRG;
-    [Tooltip("Stamina Point Regeneration")] public Stat SRG;
+    [Tooltip("Max Health Point")] public Statf statMHP;
+    [Tooltip("Max Stamina Point")] public Statf statMSP;
+    [Tooltip("Base Attack")] public Statf statATK;
+    [Tooltip("Base Defense")] public Statf statDEF;
+    [Tooltip("Base Magic Attack")] public Statf statMATK;
+    [Tooltip("Base Magic Defense")] public Statf statMDEF;
+    
+    [Tooltip("Base Agility")] public Statf statAGI;
+    [Tooltip("Base Luck")] public Statf statLUK;
+    [Tooltip("Health Point Regeneration")] public Statf statHRG;
+    [Tooltip("Stamina Point Regeneration")] public Statf statSRG;
 
     [Space]
     [Header("Ex Parameter")]
-    [Tooltip("Hit Rate")] public Stat HIT;
-    [Tooltip("Critical Rate")] public Stat CRI;
-    [Tooltip("Critical Rate")] public Stat EVA;
-    [Tooltip("Health Regeneration Rate")] public Stat HRR;
-    [Tooltip("Stamina Regeneration Rate")] public Stat SRR;
+    [Tooltip("Hit Rate")] public Statf statHIT;
+    [Tooltip("Critical Rate")] public Statf statCRI;
+    [Tooltip("Critical Rate")] public Statf statEVA;
+    [Tooltip("Health Regeneration Rate")] public Statf statHRR;
+    [Tooltip("Stamina Regeneration Rate")] public Statf statSRR;
 
 }

@@ -61,7 +61,7 @@ public class MapManager : MonoBehaviour
         cam.transform.position = pos2;
         player.gameObject.SetActive(true);
         player.gameObject.GetComponent<Player>().StartRegen();
-        EnemyManager.Instance.SpawnEnemy();
+        // EnemyManager.Instance.SpawnEnemy();
     }
     
 }

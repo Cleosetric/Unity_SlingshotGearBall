@@ -6,49 +6,63 @@ using TMPro;
 
 public class HitCounter : MonoBehaviour
 {
-   
-    [SerializeField] private float delayTimeHits = 1;
-    [SerializeField] private GameObject hitPanel;
-    [SerializeField] private TextMeshProUGUI hitText;
+    #region Singleton
+	private static HitCounter _instance;
+	public static HitCounter Instance { get { return _instance; } }
+
+	private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        } else {
+            _instance = this;
+        }
+    }
+	#endregion
+
+    public float delayTimeHits = 1;
+    [Space]
+    [Header("Combo Counter")]
+    public TextMeshProUGUI hitText;
+
+    [Space]
+    [Header("Damage Popup")]
+    public GameObject popUI;
 
     private int hitCounter;
     private float lastHitTime;
 
-    private void Awake() {
-        AttackPatterns.OnComboCounter += AddHitCounter;
-    }
-
     private void Start() {
-        hitPanel.SetActive(false);
+        hitText.text = "";
     }
 
     private void Update() {
         if((Time.time - lastHitTime) > delayTimeHits)
         {
-            hitPanel.SetActive(false);
             hitText.text = "";
             lastHitTime = 0;
         }
     }
 
-    // Call when you hit an enemy
     public void AddHitCounter(int combo)
     {
-        hitPanel.SetActive(true);
-        // Debug.Log((Time.time - lastHitTime));
         if((Time.time - lastHitTime) < delayTimeHits)
         {
-            // then add to the hit counter
             hitCounter += combo;
         }
         else
         {
-            // => Reset the counter and start over with this hit as the first one
             hitCounter = 1;
         }
-        hitText.text = "Combo : "+hitCounter;
-        
-        // update the lastHitTime
+        hitText.text = hitCounter+" Combo";
         lastHitTime = Time.time;
+    }
+
+    public void AddDamagePopup(Transform pos, int type, string damage, string hit){
+        GameObject popup = Instantiate(popUI, pos.position, Quaternion.identity);
+        popup.transform.SetParent(pos);
+        popup.transform.position = pos.position + Vector3.up;
+        popup.GetComponent<PopupUI>().Setup(type,damage,hit);
     }
 }

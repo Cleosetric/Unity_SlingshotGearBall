@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3033e0b484d1e469d2ff03a3812161, type: 3}
+  m_Name: Slime
+  m_EditorClassIdentifier: 
+  statMHP:
+    baseValue: 100
+  statMSP:
+    baseValue: 50
+  statATK:
+    baseValue: 15
+  statDEF:
+    baseValue: 3
+  statMATK:
+    baseValue: 0
+  statMDEF:
+    baseValue: 0
+  statAGI:
+    baseValue: 1.5
+  statLUK:
+    baseValue: 5
+  statHRG:
+    baseValue: 0
+  statSRG:
+    baseValue: 0
+  statHIT:
+    baseValue: 75
+  statCRI:
+    baseValue: 5
+  statEVA:
+    baseValue: 5
+  statHRR:
+    baseValue: 0
+  statSRR:
+    baseValue: 0
+  name: Limey
+  description: 'a slime '
+  mobSprite: {fileID: -7854738478779454800, guid: b3449127b97d24c4ebe66fde1e3ce9c3,
+    type: 3}
+  radiusSight: 1.5
+  attackSight: 1

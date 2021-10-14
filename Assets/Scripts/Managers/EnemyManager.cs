@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -19,21 +21,30 @@ public class EnemyManager : MonoBehaviour
     }
 	#endregion
    
-    public GameObject enemyPrefabs;
-    private Camera cam;
-    private int indexEnemySpawn = 0;
+    public List<GameObject> enemiesAlive = new List<GameObject>();
 
     private void Start() {
-        cam = Camera.main;
-        // SpawnEnemy();
+        FloodEnemy();
     }
 
-    public void SpawnEnemy(){
-        GameObject enemy;
-        enemy = Instantiate(enemyPrefabs) as GameObject;
-        enemy.transform.SetParent(transform);
-        enemy.transform.position = new Vector2(cam.transform.position.x, cam.transform.position.y + 4);
-        enemy.gameObject.name = "Enemy "+indexEnemySpawn;
-        indexEnemySpawn++;
+    private void FloodEnemy()
+    {
+        GameObject[] enemyGO = GameObject.FindGameObjectsWithTag("Enemy");
+        enemiesAlive.AddRange(enemyGO);
+    }
+
+    public Transform EnemyNearbyTransform(Vector3 position){
+        if(enemiesAlive.Count > 0){
+            enemiesAlive.Sort(delegate(GameObject t1, GameObject t2){ 
+                return Vector3.Distance(t1.transform.position,position).CompareTo(Vector3.Distance(t2.transform.position, position));
+            });
+            return enemiesAlive[0].transform;
+        }else{
+            return null;
+        }
+    }
+
+    public void RestartGame(){
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

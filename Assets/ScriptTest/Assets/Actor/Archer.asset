@@ -12,30 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ebabd7a710c9c8449b6ff360564833a, type: 3}
   m_Name: Archer
   m_EditorClassIdentifier: 
-  MHP:
-    baseValue: 150
-  MSP:
-    baseValue: 125
-  ATK:
-    baseValue: 8
-  DEF:
-    baseValue: 3
-  AGI:
+  statMHP:
+    baseValue: 100
+  statMSP:
+    baseValue: 50
+  statATK:
     baseValue: 15
-  HRG:
+  statDEF:
     baseValue: 5
-  SRG:
+  statMATK:
+    baseValue: 0
+  statMDEF:
+    baseValue: 0
+  statAGI:
+    baseValue: 15
+  statLUK:
+    baseValue: 0
+  statHRG:
+    baseValue: 5
+  statSRG:
+    baseValue: 5
+  statHIT:
+    baseValue: 85
+  statCRI:
+    baseValue: 15
+  statEVA:
+    baseValue: 10
+  statHRR:
     baseValue: 2
-  HIT:
-    baseValue: 20
-  CRI:
-    baseValue: 20
-  EVA:
-    baseValue: 20
-  HRR:
-    baseValue: 5
-  SRR:
-    baseValue: 5
+  statSRR:
+    baseValue: 2
   name: Fey Lilliana
   description: an archer warrior of the deep woods of lyr
   actorClass: 2
@@ -43,6 +49,6 @@ MonoBehaviour:
     type: 3}
   actorFace: {fileID: -3447010108014296370, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
     type: 3}
-  growthCurve: 1.3
-  actionSight: 5
+  growthCurve: 1.15
+  actionSight: 2
   actionCost: 5
