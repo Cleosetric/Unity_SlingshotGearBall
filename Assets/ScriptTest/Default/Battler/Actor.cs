@@ -6,8 +6,8 @@ public class Actor : Charachter
     public delegate void OnActorStatChanged();
     public OnActorStatChanged onActorStatChanged;
 
-    public delegate void OnActorHit();
-    public OnActorHit onActorHit;
+    public delegate void OnActorHPChanged();
+    public OnActorHPChanged onActorHPChanged;
 
     [Space]
     [Header("Actor Info")]
@@ -38,7 +38,6 @@ public class Actor : Charachter
     private bool isDash = false;
     private Vector2 lastVel;
     private Coroutine regen;
-    private CameraManager cameraManager;
 
     [Space]
     [Header("Party Info")]
@@ -98,11 +97,8 @@ public class Actor : Charachter
         {
             nextLevelExp[i] = Mathf.RoundToInt(nextLevelExp[i - 1] * 1.2f);
         }
-        
-        cameraManager = CameraManager.Instance;
     }
 
-    
     public void OnItemEquiped(Equipment newItem)
     {
         if(newItem != null ){
@@ -152,8 +148,10 @@ public class Actor : Charachter
     public override void ApplyDamage(Charachter user)
     {
         base.ApplyDamage(user);
-        cameraManager.Shake(0.75f,0.05f);
-        StartCoroutine(HitEffect());
+        if(base.isHit) HitCounter.Instance.AddHitCounter(1);
+        if(onActorHPChanged != null) onActorHPChanged.Invoke();
+        if(gameObject.activeSelf) StartCoroutine(HitEffect());
+        CameraManager.Instance.Shake(0.75f,0.05f);
     }
 
     public void ApplyAction(int energy)
@@ -162,6 +160,7 @@ public class Actor : Charachter
             currentSP -= energy;
             if(currentSP <= 0) currentSP = 0;
             StartRegen();
+            if(onActorHPChanged != null) onActorHPChanged.Invoke();
         }
     }
 
@@ -177,14 +176,16 @@ public class Actor : Charachter
             Transform closestEnemy = EnemyManager.Instance.EnemyNearbyTransform(transform.position);
             if (closestEnemy != null){
                 float distance = Vector3.Distance(closestEnemy.position, transform.position); 
-                float maxDistance = 3f;               
+                float maxDistance = 3f;  
                 if(distance < maxDistance){
-                    rb.velocity = Vector2.zero;
-                    Vector3 direction = closestEnemy.position - transform.position;
+                    rb.velocity = Vector2.zero;         
+                    Vector3 direction = (closestEnemy.position - transform.position).normalized;
                     rb.AddForce(direction * 20f, ForceMode2D.Impulse);
+                    ApplyAction(actionCost);
                     TimeManager.Instance.StartImpactMotion();
                     isDash = false;
                 }
+                
             }
         }
     }
@@ -281,6 +282,7 @@ public class Actor : Charachter
         while (currentSP < statMSP.GetValue())
         {
             currentSP += Mathf.RoundToInt(statSRG.GetValue());
+            if(onActorHPChanged != null) onActorHPChanged.Invoke();
             yield return new WaitForSeconds(0.25f);
         }
         regen = null;
@@ -310,7 +312,6 @@ public class Actor : Charachter
         if(other.collider.tag == "Enemy" && impulse > 10f){ 
             TimeManager.Instance.StartImpactMotion();
             other.collider.GetComponent<Mob>().ApplyDamage(this);
-            HitCounter.Instance.AddHitCounter(1);
             ActionAttack();
             isDash = false;
         }

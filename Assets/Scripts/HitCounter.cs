@@ -25,6 +25,7 @@ public class HitCounter : MonoBehaviour
     [Space]
     [Header("Combo Counter")]
     public TextMeshProUGUI hitText;
+    public Animator hitAnim;
 
     [Space]
     [Header("Damage Popup")]
@@ -35,6 +36,7 @@ public class HitCounter : MonoBehaviour
 
     private void Start() {
         hitText.text = "";
+        hitAnim = hitText.GetComponent<Animator>();
     }
 
     private void Update() {
@@ -55,7 +57,8 @@ public class HitCounter : MonoBehaviour
         {
             hitCounter = 1;
         }
-        hitText.text = hitCounter+" Combo";
+        hitAnim.SetTrigger("comboHit");
+        hitText.text = hitCounter+" Hits!";
         lastHitTime = Time.time;
     }
 

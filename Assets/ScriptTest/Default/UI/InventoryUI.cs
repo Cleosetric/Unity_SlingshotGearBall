@@ -69,8 +69,4 @@ public class InventoryUI : MonoBehaviour
             equipmentSlotUI[slotIndex].ClearSlot();
         }
     }
-
-    public void ShowMenu(){
-        inventoryUI.SetActive(!inventoryUI.activeSelf);
-    }
 }

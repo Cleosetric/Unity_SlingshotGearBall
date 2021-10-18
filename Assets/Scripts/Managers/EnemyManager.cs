@@ -27,14 +27,17 @@ public class EnemyManager : MonoBehaviour
         FloodEnemy();
     }
 
-    private void FloodEnemy()
+    public void FloodEnemy()
     {
         GameObject[] enemyGO = GameObject.FindGameObjectsWithTag("Enemy");
         enemiesAlive.AddRange(enemyGO);
     }
 
     public Transform EnemyNearbyTransform(Vector3 position){
-        if(enemiesAlive.Count > 0){
+        enemiesAlive.RemoveAll(enemy => enemy == null);
+        if(enemiesAlive.Count == 1){
+            return enemiesAlive[0].transform;
+        }else if(enemiesAlive.Count > 1){
             enemiesAlive.Sort(delegate(GameObject t1, GameObject t2){ 
                 return Vector3.Distance(t1.transform.position,position).CompareTo(Vector3.Distance(t2.transform.position, position));
             });

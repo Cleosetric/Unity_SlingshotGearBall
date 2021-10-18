@@ -37,44 +37,49 @@ public class Charachter : MonoBehaviour
     public Image hpEffect;
     public Rigidbody2D rb;
 
+    protected bool isHit;
+
     public virtual void ApplyDamage(Charachter user)
     {
-        int damage = Mathf.RoundToInt(user.statATK.GetValue());
-        float hitRate = (user.statHIT.GetValue()/ 100) - (this.statEVA.GetValue() / 100);
-        float criRate = (user.statCRI.GetValue() / 100) + 1 - (user.currentHP/user.statMHP.GetValue());
-        float rand = Random.Range(0.0f,1.0f);
+        if(user != null){
+            int damage = Mathf.RoundToInt(user.statATK.GetValue());
+            float hitRate = (user.statHIT.GetValue()/ 100) - (this.statEVA.GetValue() / 100);
+            float criRate = (user.statCRI.GetValue() / 100) + 1 - (user.currentHP/user.statMHP.GetValue());
+            float rand = Random.Range(0.0f,1.0f);
+            isHit = (rand <= hitRate);
 
-        // Debug.Log("Hit - Rand:"+rand+" <= "+hitRate);
-        if(rand <= hitRate){
-            if(damage <= Mathf.RoundToInt(this.statDEF.GetValue())){
-                HitCounter.Instance.AddDamagePopup(transform, 2, "0", "NEGATE");
-            }else{
-                damage -= Mathf.RoundToInt(this.statDEF.GetValue());
-                damage = Mathf.Clamp(damage, 0, int.MaxValue);
-                
-                // Debug.Log(" Cri - Rand:"+rand+" > "+criRate);
-                if(rand < criRate){
-                    damage *= 2;
-                    float damageVariance = Random.Range(0.0f,0.2f);
-                    // Debug.Log("CRand:"+damage+" | "+damageVariance);
-                    damage = Mathf.RoundToInt(damage + (damage * damageVariance));
-                    currentHP -= damage;
-                    HitCounter.Instance.AddDamagePopup(transform, 3, damage.ToString(), "CRITICAL");
+            // Debug.Log("Hit - Rand:"+rand+" <= "+hitRate);
+            if(isHit){
+                if(damage <= Mathf.RoundToInt(this.statDEF.GetValue())){
+                    HitCounter.Instance.AddDamagePopup(transform, 2, "0", "NEGATE");
                 }else{
-                    float damageVariance = Random.Range(0.0f,0.2f);
-                    // Debug.Log("NRand:"+damage+" | "+damageVariance);
-                    damage = Mathf.RoundToInt(damage + (damage * damageVariance));
-                    currentHP -= damage;
-                    HitCounter.Instance.AddDamagePopup(transform, 1, damage.ToString(), "");
-                }
+                    damage -= Mathf.RoundToInt(this.statDEF.GetValue());
+                    damage = Mathf.Clamp(damage, 0, int.MaxValue);
+                    
+                    // Debug.Log(" Cri - Rand:"+rand+" > "+criRate);
+                    if(rand < criRate){
+                        damage *= 2;
+                        float damageVariance = Random.Range(0.0f,0.2f);
+                        // Debug.Log("CRand:"+damage+" | "+damageVariance);
+                        damage = Mathf.RoundToInt(damage + (damage * damageVariance));
+                        currentHP -= damage;
+                        HitCounter.Instance.AddDamagePopup(transform, 3, damage.ToString(), "CRITICAL");
+                    }else{
+                        float damageVariance = Random.Range(0.0f,0.2f);
+                        // Debug.Log("NRand:"+damage+" | "+damageVariance);
+                        damage = Mathf.RoundToInt(damage + (damage * damageVariance));
+                        currentHP -= damage;
+                        HitCounter.Instance.AddDamagePopup(transform, 1, damage.ToString(), "");
+                    }
 
-                if(currentHP <= 0){
-                    currentHP = 0;
-                    Die();
-                }   
+                    if(currentHP <= 0){
+                        currentHP = 0;
+                        Die();
+                    }   
+                }
+            }else{
+                HitCounter.Instance.AddDamagePopup(transform, 2, "0", "MISS");
             }
-        }else{
-            HitCounter.Instance.AddDamagePopup(transform, 2, "0", "MISS");
         }
     }
 

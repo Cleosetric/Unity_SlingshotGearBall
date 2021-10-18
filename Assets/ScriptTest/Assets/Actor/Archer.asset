@@ -31,7 +31,7 @@ MonoBehaviour:
   statHRG:
     baseValue: 5
   statSRG:
-    baseValue: 5
+    baseValue: 2
   statHIT:
     baseValue: 85
   statCRI:
@@ -41,7 +41,7 @@ MonoBehaviour:
   statHRR:
     baseValue: 2
   statSRR:
-    baseValue: 2
+    baseValue: 1
   name: Fey Lilliana
   description: an archer warrior of the deep woods of lyr
   actorClass: 2

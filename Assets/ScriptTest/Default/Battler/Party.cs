@@ -77,13 +77,15 @@ public class Party : MonoBehaviour
         {
             if(i == 0){
                 // actors[i].gameObject.GetComponent<CircleCollider2D>().enabled = true;
-                actors[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.2f;
+                actors[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
                 actors[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
+                actors[i].gameObject.GetComponentInChildren<TargetIndicator>().ShowIndicator();
                 // actors[i].gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
             }else{
                 // actors[i].gameObject.GetComponent<CircleCollider2D>().enabled = false;
-                actors[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.1f;
+                actors[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
                 actors[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
+                actors[i].gameObject.GetComponentInChildren<TargetIndicator>().HideIndicator();
                 // actors[i].gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
             }
         }
@@ -113,6 +115,11 @@ public class Party : MonoBehaviour
             currentIndex ++;
         }   
 
+        if(partyOnActorChanged != null) partyOnActorChanged.Invoke();
+    }
+
+    public void SetActor(int index){
+        currentIndex = index;
         if(partyOnActorChanged != null) partyOnActorChanged.Invoke();
     }
 
