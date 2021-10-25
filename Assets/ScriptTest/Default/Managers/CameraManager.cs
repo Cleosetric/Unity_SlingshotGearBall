@@ -23,6 +23,9 @@ public class CameraManager : MonoBehaviour
 
 	void Start()
 	{
+        // Application.targetFrameRate = 60;
+        // QualitySettings.vSyncCount = 1;
+        
         camTransform = Camera.main.transform;
 		originalPos = camTransform.localPosition;
 	}

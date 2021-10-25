@@ -41,7 +41,9 @@ public class Statf
             }
             else if (mod.type == StatModType.percent)
             {
-                finalValue *= 1 + mod.value;
+                // finalValue += (mod.value*finalValue)/100;
+                // finalValue = finalValue + finalValue * (mod.value / 100);
+                finalValue *= 1 + (mod.value/100);
             }
         }
         // Rounding gets around float calculation errors (like getting 12.0001f, instead of 12f)

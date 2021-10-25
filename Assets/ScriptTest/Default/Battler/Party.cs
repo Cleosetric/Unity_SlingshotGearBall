@@ -29,14 +29,14 @@ public class Party : MonoBehaviour
     public float actorsDistance = 1;
     public float leaderDistance = 0f;
     public Path path = new Path(1);
-    public List<Actor> actors = new List<Actor>();
+    public Queue<Actor> actors = new Queue<Actor>();
     public bool isPartyDefeated = false;
 
     Vector2 moveDir = Vector2.zero;
+    private Vector2 lastVel;
 
     private Actor actorLeader;
     private int currentIndex = 0;
-    // private int oldLeaderIndex = 0;
 
     void Init()
     {
@@ -48,24 +48,27 @@ public class Party : MonoBehaviour
                 // actor.transform.position = spawnPoint.position;
                 AddActor(actor);
             }
-            actorLeader = actors[0];
-            EnableLeaderHitBox();
+            actorLeader = GetLeader();
         }
     }
 
+    private void Start() {
+        EnableLeaderHitBox();
+    }
+
     public Actor GetActiveActor(){
-        return actors[currentIndex];
+        return actors.ToArray()[currentIndex];
     }
 
     public Actor GetLeader(){
-        return actors[0];
+        return actors.Peek();
     }
 
     void AddActor(Actor actor)
     {
         // Initialize a minion and give it an index (0,1,2) which is used as offset later on
         actor.Init(actors.Count);
-        actors.Add(actor);
+        actors.Enqueue(actor);
         actor.MoveOnPath(path, 0f);
 
         // Resize the capacity of the path if there are more minions in the snake than the path
@@ -77,36 +80,55 @@ public class Party : MonoBehaviour
         {
             if(i == 0){
                 // actors[i].gameObject.GetComponent<CircleCollider2D>().enabled = true;
-                actors[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
-                actors[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
-                actors[i].gameObject.GetComponentInChildren<TargetIndicator>().ShowIndicator();
+                // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
+                // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
+                actors.ToArray()[i].parent.GetComponentInChildren<TargetIndicator>().ShowIndicator();
+                actors.ToArray()[i].gameObject.GetComponentInParent<Rigidbody2D>().velocity = lastVel;
                 // actors[i].gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
             }else{
                 // actors[i].gameObject.GetComponent<CircleCollider2D>().enabled = false;
-                actors[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
-                actors[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
-                actors[i].gameObject.GetComponentInChildren<TargetIndicator>().HideIndicator();
+                // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
+                // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
+                actors.ToArray()[i].parent.GetComponentInChildren<TargetIndicator>().HideIndicator();
+                if(actors.ToArray()[i].gameObject.activeSelf) actors.ToArray()[i].StartRegen();
                 // actors[i].gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
             }
         }
     }
 
     public void SwapLeader(){
-        // actors[0].transform.position = actors[actors.Count-1].transform.position;
-        // actors[0].transform.position = actors[1].transform.position;
-
-        IListExtension.Swap(actors,0,actors.Count-1);
-        IListExtension.Swap(actors,0,1);
-        
-        for (int i = 0; i < actors.Count; i++)
+        //check if actor count is alive > 1
+        //not only check count
+        int aliveMemberCount = 0;
+        foreach (Actor actor in actors)
         {
-            if(actors[i].isAlive) actors[i].Init(i);
+            if(actor.isAlive) aliveMemberCount++;
         }
 
-        actorLeader = actors[0];
-        EnableLeaderHitBox();
+        if(aliveMemberCount == 1 && GetLeader().isAlive) return;
 
-        if(partyOnActorChanged != null) partyOnActorChanged.Invoke();
+        if(SkillUI.Instance.CheckAbilityIsAllReady()){
+            if(GetLeader().isAlive) lastVel = GetLeader().GetComponentInParent<Rigidbody2D>().velocity;
+            Actor currentLeader = actors.Peek();
+            actors.Dequeue();
+            actors.Enqueue(currentLeader);
+            actorLeader = actors.Peek();
+            for (int i = 0; i < actors.Count; i++)
+            {
+                if(actors.ToArray()[i].isAlive){
+                    actors.ToArray()[i].Init(i);
+                    actors.ToArray()[i].MoveOnPath(path, 0f);
+                    actors.ToArray()[i].GetComponentInParent<Rigidbody2D>().velocity = Vector2.zero;
+                }
+                actors.ToArray()[i].MoveOnPath(path, 0f);
+                
+            }
+
+            EnableLeaderHitBox();
+            if (path.Capacity <= actors.Count) path.Resize();
+            if(partyOnActorChanged != null) partyOnActorChanged.Invoke();
+        }
+
     }
 
     public void NextActor(){
@@ -140,6 +162,7 @@ public class Party : MonoBehaviour
     private void Update() {
         if(!isPartyDefeated){
             CheckMemberAlive();
+            // CheckGameOver();
         }
     }
 
@@ -151,16 +174,33 @@ public class Party : MonoBehaviour
         }
     }
 
+    void CheckGameOver(){
+        int aliveMemberCount = 0;
+        foreach (Actor actor in actors)
+        {
+            if(actor.isAlive) aliveMemberCount++;
+        }
+        if(aliveMemberCount == 1 && actors.Peek().currentSP < actors.Peek().actionCost){
+            GameOver();
+        }
+    }
+
     void CheckMemberAlive(){
-        isPartyDefeated = !actors.Exists(x => x.isAlive == true);
+        List<Actor> partyMemberList = new List<Actor>();
+        partyMemberList.AddRange(actors.ToArray());
+        isPartyDefeated = !partyMemberList.Exists(x => x.isAlive == true);
         if(!isPartyDefeated){
             if(!GetLeader().isAlive){
                 SwapLeader();
             }
         }else{
-            Invoke("Restart",1f);
-            Debug.Log("Game Over!");
+            GameOver();
         }
+    }
+
+    void GameOver(){
+        Invoke("Restart",3f);
+        Debug.Log("Game Over!");
     }
 
     void Restart(){
@@ -169,20 +209,8 @@ public class Party : MonoBehaviour
 
     private void MoveLeader()
     {
-        // Move the first minion (leader) towards the 'dir'
-        // if(Input.GetKey(KeyCode.RightArrow)){
-        //     moveDir = Vector2.right;
-        // }else if(Input.GetKey(KeyCode.LeftArrow)){
-        //     moveDir = Vector2.left;
-        // }else if(Input.GetKey(KeyCode.DownArrow)){
-        //     moveDir = Vector2.down;
-        // }else if(Input.GetKey(KeyCode.UpArrow)){
-        //     moveDir = Vector2.up;
-        // }
-        // actorLeader.transform.position += ((Vector3)moveDir) * 5f * Time.deltaTime;
-
         // Measure the distance between the leader and the 'head' of that path
-        Vector2 headToLeader = ((Vector2)actorLeader.transform.position) - path.Head();
+        Vector2 headToLeader = ((Vector2)actorLeader.parent.position) - path.Head();
 
         // Cache the precise distance so we can reuse it when we offset each minion
         leaderDistance = headToLeader.magnitude;
@@ -194,10 +222,10 @@ public class Party : MonoBehaviour
             float leaderOvershoot = leaderDistance - actorsDistance;
             Vector2 pushDir = headToLeader.normalized * leaderOvershoot;
 
-            path.Add(((Vector2)actorLeader.transform.position) - pushDir);
+            path.Add(((Vector2)actorLeader.parent.position) - pushDir);
 
             // Update head distance as there is a new point we have to measure from now
-            leaderDistance = (((Vector2)actorLeader.transform.position) - path.Head()).sqrMagnitude;
+            leaderDistance = (((Vector2)actorLeader.parent.position) - path.Head()).sqrMagnitude;
         }
     }
 
@@ -207,14 +235,14 @@ public class Party : MonoBehaviour
 
         for (int i = 1; i < actors.Count; i++)
         {
-            Actor actor = actors[i];
+            Actor actor = actors.ToArray()[i];
 
             if(actor.isAlive){
                 // Move minion on the path
                 actor.MoveOnPath(path, headDistUnit);
 
                 // Extra push to avoid minions stepping on each other
-                Vector2 prevToNext = actors[i - 1].transform.position - actor.transform.position;
+                Vector2 prevToNext = actors.ToArray()[i - 1].parent.position - actor.parent.position;
 
                 float distance = prevToNext.magnitude;
                 if (distance < actorsDistance)

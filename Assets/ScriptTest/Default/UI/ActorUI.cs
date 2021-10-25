@@ -12,6 +12,7 @@ public class ActorUI : MonoBehaviour
     public Image hpBar;
     public Image spBar;
     public TextMeshProUGUI textHP;
+    public TextMeshProUGUI textSP;
     public GameObject actorStatusUI;
 
     private Actor actor;
@@ -25,18 +26,23 @@ public class ActorUI : MonoBehaviour
 
     public void RefreshHud()
     {
+        DisplayHPBar();
+        DisplaySPBar();
         if(actor.isAlive){
             actorFace.sprite = actor.actorSprite;
         }else{
             actorFace.sprite = death;
+            textHP.SetText("-");
+            textSP.SetText("-");
+            hpBar.fillAmount = 0;
+            spBar.fillAmount = 0;
         }
-        DisplayHPBar();
-        DisplaySPBar();
     }
 
     private void DisplayHPBar()
     {
         textHP.SetText(actor.currentHP + "/"+ actor.statMHP.GetValue());
+        textSP.SetText(Mathf.Round(actor.currentSP).ToString());
         hpBar.fillAmount = (float)actor.currentHP / (float)actor.statMHP.GetValue();
     }
     

@@ -163,9 +163,4 @@ public class Slime : Mob
         base.OnCollisionEnter2D(other);
         PickNewRandomDestination();
     }
-
-    private void OnDrawGizmos() {
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, 1f);
-    }
 }

@@ -42,6 +42,7 @@ MonoBehaviour:
     baseValue: 0
   statSRR:
     baseValue: 0
+  elementType: 0
   name: Limey
   description: 'a slime '
   mobSprite: {fileID: -7854738478779454800, guid: b3449127b97d24c4ebe66fde1e3ce9c3,

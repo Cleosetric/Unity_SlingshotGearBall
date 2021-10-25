@@ -8,7 +8,7 @@ public class TargetIndicator : MonoBehaviour
     public SpriteRenderer sprite;
     
     private void Awake() {
-        sprite.enabled = false;
+        sprite.enabled = true;
     }
 
     public void ShowIndicator(){

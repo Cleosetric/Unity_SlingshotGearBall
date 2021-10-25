@@ -15,6 +15,10 @@ public class ActorStats : CharachterStats
     public float growthCurve;
 
     [Space]
+    [Header("Abilities")]
+    public List<Ability> abilities = new List<Ability>();
+
+    [Space]
     [Header("Controller")]
     public float actionSight;
     public int actionCost;

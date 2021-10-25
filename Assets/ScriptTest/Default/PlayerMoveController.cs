@@ -2,10 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class PlayerMoveController : MonoBehaviour
 {
+    public float slowmotionTime = 3f;
+    public Image slowmotionBar;
+    public GameObject cancelSprite;
+    [Space]
     [SerializeField] private GameObject trajectoryPrefab;
     [SerializeField] private LayerMask layerHit;
     [Space]
@@ -30,11 +35,15 @@ public class PlayerMoveController : MonoBehaviour
     private Vector3 endPoint;
     private Vector3 currentPoint;
     private Vector3 initialPos;
+    private Rigidbody2D actorRb;
 
     private bool isSlingValid = false;  
     private bool onSling = false;  
+    private bool onSlowmo = false;  
+    private bool isRegen = false;  
     private float downClickTime;
-    private float delayDeltaTime = 0.175f;  
+    private float delayDeltaTime = 0.05f;  
+    private float currentSlowTime;
     private int count;
 
     private void Awake() {
@@ -56,14 +65,19 @@ public class PlayerMoveController : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         lr = GetComponent<LineRenderer>();
         trajectory = trajectoryPrefab.GetComponent<LineRenderer>();
+        actorRb = actor.GetComponentInParent<Rigidbody2D>();
 
+        currentSlowTime = slowmotionTime;
+        slowmotionBar.fillAmount = 1;
         initialPos = transform.position;
+        cancelSprite.SetActive(false);
         // sprite.enabled = false;
     }
 
     private void RefreshParty()
     {
         actor = party.GetLeader();
+        actorRb = actor.GetComponentInParent<Rigidbody2D>();
     }
 
     private bool IsMouseOnArea(Vector3 MousePosition){
@@ -83,11 +97,27 @@ public class PlayerMoveController : MonoBehaviour
     {
         CheckTouchControl();
         CheckPlayerMovement();
+        CountdownSlomotion();
+    }
+
+    private void FixedUpdate() {
+        if(actor.currentSP > 1f){
+            actorRb.velocity = actor.statAGI.GetValue() * (actorRb.velocity.normalized);
+        }
+        if(actorRb.velocity.magnitude > 0.5f){
+            actor.ApplyAction(1f * Time.fixedDeltaTime);
+        }else{
+            if(actor.gameObject.activeSelf && !isRegen){
+                actorRb.velocity = Vector2.zero;
+                actor.StartRegen();
+                isRegen = true;
+            } 
+        }
     }
 
     private void CheckPlayerMovement()
     {
-        if(actor != null && actor.GetComponent<Rigidbody2D>().velocity.magnitude >= 1.5f){
+        if(actor != null && actorRb.velocity.magnitude >= 1.5f){
             ShowDustTrail();
         }else{
             HideDustTrail();
@@ -112,7 +142,12 @@ public class PlayerMoveController : MonoBehaviour
                             startPoint = new Vector2( cam.transform.position.x, cam.transform.position.y-3.5f);
                             startPoint.z = -4;
                         }
+                        currentSlowTime = slowmotionTime;
+                        slowmotionBar.fillAmount = 1;
                         isSlingValid = true;
+                        onSlowmo = true;
+                        isRegen = false;
+                        actor.StopRegen();
                     }else{
                         isSlingValid = false;
                     }
@@ -125,29 +160,57 @@ public class PlayerMoveController : MonoBehaviour
                                 onSling = true;
                                 sprite.transform.position = startPoint;
                                 sprite.enabled = true;
-                                TimeManager.Instance.EnterSlowmotion();
                                 currentPoint = cam.ScreenToWorldPoint(touch.position);
                                 currentPoint.z = -4;
-                                ShowLine(startPoint, currentPoint);
+                                ShowLine(startPoint,currentPoint);
                                 ShowTrajectory(startPoint, currentPoint);
+                                TimeManager.Instance.EnterSlowmotion();
+                            }else{
+                                onSlowmo = false;
                             }
                         }else{
                             onSling = false;
+                            onSlowmo = false;
                         }
+                    }else{
+                        onSlowmo = false;
                     }
                 break;
 
                 case TouchPhase.Ended:
-                    if(isSlingValid){
-                        if(onSling){
-                            DoMove();
-                        }else{
-                            DoDash();
-                        }
-                    }
+                    EndPhase();
                 break;
                 }
             // }
+        }
+    }
+
+    void EndPhase(){
+        if(isSlingValid){
+            if(onSling){
+                DoMove();
+            }else{
+                DoDash();
+            }
+        }
+        onSlowmo = false;
+        isSlingValid = false;
+        onSling = false;
+
+        slowmotionBar.fillAmount = 1;
+        cancelSprite.SetActive(false);
+    }
+
+    void CountdownSlomotion(){
+        if(onSlowmo){
+            currentSlowTime -= 0.5f * Time.unscaledDeltaTime;
+            float slowTime = currentSlowTime / slowmotionTime;
+            slowmotionBar.fillAmount = slowTime;
+            if(slowTime <= 0f){
+                TimeManager.Instance.ReleaseSlowmotion();
+                EndPhase();
+                onSlowmo = false;
+            }
         }
     }
 
@@ -162,12 +225,11 @@ public class PlayerMoveController : MonoBehaviour
         if(!isForceWeak){
             actor.ActionMove(force);
         }else{
-            actor.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            actorRb.velocity = Vector2.zero;
         }
         
         TimeManager.Instance.ReleaseSlowmotion();
         HideLine();
-        onSling = false;
     }
 
     void DoDash(){
@@ -188,7 +250,13 @@ public class PlayerMoveController : MonoBehaviour
         points[1] = Vector3.MoveTowards(startPoint, endPoint, maxControlDrag);
         
         lr.SetPositions(points);
-        float fade = Vector2.Distance(startPoint, endPoint) / 100 * 50;
+        float distance = Vector2.Distance(startPoint, endPoint);
+        float fade =  distance / 100 * 50;
+        if(distance < 1){
+            cancelSprite.SetActive(true);
+        }else{
+            cancelSprite.SetActive(false);
+        }
         lr.startColor = new Color(1.0F, fade + 1 - (fade * 2), 0.0F, 1.0F);
         lr.endColor = new Color(1.0F, fade + 1 - (fade * 2), 0.0F, 0.0F);
     }
@@ -223,7 +291,7 @@ public class PlayerMoveController : MonoBehaviour
             }else{
                 count++;
                 var reflectAngle = Vector2.Reflect(direction, hit.normal);
-                trajectory.startColor = Color.blue;
+                trajectory.startColor = Color.white;
                 trajectory.endColor = new Color(16,207,255, 0);
                 trajectory.positionCount = (count + 1);
                 trajectory.SetPosition(count, hit.point);
@@ -245,7 +313,7 @@ public class PlayerMoveController : MonoBehaviour
     {
         foreach (Actor actor in party.actors)
         {
-           actor.GetComponentInChildren<ParticleSystem>().Stop();
+           actor.parent.GetComponent<ParticleSystem>().Stop();
         }
     }
 
@@ -253,7 +321,7 @@ public class PlayerMoveController : MonoBehaviour
     {
         foreach (Actor actor in party.actors)
         {
-           actor.GetComponentInChildren<ParticleSystem>().Play();
+           actor.parent.GetComponent<ParticleSystem>().Play();
         }
     }
 }

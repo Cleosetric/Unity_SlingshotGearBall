@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Actor : Charachter
@@ -29,6 +30,10 @@ public class Actor : Charachter
 
     [Space]
     [Header("Actor Equipment")]
+    public List<Ability> abilities = new List<Ability>();
+
+    [Space]
+    [Header("Actor Equipment")]
     public Equipment[] equipment;
 
     [Space]
@@ -40,9 +45,15 @@ public class Actor : Charachter
     private Coroutine regen;
 
     [Space]
-    [Header("Party Info")]
+    [Header("Combat Info")]
+    public LayerMask enemyLayers;
+    public float attackRate = 1f;
+    private float attackTime = 1f;
+    private float nextAttackTime = 0;
+
+    public GameObject hitEffect;
+    public GameObject bounceEffect;
     private int index;
-    private LayerMask enemyLayers;
 
     private void Awake()
     {
@@ -91,12 +102,18 @@ public class Actor : Charachter
         nameText.SetText(actorName);
         isAlive = true;
 
+        abilities = charachter.abilities;
+
         nextLevelExp = new int[maxLevel + 1];
         nextLevelExp[1] = 100;
         for (int i = 2; i < maxLevel; i++)
         {
             nextLevelExp[i] = Mathf.RoundToInt(nextLevelExp[i - 1] * 1.2f);
         }
+        currentLevel = 1;
+
+        Quaternion rotation = Quaternion.LookRotation(Vector3.up, Vector3.up);
+        transform.rotation = rotation;
     }
 
     public void OnItemEquiped(Equipment newItem)
@@ -148,23 +165,24 @@ public class Actor : Charachter
     public override void ApplyDamage(Charachter user)
     {
         base.ApplyDamage(user);
-        if(base.isHit) HitCounter.Instance.AddHitCounter(1);
         if(onActorHPChanged != null) onActorHPChanged.Invoke();
         if(gameObject.activeSelf) StartCoroutine(HitEffect());
         CameraManager.Instance.Shake(0.75f,0.05f);
     }
 
-    public void ApplyAction(int energy)
+    public void ApplyAction(float energy)
     {
+        StopRegen();
         if(currentSP >= energy){
             currentSP -= energy;
             if(currentSP <= 0) currentSP = 0;
-            StartRegen();
             if(onActorHPChanged != null) onActorHPChanged.Invoke();
         }
     }
 
     public virtual void ActionMove(Vector2 force){
+        Quaternion rotation = Quaternion.LookRotation(force, Vector3.up);
+        transform.rotation = rotation;
         rb.velocity = Vector2.zero;
         rb.AddForce(force * statAGI.GetValue(), ForceMode2D.Impulse);
         ApplyAction(actionCost);
@@ -173,13 +191,13 @@ public class Actor : Charachter
 
     public virtual void ActionDash(){
         if(isDash && gameObject.activeSelf){
-            Transform closestEnemy = EnemyManager.Instance.EnemyNearbyTransform(transform.position);
+            Transform closestEnemy = EnemyManager.Instance.EnemyNearbyTransform(parent.transform.position);
             if (closestEnemy != null){
-                float distance = Vector3.Distance(closestEnemy.position, transform.position); 
+                float distance = Vector3.Distance(closestEnemy.position, parent.transform.position); 
                 float maxDistance = 3f;  
                 if(distance < maxDistance){
                     rb.velocity = Vector2.zero;         
-                    Vector3 direction = (closestEnemy.position - transform.position).normalized;
+                    Vector3 direction = (closestEnemy.position - parent.transform.position).normalized;
                     rb.AddForce(direction * 20f, ForceMode2D.Impulse);
                     ApplyAction(actionCost);
                     TimeManager.Instance.StartImpactMotion();
@@ -190,15 +208,32 @@ public class Actor : Charachter
         }
     }
 
-    public virtual void ActionAttack(){
-        Debug.Log("Attack!");
+    public virtual void ActionAttack(GameObject target){
+        Mob targetAtk =  target.GetComponent<Mob>();
+        if(targetAtk != null) {
+            // TimeManager.Instance.StartImpactMotion();
+            Instantiate(hitEffect,target.transform.position,Quaternion.identity);
+            targetAtk.ApplyDamage(this);
+        }
+        isDash = false;
+    }
+
+    void CheckAttackDistance(){
+        Collider2D[] hitBox = Physics2D.OverlapCircleAll(parent.transform.position, actionSight, enemyLayers);
+        foreach (Collider2D hitObj in hitBox)
+        {
+            if(hitObj.CompareTag("Enemy")){
+                if(Time.time >= nextAttackTime)
+                {
+                    ActionAttack(hitObj.gameObject);
+                    nextAttackTime = Time.time + attackTime / attackRate;
+                }
+            }
+        }
     }
 
     private void Update() {
-        //if this actor is not party leader
-        //if not cooldown
-        //attack enemy in range
-        //cooldown
+        CheckAttackDistance();
         DisplayHPBar();
     }
 
@@ -213,12 +248,12 @@ public class Actor : Charachter
         Vector2 next = path.Head(-index + 1);
 
         // Interpolate the position of the minion between the previous and the next point within the path. 'dist' is the distance between the 'head' of the path and the leader
-        this.transform.position = Vector2.Lerp(prev, next, dist);
+        parent.transform.position = Vector2.Lerp(prev, next, dist);
     }
 
     public void Push(Vector2 dir)
     {
-        this.transform.position += (Vector3)dir;
+        parent.transform.position += (Vector3)dir;
     }
     
     private void DisplayHPBar()
@@ -271,9 +306,13 @@ public class Actor : Charachter
         currentSP = Mathf.RoundToInt(statMSP.GetValue());
     }
 
-    private void StartRegen(){
+    public void StartRegen(){
         if(regen != null) StopCoroutine(regen);
         regen = StartCoroutine(RegenerateStamina());
+    }
+
+    public void StopRegen(){
+        if(regen != null) StopCoroutine(regen);
     }
 
     private IEnumerator RegenerateStamina(){
@@ -307,26 +346,38 @@ public class Actor : Charachter
 
 
     private void OnCollisionEnter2D(Collision2D other) {
-        float impulse = calculateImpulse(other);
+        // float impulse = calculateImpulse(other);
 
-        if(other.collider.tag == "Enemy" && impulse > 10f){ 
-            TimeManager.Instance.StartImpactMotion();
-            other.collider.GetComponent<Mob>().ApplyDamage(this);
-            ActionAttack();
-            isDash = false;
-        }
+        // if(other.collider.tag == "Enemy" && impulse > 0){ 
+        //     TimeManager.Instance.StartImpactMotion();
+        //     other.collider.GetComponent<Mob>().ApplyDamage(this);
+        //     Instantiate(hitEffect,other.transform.position,Quaternion.identity);
+        //     ActionAttack();
+        //     isDash = false;
+        // }
         
         if(other.collider.tag == "Props"){
+            Vector3 hitPoint = other.contacts[0].point;
+            Instantiate(bounceEffect,hitPoint,Quaternion.identity);
             other.collider.GetComponent<Box>().ApplyDamage(1);
             isDash = true;
         }
 
         if(other.collider.tag == "Wall"){
+            Vector3 hitPoint = other.contacts[0].point;
+            Instantiate(bounceEffect,hitPoint,Quaternion.identity);
             isDash = true;
         }
 
+        // if(other.collider.CompareTag("Actors")){
+        //     Physics2D.IgnoreCollision(other.collider, GetComponent<Collider2D>());
+        // }
+
         Vector2 inNormal = other.contacts[0].normal;
-        rb.velocity = Vector3.Reflect(lastVel, inNormal);
+        Vector2 force = Vector3.Reflect(lastVel, inNormal);
+        Quaternion rotation = Quaternion.LookRotation(force, Vector3.up);
+        transform.rotation = rotation;
+        rb.velocity = force;
         rb.velocity += inNormal * 2.0f;
     }
 
@@ -344,6 +395,6 @@ public class Actor : Charachter
 
     private void OnDrawGizmos() {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, actionSight);
+        Gizmos.DrawWireSphere(parent.transform.position, actionSight);
     }
 }

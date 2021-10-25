@@ -25,7 +25,7 @@ MonoBehaviour:
   statMDEF:
     baseValue: 0
   statAGI:
-    baseValue: 10
+    baseValue: 7
   statLUK:
     baseValue: 0
   statHRG:
@@ -42,6 +42,7 @@ MonoBehaviour:
     baseValue: 2
   statSRR:
     baseValue: 1
+  elementType: 0
   name: Sir Ian Phage
   description: A Knight
   actorClass: 1
@@ -50,5 +51,7 @@ MonoBehaviour:
   actorFace: {fileID: 3303528763351885255, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
     type: 3}
   growthCurve: 1.125
+  abilities:
+  - {fileID: 11400000, guid: 385efa43560d7e840ba83a73cfc19814, type: 2}
   actionSight: 1
   actionCost: 5

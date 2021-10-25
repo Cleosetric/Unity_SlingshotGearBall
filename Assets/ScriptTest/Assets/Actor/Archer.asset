@@ -25,7 +25,7 @@ MonoBehaviour:
   statMDEF:
     baseValue: 0
   statAGI:
-    baseValue: 15
+    baseValue: 7
   statLUK:
     baseValue: 0
   statHRG:
@@ -42,6 +42,7 @@ MonoBehaviour:
     baseValue: 2
   statSRR:
     baseValue: 1
+  elementType: 0
   name: Fey Lilliana
   description: an archer warrior of the deep woods of lyr
   actorClass: 2
@@ -50,5 +51,8 @@ MonoBehaviour:
   actorFace: {fileID: -3447010108014296370, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
     type: 3}
   growthCurve: 1.15
-  actionSight: 2
+  abilities:
+  - {fileID: 11400000, guid: c1e4d224ca1f1b649bb6cbbb93766dfe, type: 2}
+  - {fileID: 11400000, guid: 0561c1285c8399046bd6a457d31342ad, type: 2}
+  actionSight: 1.25
   actionCost: 5

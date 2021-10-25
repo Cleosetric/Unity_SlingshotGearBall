@@ -27,7 +27,7 @@ public class Charachter : MonoBehaviour
     [Tooltip("Stamina Regeneration Rate")] public Statf statSRR;
 
     public int currentHP { get; set; }
-    public int currentSP { get; set; }
+    public float currentSP { get; set; }
 
     [Space]
     [Header("Base Component")]
@@ -35,23 +35,24 @@ public class Charachter : MonoBehaviour
     public TextMeshProUGUI nameText;
     public Image hpBar;
     public Image hpEffect;
+    public Image element;
+    [Space]
+    public Transform parent;
     public Rigidbody2D rb;
-
-    protected bool isHit;
 
     public virtual void ApplyDamage(Charachter user)
     {
         if(user != null){
+            bool isActor = user is Actor;
             int damage = Mathf.RoundToInt(user.statATK.GetValue());
             float hitRate = (user.statHIT.GetValue()/ 100) - (this.statEVA.GetValue() / 100);
             float criRate = (user.statCRI.GetValue() / 100) + 1 - (user.currentHP/user.statMHP.GetValue());
             float rand = Random.Range(0.0f,1.0f);
-            isHit = (rand <= hitRate);
 
             // Debug.Log("Hit - Rand:"+rand+" <= "+hitRate);
-            if(isHit){
+            if(rand <= hitRate){
                 if(damage <= Mathf.RoundToInt(this.statDEF.GetValue())){
-                    HitCounter.Instance.AddDamagePopup(transform, 2, "0", "NEGATE");
+                    HitCounter.Instance.AddDamagePopup(parent, 2, "0", "NEGATE");
                 }else{
                     damage -= Mathf.RoundToInt(this.statDEF.GetValue());
                     damage = Mathf.Clamp(damage, 0, int.MaxValue);
@@ -59,26 +60,27 @@ public class Charachter : MonoBehaviour
                     // Debug.Log(" Cri - Rand:"+rand+" > "+criRate);
                     if(rand < criRate){
                         damage *= 2;
-                        float damageVariance = Random.Range(0.0f,0.2f);
+                        float damageVariance = Random.Range(0.0f,0.5f);
                         // Debug.Log("CRand:"+damage+" | "+damageVariance);
                         damage = Mathf.RoundToInt(damage + (damage * damageVariance));
                         currentHP -= damage;
-                        HitCounter.Instance.AddDamagePopup(transform, 3, damage.ToString(), "CRITICAL");
+                        HitCounter.Instance.AddDamagePopup(parent, 3, damage.ToString(), "CRITICAL");
                     }else{
-                        float damageVariance = Random.Range(0.0f,0.2f);
+                        float damageVariance = Random.Range(0.0f,0.5f);
                         // Debug.Log("NRand:"+damage+" | "+damageVariance);
                         damage = Mathf.RoundToInt(damage + (damage * damageVariance));
                         currentHP -= damage;
-                        HitCounter.Instance.AddDamagePopup(transform, 1, damage.ToString(), "");
+                        HitCounter.Instance.AddDamagePopup(parent, 1, damage.ToString(), "");
                     }
 
                     if(currentHP <= 0){
                         currentHP = 0;
                         Die();
                     }   
+                    if(isActor) HitCounter.Instance.AddHitCounter(1,damage);
                 }
             }else{
-                HitCounter.Instance.AddDamagePopup(transform, 2, "0", "MISS");
+                HitCounter.Instance.AddDamagePopup(parent, 2, "0", "MISS");
             }
         }
     }

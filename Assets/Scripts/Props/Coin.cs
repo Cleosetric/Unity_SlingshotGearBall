@@ -47,12 +47,6 @@ public class Coin : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if(isSpawning) Invoke("MoveCoinToPlayer", 3f);
-    }
-
     void MoveCoinToPlayer()
     {
         Vector3 moveVector  = (actor.position - transform.position);

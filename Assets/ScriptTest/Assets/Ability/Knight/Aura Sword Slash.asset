@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2318742083eeecc4b8c8f71724e860aa, type: 3}
+  m_Name: Aura Sword Slash
+  m_EditorClassIdentifier: 
+  abilityName: Aura Sword Slash
+  abilityDesc: A slash from knight aura, attack +5 to self
+  abilitySprite: {fileID: -5024682875286124276, guid: 3633525da4fdc0048a59495ac285ce3c,
+    type: 3}
+  bonusValue: 5
+  abilityBonus: 3
+  bonusType: 0
+  targetType: 0
+  chantType: 2
+  chantAnimPrefab: {fileID: 1123387143458698957, guid: 6fcfe6fbf88b84047bd30933149f0e7c,
+    type: 3}
+  staminaCost: 5
+  cooldownTime: 5
+  isFinished: 0
+  target: 1
+  projectileSpeed: 10
+  projectileLife: 1
+  projectileImpact: 15
+  projectileCount: 2
+  projectileDelay: 0.25
+  hitType: 2
+  direction: 0
+  projectile: {fileID: 1958277384886963714, guid: 7d50267f261eb054db7c6e0e1592b835,
+    type: 3}

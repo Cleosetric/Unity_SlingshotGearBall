@@ -100,31 +100,37 @@ public class ItemHelpUI : MonoBehaviour
 
     private void DrawItemStat()
     {
-        float[] allStat = {
-            equip.modMHP.value,
-            equip.modMSP.value,
-            equip.modATK.value,
-            equip.modDEF.value,
-            equip.modMATK.value,
-            equip.modMDEF.value,
-            equip.modAGI.value,
-            equip.modLUK.value,
-            equip.modHRG.value,
-            equip.modSRG.value,
-            equip.modHIT.value, 
-            equip.modCRI.value,
-            equip.modEVA.value,
-            equip.modHRR.value,
-            equip.modSRR.value
+        StatModifier[] allStat = {
+            equip.modMHP,
+            equip.modMSP,
+            equip.modATK,
+            equip.modDEF,
+            equip.modMATK,
+            equip.modMDEF,
+            equip.modAGI,
+            equip.modLUK,
+            equip.modHRG,
+            equip.modSRG,
+            equip.modHIT, 
+            equip.modCRI,
+            equip.modEVA,
+            equip.modHRR,
+            equip.modSRR
         };
         string[] statLabel = {"MHP","MSP","ATK","DEF","MATK","MDEF","AGI","LUK","HRG","SRG","HIT","CRI","EVA","HRR","SRR"};
         string allstring = "";
         int counter = 0;
         for (int i = 0; i < allStat.Length; i++)
         {
-            if(allStat[i] != 0){
+            if(allStat[i].value != 0){
                 counter += 1;
-                allstring += statLabel[i]+"\t: "+"<color=#2d940e>+"+Mathf.RoundToInt(allStat[i])+"</color>\t";
+                string value;
+                if((int)allStat[i].type == 0){
+                    value = Mathf.RoundToInt(allStat[i].value).ToString();
+                }else{
+                    value = Mathf.RoundToInt(allStat[i].value).ToString() + "%";
+                }
+                allstring += statLabel[i]+"\t: "+"<color=#2d940e>+"+value+"</color>\t";
                 if(counter >= 2){
                     counter = 0;
                     allstring += "\n";

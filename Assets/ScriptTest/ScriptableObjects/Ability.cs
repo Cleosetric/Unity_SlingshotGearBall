@@ -2,13 +2,159 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Ability : ScriptableObject
-{
-    public string aName = "New Ability";
-    public Sprite aSprite;
-    public AudioClip aSound;
-    public float coolDownDuration;
+public enum TargetType { self, party }
 
-    public abstract void Initialize(GameObject obj);
-    public abstract void TriggerAbility();
+public enum AbilityMod {
+    none, mhp, msp, atk, def, matk, mdef, agi, luk, hit, cri, eva
+}
+
+public enum TargetAttack{ closestEnemy, directionForward, directionUp, directionDown }
+
+public enum ChantType{ move, stop, continous }
+
+public class Ability : ScriptableObject
+{
+    [Header("Ability Info")]
+    public string abilityName = "New Ability";
+    [TextArea] public string abilityDesc;
+    public Sprite abilitySprite;
+
+    [Space]
+    [Header("Ability Effect")]
+    public float bonusValue;
+    public AbilityMod abilityBonus;
+    public StatModType bonusType;
+    public TargetType targetType;
+    public ChantType chantType;
+
+    [Space]
+    [Header("Ability Animation")]
+    public GameObject chantAnimPrefab;
+
+    [Space]
+    [Header("Ability Time")]
+    public float staminaCost;
+    public float cooldownTime;
+    public bool isFinished = false;
+    protected Actor actor;
+    protected StatModifier bonus;
+
+    public virtual void Initialize(GameObject parent){
+        actor = parent.GetComponent<Actor>();
+        bonus = new StatModifier();
+        bonus.value = bonusValue;
+        bonus.type = bonusType;
+        isFinished = false;
+    }
+
+    public virtual void Activate(){
+        switch ((int)targetType)
+        {
+            case 0:
+                AddAbilityBonus(actor);
+            break;
+            case 1:
+                foreach (Actor member in Party.Instance.actors)
+                {
+                    if(member.isAlive) AddAbilityBonus(member);
+                }
+            break;
+        }
+    }
+
+    public virtual void Deactivate(){
+        switch ((int)targetType)
+        {
+            case 0:
+                RemoveAbilityBonus(actor);
+            break;
+            case 1:
+                foreach (Actor member in Party.Instance.actors)
+                {
+                    if(member.isAlive) RemoveAbilityBonus(member);
+                }
+            break;
+        }
+    }
+
+    private void AddAbilityBonus(Actor chara){
+        if((int)abilityBonus == 0) return;
+        switch ((int)abilityBonus)
+        {
+            case 1:
+                chara.statMHP.AddModifier(bonus);
+            break;
+            case 2:
+                chara.statMSP.AddModifier(bonus);
+            break;
+            case 3:
+                chara.statATK.AddModifier(bonus);
+            break;
+            case 4:
+                chara.statDEF.AddModifier(bonus);
+            break;
+            case 5:
+                chara.statMATK.AddModifier(bonus);
+            break;
+            case 6:
+                chara.statMDEF.AddModifier(bonus);
+            break;
+            case 7:
+                chara.statAGI.AddModifier(bonus);
+            break;
+            case 8:
+                chara.statLUK.AddModifier(bonus);
+            break;
+            case 9:
+                chara.statHIT.AddModifier(bonus);
+            break;
+            case 10:
+                chara.statCRI.AddModifier(bonus);
+            break;
+            case 11:
+                chara.statEVA.AddModifier(bonus);
+            break;
+        }
+    }
+
+    private void RemoveAbilityBonus(Actor chara){
+        if((int)abilityBonus == 0) return;
+        switch ((int)abilityBonus)
+        {
+            case 1:
+                chara.statMHP.RemoveModifier(bonus);
+            break;
+            case 2:
+                chara.statMSP.RemoveModifier(bonus);
+            break;
+            case 3:
+                chara.statATK.RemoveModifier(bonus);
+            break;
+            case 4:
+                chara.statDEF.RemoveModifier(bonus);
+            break;
+            case 5:
+                chara.statMATK.RemoveModifier(bonus);
+            break;
+            case 6:
+                chara.statMDEF.RemoveModifier(bonus);
+            break;
+            case 7:
+                chara.statAGI.RemoveModifier(bonus);
+            break;
+            case 8:
+                chara.statLUK.RemoveModifier(bonus);
+            break;
+            case 9:
+                chara.statHIT.RemoveModifier(bonus);
+            break;
+            case 10:
+                chara.statCRI.RemoveModifier(bonus);
+            break;
+            case 11:
+                chara.statEVA.RemoveModifier(bonus);
+            break;
+        }
+    }
+
 }

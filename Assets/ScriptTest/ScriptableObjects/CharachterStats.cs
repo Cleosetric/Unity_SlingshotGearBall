@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ElementAffinity{
+    Water,Fire,Wind,Earth
+}
+
 public class CharachterStats : ScriptableObject
 {
     [Space]
@@ -26,4 +30,7 @@ public class CharachterStats : ScriptableObject
     [Tooltip("Health Regeneration Rate")] public Statf statHRR;
     [Tooltip("Stamina Regeneration Rate")] public Statf statSRR;
 
+    [Space]
+    [Header("Element Affinity")]
+    [Tooltip("Element Affinity")] public ElementAffinity elementType;
 }

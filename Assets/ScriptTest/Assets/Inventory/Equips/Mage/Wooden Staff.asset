@@ -33,7 +33,7 @@ MonoBehaviour:
     value: 0
     type: 0
   modMATK:
-    value: 0.2
+    value: 20
     type: 1
   modMDEF:
     value: 0

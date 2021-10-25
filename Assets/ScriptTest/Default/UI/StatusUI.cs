@@ -65,7 +65,7 @@ public class StatusUI : MonoBehaviour
             textLevel.SetText("(Level "+actor.currentLevel+")");
             textClass.SetText("["+actor.actorClass.ToString()+"]");
             hp.SetText(actor.currentHP+"/"+actor.statMHP.GetValue());
-            sp.SetText(actor.currentSP+"/"+actor.statMSP.GetValue());
+            sp.SetText(Mathf.RoundToInt(actor.currentSP)+"/"+actor.statMSP.GetValue());
             xp.SetText(actor.currentExp+"/"+actor.nextLevelExp[actor.currentLevel]);
             atk.SetText("ATK\t: "+actor.statATK.GetValue());
             def.SetText("DEF\t: "+actor.statDEF.GetValue());

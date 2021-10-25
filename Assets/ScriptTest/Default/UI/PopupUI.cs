@@ -12,22 +12,34 @@ public class PopupUI : MonoBehaviour
 
     public void Setup(int type, string dmgText, string hitResult){
         //normal
-        if(type == 1){
-            hitResultText.enabled = false;
-            spriteHit.enabled = false;
-            damageText.enabled = true;
-            damageText.SetText(dmgText);
-        }else if(type == 2){ //miss
-            damageText.enabled = false;
-            spriteHit.enabled = false;
-            hitResultText.enabled = true;
-            hitResultText.SetText(hitResult);
-        }else if(type == 3){ //critical
-            damageText.enabled = true;
-            hitResultText.enabled = true;
-            spriteHit.enabled = true;
-            damageText.SetText(dmgText);
-            hitResultText.SetText(hitResult);
+        switch (type)
+        {
+            case 1:
+                hitResultText.enabled = false;
+                spriteHit.enabled = false;
+                damageText.enabled = true;
+                damageText.SetText(dmgText);
+                break;
+            case 2:
+                damageText.enabled = false;
+                spriteHit.enabled = false;
+                hitResultText.enabled = true;
+                hitResultText.SetText(hitResult);
+                break;
+            case 3:
+                damageText.enabled = true;
+                hitResultText.enabled = true;
+                spriteHit.enabled = true;
+                damageText.SetText(dmgText);
+                hitResultText.SetText(hitResult);
+                break;
+            case 4:
+                damageText.enabled = true;
+                hitResultText.enabled = true;
+                spriteHit.enabled = false;
+                damageText.SetText("<color=#0cc92f>"+dmgText+"</color>");
+                hitResultText.SetText("<color=#ffffff>"+hitResult+"</color>");
+                break;
         }
     }
 }

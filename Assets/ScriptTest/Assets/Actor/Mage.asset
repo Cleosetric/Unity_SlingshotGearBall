@@ -17,7 +17,7 @@ MonoBehaviour:
   statMSP:
     baseValue: 50
   statATK:
-    baseValue: 5
+    baseValue: 10
   statDEF:
     baseValue: 5
   statMATK:
@@ -25,7 +25,7 @@ MonoBehaviour:
   statMDEF:
     baseValue: 10
   statAGI:
-    baseValue: 10
+    baseValue: 7
   statLUK:
     baseValue: 0
   statHRG:
@@ -42,6 +42,7 @@ MonoBehaviour:
     baseValue: 2
   statSRR:
     baseValue: 1
+  elementType: 0
   name: Vernes
   description: a mage of ancient tower
   actorClass: 3
@@ -50,5 +51,7 @@ MonoBehaviour:
   actorFace: {fileID: 8999996067587195337, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
     type: 3}
   growthCurve: 1.2
+  abilities:
+  - {fileID: 11400000, guid: 4db76e1a0e5324e4d83b0889c5491705, type: 2}
   actionSight: 1
   actionCost: 5
