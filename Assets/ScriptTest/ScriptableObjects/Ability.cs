@@ -41,9 +41,7 @@ public class Ability : ScriptableObject
 
     public virtual void Initialize(GameObject parent){
         actor = parent.GetComponent<Actor>();
-        bonus = new StatModifier();
-        bonus.value = bonusValue;
-        bonus.type = bonusType;
+        bonus = new StatModifier(bonusValue, bonusType);
         isFinished = false;
     }
 
@@ -60,6 +58,8 @@ public class Ability : ScriptableObject
                 }
             break;
         }
+        string bonusText = "+"+abilityBonus.ToString().ToUpper()+" UP";
+        HitCounter.Instance.AddDamagePopup(actor.parent, 4, bonusText, abilityName);
     }
 
     public virtual void Deactivate(){
@@ -155,6 +155,7 @@ public class Ability : ScriptableObject
                 chara.statEVA.RemoveModifier(bonus);
             break;
         }
+        Debug.Log("Remove Bonus : "+abilityBonus.ToString()+" | "+bonus.value);
     }
 
 }

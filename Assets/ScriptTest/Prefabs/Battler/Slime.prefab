@@ -766,6 +766,8 @@ MonoBehaviour:
   mob: {fileID: 11400000, guid: 661a665d4c8aa1c469a0cfd3d253c29c, type: 2}
   mobName: 
   initialPost: {fileID: 279013464663287255}
+  deathEffectPrefab: {fileID: 8449388853544896041, guid: 267cfcd11ddfba4449243a0a44e1ae22,
+    type: 3}
   actorLayer:
     serializedVersion: 2
     m_Bits: 1024

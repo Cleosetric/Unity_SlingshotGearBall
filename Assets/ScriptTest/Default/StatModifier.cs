@@ -13,4 +13,9 @@ public class StatModifier
     public float value;
     public StatModType type;
     public readonly int order;
+
+    public StatModifier(float value, StatModType type){
+        this.value = value;
+        this.type = type;
+    }
 }

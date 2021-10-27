@@ -51,9 +51,9 @@ public class Projectile : MonoBehaviour
 
                 Rigidbody2D otherRb = other.GetComponent<Rigidbody2D>();
                 if(otherRb != null){
-                    Vector3 collisionPoint = other.ClosestPoint(transform.position);
-                    Vector3 collisionNormal = transform.position - collisionPoint;
-                    otherRb.AddForce(-collisionNormal * impact);
+                    Debug.Log("Yes there is RB in "+ other.name);
+                    Vector3 dir = (transform.position - other.transform.position).normalized;
+                    otherRb.AddForce(-dir * impact, ForceMode2D.Impulse);
                 }
 
                 OnProjectileDestroy(this.gameObject);
@@ -70,9 +70,8 @@ public class Projectile : MonoBehaviour
 
                 Rigidbody2D otherRb = other.GetComponent<Rigidbody2D>();
                 if(otherRb != null){
-                    Vector3 collisionPoint = other.ClosestPoint(transform.position);
-                    Vector3 collisionNormal = transform.position - collisionPoint;
-                    otherRb.AddForce(-collisionNormal * impact);
+                    Vector3 dir = (transform.position - other.transform.position).normalized;
+                   otherRb.AddForce(-dir * impact, ForceMode2D.Impulse);
                 }
 
                 Instantiate(destroyAnimPrefab, other.transform.position, Quaternion.identity);

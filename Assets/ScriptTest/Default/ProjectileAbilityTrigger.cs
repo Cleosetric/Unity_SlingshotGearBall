@@ -67,6 +67,23 @@ public class ProjectileAbilityTrigger : MonoBehaviour
         return direction;
     }
 
+    void RadialProjectile(float angle)
+	{
+        float projectileDirXposition = origin.position.x + Mathf.Sin ((angle * Mathf.PI) / 180) * 5f;
+        float projectileDirYposition = origin.position.y + Mathf.Cos ((angle * Mathf.PI) / 180) * 5f;
+
+        Vector3 projectileVector = new Vector2 (projectileDirXposition, projectileDirYposition);
+        Vector2 projectileMoveDirection = (projectileVector - origin.position).normalized;
+
+        Vector3 directionAngle = Quaternion.Euler(0, 0, 90) * projectileMoveDirection;
+        Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, directionAngle);
+
+        GameObject clonedBullet = Instantiate(projectile.gameObject, origin.position, Quaternion.identity);
+        clonedBullet.GetComponent<Projectile>().Initialize(origin.GetComponent<Actor>(), hitType, projectileForce, 
+        projectileImpact, targetRotation);
+        DestroyProjectile(clonedBullet.gameObject, projectileLife);
+	}
+
     void SingleProjectile(float offset){
         Vector3 direction = GetDirection();
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -74,8 +91,6 @@ public class ProjectileAbilityTrigger : MonoBehaviour
         clonedBullet.GetComponent<Projectile>().Initialize(origin.GetComponent<Actor>(), hitType, projectileForce, 
         projectileImpact, Quaternion.Euler(0, 0, angle + offset));
         DestroyProjectile(clonedBullet.gameObject, projectileLife);
-
-        Debug.DrawRay (origin.position, direction, Color.green);
     }
 
     void DoubleProjectile(float offset1, float offset2){
@@ -91,8 +106,6 @@ public class ProjectileAbilityTrigger : MonoBehaviour
         clonedBullet2.GetComponent<Projectile>().Initialize(origin.GetComponent<Actor>(), hitType, projectileForce, 
         projectileImpact, Quaternion.Euler(0, 0, angle + offset2));
         DestroyProjectile(clonedBullet2.gameObject, projectileLife);
-
-        Debug.DrawRay (origin.position, direction, Color.green);
     }
 
     void TrippleProjectile(float offset1, float offset2, float offset3){
@@ -113,8 +126,6 @@ public class ProjectileAbilityTrigger : MonoBehaviour
         clonedBullet3.GetComponent<Projectile>().Initialize(origin.GetComponent<Actor>(), hitType, projectileForce, 
         projectileImpact, Quaternion.Euler(0, 0, angle + offset3));
         DestroyProjectile(clonedBullet3.gameObject, projectileLife);
-
-        Debug.DrawRay (origin.position, direction, Color.green);
     }
 
     IEnumerator ShowChantAnimation(){
@@ -124,10 +135,10 @@ public class ProjectileAbilityTrigger : MonoBehaviour
         if((int)chantType == 1 || (int)chantType == 2) 
         origin.GetComponentInParent<Rigidbody2D>().velocity = Vector2.zero;
 
-        Vector3 pos = origin.position + new Vector3(0,1.5f,0);
+        Vector3 pos = origin.position + new Vector3(0,0.1f,0);
         GameObject anim = Instantiate(animationCast, pos, Quaternion.identity);
 
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.15f);
 
         Destroy(anim);
 
@@ -150,6 +161,17 @@ public class ProjectileAbilityTrigger : MonoBehaviour
                 for (int i = 0; i < projectileCount; i++)
                 {
                     TrippleProjectile(-75,-90,-105);
+                    yield return new WaitForSeconds(projectileDelay);
+                }
+            break;
+            case 3:
+                Vector3 direction = GetDirection();
+                float angleStep = 360f / projectileCount;
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+                for (int i = 0; i <= projectileCount - 1; i++) {
+                    RadialProjectile(angle);
+                    angle += angleStep;
                     yield return new WaitForSeconds(projectileDelay);
                 }
             break;

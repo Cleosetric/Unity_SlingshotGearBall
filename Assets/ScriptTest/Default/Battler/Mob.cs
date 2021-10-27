@@ -9,6 +9,7 @@ public class Mob : Charachter
     public MobStats mob;
     public string mobName;
     public Transform initialPost;
+    public GameObject deathEffectPrefab;
 
     [Space]
     [Header("Mob Movement")]
@@ -92,7 +93,13 @@ public class Mob : Charachter
 
     public override void Die()
     {
-        Destroy(gameObject);
+        rb.velocity = Vector2.zero;
+        rb.isKinematic = true;
+        GetComponent<CircleCollider2D>().enabled = false;
+        GameObject effect = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
+        ParticleSystem particle = effect.GetComponent<ParticleSystem>();
+        effect.transform.SetParent(transform);
+        Destroy(gameObject, particle.main.duration);
     }
 
     public virtual void OnCollisionEnter2D(Collision2D other) {

@@ -49,16 +49,18 @@ public class SkillSlotUI : MonoBehaviour
         if (coolDownComplete) 
         {
             AbilityReady();    
-        } else 
-        {
+        } else {
             AbilityCoolDown();  
         }
 
         if(ability.isFinished){
+            Debug.Log("abilityfinish");
+
             casting.SetActive(false);
-            backgroundSprite.color = new Color32(36,36,36,255);
             isAbilityFinished = true;
             ability.isFinished = false;
+            
+            backgroundSprite.color = new Color32(36,36,36,255);
         }
     }
 
@@ -67,12 +69,16 @@ public class SkillSlotUI : MonoBehaviour
             if(isAbilityReady && actor.currentSP > ability.staminaCost){
                 ability.Activate();
                 actor.ApplyAction(ability.staminaCost);
+
                 isAbilityReady = false;
                 isAbilityFinished = false;
+                abilityTrigger.interactable = false;
                 casting.SetActive(true);
+               
+                backgroundSprite.color = new Color32(100,10,0,255);
+
                 nextReadyTime = coolDownDuration + Time.unscaledTime;
                 coolDownTimeLeft = coolDownDuration;
-                backgroundSprite.color = new Color32(100,10,0,255);
             }
         }
     }
@@ -81,15 +87,18 @@ public class SkillSlotUI : MonoBehaviour
     {
         if(ability != null){
             coolDownTimeLeft -= Time.unscaledDeltaTime;
-            if(coolDownTimeLeft <= 0.0f){
+
+            abilityTrigger.interactable = false;
+            cooldownText.enabled = true;
+            skillMask.enabled = true;
+
+            cooldownText.text = Math.Round((decimal)coolDownTimeLeft, 1).ToString() + "s";
+            skillMask.fillAmount = (coolDownTimeLeft / coolDownDuration);
+
+            if(Mathf.Round(coolDownTimeLeft) <= 0){
+                Debug.Log("Interactrue");
                 coolDownTimeLeft = 0;
             }
-            // float roundedCd =  Mathf.Round(coolDownTimeLeft);
-            cooldownText.enabled = true;
-            cooldownText.text = String.Format("{0:0.0}",coolDownTimeLeft)+"s";
-            skillMask.enabled = true;
-            skillMask.fillAmount = (coolDownTimeLeft / coolDownDuration);
-            abilityTrigger.interactable = false;
         }
     }
 
@@ -98,10 +107,11 @@ public class SkillSlotUI : MonoBehaviour
         isAbilityReady = true;
         isAbilityFinished = true;
 
-        abilityTrigger.interactable = true;
         cooldownText.enabled = false;
         skillMask.enabled = false;
         casting.SetActive(false);
+        abilityTrigger.interactable = true;
+
         backgroundSprite.color = new Color32(36,36,36,255);
     }
 

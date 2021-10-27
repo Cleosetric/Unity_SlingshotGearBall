@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum HitType {destroyAll,destroyOnlyEnemy,pierceAll,pierceOnlyEnemy}
-public enum Direction {one, two, three}
+public enum Direction {one, two, three, radial}
 
 [CreateAssetMenu(fileName = "Ability", menuName = "Ability/Projectile Ability", order = 2)]
 public class ProjectileAbility : Ability
@@ -31,9 +31,7 @@ public class ProjectileAbility : Ability
 
     public override void Activate(){
         base.Activate();
-
-        string bonusText = "+"+bonusValue.ToString() +" "+abilityBonus.ToString().ToUpper();
-        HitCounter.Instance.AddDamagePopup(origin.GetComponentInParent<Transform>(), 4, bonusText, abilityName);
+        // string bonusText = "+"+bonusValue.ToString() +" "+abilityBonus.ToString().ToUpper();
 
         projectileAbility.Initialize(this, projectile, origin.transform, projectileSpeed, 
         projectileLife, projectileImpact, projectileCount, projectileDelay, target, chantType, hitType,

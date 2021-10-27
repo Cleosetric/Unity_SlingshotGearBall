@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2318742083eeecc4b8c8f71724e860aa, type: 3}
-  m_Name: Aura Sword Slash
+  m_Name: Aura Slash
   m_EditorClassIdentifier: 
-  abilityName: Aura Sword Slash
+  abilityName: Aura Slash
   abilityDesc: A slash from knight aura, attack +5 to self
   abilitySprite: {fileID: -5024682875286124276, guid: 3633525da4fdc0048a59495ac285ce3c,
     type: 3}
@@ -28,8 +28,8 @@ MonoBehaviour:
   isFinished: 0
   target: 1
   projectileSpeed: 10
-  projectileLife: 1
-  projectileImpact: 15
+  projectileLife: 0.45
+  projectileImpact: 10
   projectileCount: 2
   projectileDelay: 0.25
   hitType: 2

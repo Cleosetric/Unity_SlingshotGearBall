@@ -21,17 +21,17 @@ MonoBehaviour:
   bonusType: 0
   targetType: 0
   chantType: 2
-  chantAnimPrefab: {fileID: 1123387143458698957, guid: 6fcfe6fbf88b84047bd30933149f0e7c,
+  chantAnimPrefab: {fileID: 3130289515074883870, guid: 89cffe54b3039994492cdc67576166fb,
     type: 3}
   staminaCost: 5
-  cooldownTime: 5
+  cooldownTime: 10
   isFinished: 0
-  target: 2
+  target: 1
   projectileSpeed: 15
   projectileLife: 1
-  projectileImpact: 5
-  projectileCount: 1
-  projectileDelay: 0
+  projectileImpact: 10
+  projectileCount: 2
+  projectileDelay: 0.3
   hitType: 1
   direction: 2
   projectile: {fileID: 8839379561025394991, guid: 1959d4487dab2ca469390915497b5249,

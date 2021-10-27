@@ -29,9 +29,9 @@ MonoBehaviour:
   target: 0
   projectileSpeed: 12
   projectileLife: 1
-  projectileImpact: 5
+  projectileImpact: 10
   projectileCount: 3
-  projectileDelay: 0.5
+  projectileDelay: 0.25
   hitType: 1
   direction: 0
   projectile: {fileID: 8839379561025394991, guid: 1959d4487dab2ca469390915497b5249,

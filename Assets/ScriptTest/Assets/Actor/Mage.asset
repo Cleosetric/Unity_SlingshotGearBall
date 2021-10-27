@@ -53,5 +53,6 @@ MonoBehaviour:
   growthCurve: 1.2
   abilities:
   - {fileID: 11400000, guid: 4db76e1a0e5324e4d83b0889c5491705, type: 2}
+  - {fileID: 11400000, guid: bd10c6fbb07dbaf439a7ad9c6df8d6e9, type: 2}
   actionSight: 1
   actionCost: 5
