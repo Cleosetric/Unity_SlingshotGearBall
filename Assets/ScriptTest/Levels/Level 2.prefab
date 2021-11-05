@@ -6463,7 +6463,7 @@ GameObject:
   - component: {fileID: 8462553646454348938}
   - component: {fileID: 8462553646454348939}
   m_Layer: 0
-  m_Name: Level Mobtest
+  m_Name: Level 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

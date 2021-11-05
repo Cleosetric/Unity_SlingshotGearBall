@@ -16222,6 +16222,7 @@ MonoBehaviour:
   stage:
   - {fileID: 3674910900043916386, guid: 5b04d2945a929ca4d845a7334229d158, type: 3}
   - {fileID: 8462553646454348936, guid: 4a206d6ae70de724a9860118f18cf670, type: 3}
+  - {fileID: 4027884467182073328, guid: 0c62fab51f15b7e409af2c7a45daffdd, type: 3}
   upOffset: 50
 --- !u!1 &898363817
 GameObject:
@@ -18180,6 +18181,7 @@ MonoBehaviour:
     type: 3}
   stageClearText: {fileID: 1903091543}
   victoryPanel: {fileID: 1695830825}
+  isGamePaused: 0
 --- !u!1 &1009363792
 GameObject:
   m_ObjectHideFlags: 0
