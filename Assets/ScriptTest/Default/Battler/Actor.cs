@@ -47,8 +47,10 @@ public class Actor : Charachter
     [Space]
     [Header("Combat Info")]
     public LayerMask enemyLayers;
-    public float attackRate = 1f;
-    private float attackTime = 1f;
+    public Projectile projectile;
+    public float projectileLife;
+    private float attackRate;
+    private float attackTime;
     private float nextAttackTime = 0;
 
     public GameObject hitEffect;
@@ -103,6 +105,10 @@ public class Actor : Charachter
         isAlive = true;
 
         abilities = charachter.abilities;
+        projectile = charachter.projectile;
+        projectileLife = charachter.projectileLife;
+        attackRate = charachter.attackRate;
+        attackTime = charachter.attackTime;
 
         nextLevelExp = new int[maxLevel + 1];
         nextLevelExp[1] = 100;
@@ -167,7 +173,7 @@ public class Actor : Charachter
         base.ApplyDamage(user);
         if(onActorHPChanged != null) onActorHPChanged.Invoke();
         if(gameObject.activeSelf) StartCoroutine(HitEffect());
-        CameraManager.Instance.Shake(0.75f,0.05f);
+        CameraManager.Instance.Shake(0.75f,2.5f);
     }
 
     public void ApplyAction(float energy)
@@ -183,9 +189,10 @@ public class Actor : Charachter
     public virtual void ActionMove(Vector2 force){
         Quaternion rotation = Quaternion.LookRotation(force, Vector3.up);
         transform.rotation = rotation;
-        rb.velocity = Vector2.zero;
-        rb.AddForce(force * statAGI.GetValue(), ForceMode2D.Impulse);
-        ApplyAction(actionCost);
+        rb.velocity = statAGI.GetValue() * force;
+        // rb.velocity = Vector2.zero;
+        // rb.AddForce(force * statAGI.GetValue(), ForceMode2D.Impulse);
+        // ApplyAction(actionCost);
         isDash = true;
     }
 
@@ -199,7 +206,7 @@ public class Actor : Charachter
                     rb.velocity = Vector2.zero;         
                     Vector3 direction = (closestEnemy.position - parent.transform.position).normalized;
                     rb.AddForce(direction * 20f, ForceMode2D.Impulse);
-                    ApplyAction(actionCost);
+                    // ApplyAction(actionCost);
                     TimeManager.Instance.StartImpactMotion();
                     isDash = false;
                 }
@@ -209,12 +216,19 @@ public class Actor : Charachter
     }
 
     public virtual void ActionAttack(GameObject target){
-        Mob targetAtk =  target.GetComponent<Mob>();
-        if(targetAtk != null) {
-            // TimeManager.Instance.StartImpactMotion();
-            Instantiate(hitEffect,target.transform.position,Quaternion.identity);
-            targetAtk.ApplyDamage(this);
-        }
+        Vector2 direction = (target.transform.position - parent.position).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        Projectile projClone = Instantiate(projectile, parent.position, Quaternion.Euler(0,0,angle -90)) as Projectile;
+        projClone.Initialize(this, 0, 10, 5, false, Quaternion.Euler(0,0,angle -90));
+        Destroy(projClone.gameObject, projectileLife);
+
+        // Mob targetAtk =  target.GetComponent<Mob>();
+        // if(targetAtk != null) {
+        //     // TimeManager.Instance.StartImpactMotion();
+        //     Instantiate(hitEffect,target.transform.position,Quaternion.identity);
+        //     targetAtk.ApplyDamage(this);
+        // }
         isDash = false;
     }
 
@@ -248,7 +262,8 @@ public class Actor : Charachter
         Vector2 next = path.Head(-index + 1);
 
         // Interpolate the position of the minion between the previous and the next point within the path. 'dist' is the distance between the 'head' of the path and the leader
-        parent.transform.position = Vector2.Lerp(prev, next, dist);
+        if(parent != null)
+        parent.position = Vector2.Lerp(prev, next, dist);
     }
 
     public void Push(Vector2 dir)
@@ -307,8 +322,10 @@ public class Actor : Charachter
     }
 
     public void StartRegen(){
-        if(regen != null) StopCoroutine(regen);
-        regen = StartCoroutine(RegenerateStamina());
+        if(parent.gameObject.activeSelf){
+            if(regen != null) StopCoroutine(regen);
+            regen = StartCoroutine(RegenerateStamina());
+        }
     }
 
     public void StopRegen(){
@@ -329,9 +346,10 @@ public class Actor : Charachter
 
     public override void Die()
     {
-        Debug.Log(actorName + " Died");
         isAlive = false;
-        gameObject.SetActive(false);
+        // parent.gameObject.SetActive(false);
+        Destroy(parent.gameObject);
+        Debug.Log(actorName + " Died");
         // rb.velocity = Vector2.zero;
         // GetComponent<CircleCollider2D>().enabled = false;
     }
@@ -359,7 +377,7 @@ public class Actor : Charachter
         if(other.collider.tag == "Props"){
             Vector3 hitPoint = other.contacts[0].point;
             Instantiate(bounceEffect,hitPoint,Quaternion.identity);
-            other.collider.GetComponent<Box>().ApplyDamage(1);
+            other.collider.GetComponent<Props>().ApplyDamage(1);
             isDash = true;
         }
 

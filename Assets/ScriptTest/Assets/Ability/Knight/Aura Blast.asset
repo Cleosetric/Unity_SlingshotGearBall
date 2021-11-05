@@ -28,8 +28,8 @@ MonoBehaviour:
   isFinished: 0
   repeatTime: 1
   repeatDelay: 0
-  range: 2
-  hitForce: 20
+  range: 2.5
+  hitForce: 25
   positionOffset: {x: 0, y: 0.1, z: 0}
   abilityEffect: {fileID: 6285459847656351979, guid: f0f7e0e05d8000546b06568175f19c5c,
     type: 3}

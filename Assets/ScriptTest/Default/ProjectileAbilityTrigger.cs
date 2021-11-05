@@ -80,7 +80,7 @@ public class ProjectileAbilityTrigger : MonoBehaviour
 
         GameObject clonedBullet = Instantiate(projectile.gameObject, origin.position, Quaternion.identity);
         clonedBullet.GetComponent<Projectile>().Initialize(origin.GetComponent<Actor>(), hitType, projectileForce, 
-        projectileImpact, targetRotation);
+        projectileImpact,true, targetRotation);
         DestroyProjectile(clonedBullet.gameObject, projectileLife);
 	}
 
@@ -89,7 +89,7 @@ public class ProjectileAbilityTrigger : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         GameObject clonedBullet = Instantiate(projectile.gameObject, origin.position, Quaternion.identity);
         clonedBullet.GetComponent<Projectile>().Initialize(origin.GetComponent<Actor>(), hitType, projectileForce, 
-        projectileImpact, Quaternion.Euler(0, 0, angle + offset));
+        projectileImpact,true, Quaternion.Euler(0, 0, angle + offset));
         DestroyProjectile(clonedBullet.gameObject, projectileLife);
     }
 
@@ -99,12 +99,12 @@ public class ProjectileAbilityTrigger : MonoBehaviour
 
         GameObject clonedBullet = Instantiate(projectile.gameObject, origin.position, Quaternion.identity);
         clonedBullet.GetComponent<Projectile>().Initialize(origin.GetComponent<Actor>(), hitType, projectileForce, 
-        projectileImpact, Quaternion.Euler(0, 0, angle + offset1));
+        projectileImpact, true, Quaternion.Euler(0, 0, angle + offset1));
         DestroyProjectile(clonedBullet.gameObject, projectileLife);
 
         GameObject clonedBullet2 = Instantiate(projectile.gameObject, origin.position, Quaternion.identity);
         clonedBullet2.GetComponent<Projectile>().Initialize(origin.GetComponent<Actor>(), hitType, projectileForce, 
-        projectileImpact, Quaternion.Euler(0, 0, angle + offset2));
+        projectileImpact,true, Quaternion.Euler(0, 0, angle + offset2));
         DestroyProjectile(clonedBullet2.gameObject, projectileLife);
     }
 
@@ -114,17 +114,17 @@ public class ProjectileAbilityTrigger : MonoBehaviour
 
         GameObject clonedBullet = Instantiate(projectile.gameObject, origin.position, Quaternion.identity);
         clonedBullet.GetComponent<Projectile>().Initialize(origin.GetComponent<Actor>(), hitType, projectileForce, 
-        projectileImpact, Quaternion.Euler(0, 0, angle + offset1));
+        projectileImpact,true, Quaternion.Euler(0, 0, angle + offset1));
         DestroyProjectile(clonedBullet.gameObject, projectileLife);
 
         GameObject clonedBullet2 = Instantiate(projectile.gameObject, origin.position, Quaternion.identity);
         clonedBullet2.GetComponent<Projectile>().Initialize(origin.GetComponent<Actor>(), hitType, projectileForce, 
-        projectileImpact, Quaternion.Euler(0, 0, angle + offset2));
+        projectileImpact,true, Quaternion.Euler(0, 0, angle + offset2));
         DestroyProjectile(clonedBullet2.gameObject, projectileLife);
 
         GameObject clonedBullet3 = Instantiate(projectile.gameObject, origin.position, Quaternion.identity);
         clonedBullet3.GetComponent<Projectile>().Initialize(origin.GetComponent<Actor>(), hitType, projectileForce, 
-        projectileImpact, Quaternion.Euler(0, 0, angle + offset3));
+        projectileImpact,true, Quaternion.Euler(0, 0, angle + offset3));
         DestroyProjectile(clonedBullet3.gameObject, projectileLife);
     }
 

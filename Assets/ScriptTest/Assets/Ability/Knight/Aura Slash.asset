@@ -26,7 +26,7 @@ MonoBehaviour:
   staminaCost: 5
   cooldownTime: 5
   isFinished: 0
-  target: 1
+  target: 0
   projectileSpeed: 10
   projectileLife: 0.45
   projectileImpact: 10

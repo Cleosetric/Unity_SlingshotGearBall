@@ -17,6 +17,10 @@ public class ActorStats : CharachterStats
     [Space]
     [Header("Abilities")]
     public List<Ability> abilities = new List<Ability>();
+    public Projectile projectile;
+    public float projectileLife;
+    public float attackTime;
+    public float attackRate;
 
     [Space]
     [Header("Controller")]

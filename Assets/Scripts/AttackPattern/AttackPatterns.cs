@@ -24,7 +24,7 @@ public class AttackPatterns : MonoBehaviour
             }
 
             if(hitObj.CompareTag("Props")){
-               hitObj.GetComponent<Box>().ApplyDamage(attack);
+               hitObj.GetComponent<Props>().ApplyDamage(attack);
             }
         }
     }

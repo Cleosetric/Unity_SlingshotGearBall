@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3033e0b484d1e469d2ff03a3812161, type: 3}
+  m_Name: Pyroslime
+  m_EditorClassIdentifier: 
+  statMHP:
+    baseValue: 150
+  statMSP:
+    baseValue: 0
+  statATK:
+    baseValue: 20
+  statDEF:
+    baseValue: 5
+  statMATK:
+    baseValue: 0
+  statMDEF:
+    baseValue: 0
+  statAGI:
+    baseValue: 2
+  statLUK:
+    baseValue: 0
+  statHRG:
+    baseValue: 0
+  statSRG:
+    baseValue: 0
+  statHIT:
+    baseValue: 75
+  statCRI:
+    baseValue: 0
+  statEVA:
+    baseValue: 15
+  statHRR:
+    baseValue: 0
+  statSRR:
+    baseValue: 0
+  elementType: 1
+  name: Pyroslime
+  description: dont touch it its hot
+  mobSprite: {fileID: -2418892464093907319, guid: 5c3a5c3b0d3a0c341a6685146826e8cf,
+    type: 3}
+  radiusSight: 2
+  attackSight: 4
+  attackTime: 1
+  attackRate: 2

@@ -176,7 +176,7 @@ public class Player : MonoBehaviour
         }
         
         if(hit.collider.tag == "Props"){
-            hit.collider.GetComponent<Box>().ApplyDamage(attack);
+            hit.collider.GetComponent<Props>().ApplyDamage(attack);
         }
  
         if(hit.collider.CompareTag("Props") || hit.collider.CompareTag("Wall")){

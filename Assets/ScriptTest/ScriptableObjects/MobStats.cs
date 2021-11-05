@@ -15,4 +15,6 @@ public class MobStats : CharachterStats
     [Header("Movement")]
     public float radiusSight;
     public float attackSight;
+    public float attackTime = 1f;
+    public float attackRate = 2f;
 }

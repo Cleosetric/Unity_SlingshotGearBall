@@ -40,7 +40,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.145, y: 0.65}
+  m_AnchoredPosition: {x: 0.17, y: 0.61}
   m_SizeDelta: {x: 0.75, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &279013464508476070
@@ -128,7 +128,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 279013464663287254}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.17000008, y: 0.20835733, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 279013466517328827}
@@ -518,7 +518,7 @@ Transform:
   m_GameObject: {fileID: 279013466517328826}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
   - {fileID: 4232068715572760128}
   - {fileID: 279013464663287255}
@@ -692,7 +692,7 @@ GameObject:
   - component: {fileID: 5438761738853231632}
   - component: {fileID: 4232068715572760133}
   m_Layer: 9
-  m_Name: Body
+  m_Name: Mob
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -757,6 +757,7 @@ MonoBehaviour:
   statSRR:
     baseValue: 0
   charSprite: {fileID: 4232068715961559101}
+  charAnim: {fileID: 4232068715961559072}
   nameText: {fileID: 279013465682245424}
   hpBar: {fileID: 279013464686745638}
   hpEffect: {fileID: 279013465152546369}
@@ -765,7 +766,6 @@ MonoBehaviour:
   rb: {fileID: 5438761738853231632}
   mob: {fileID: 11400000, guid: 661a665d4c8aa1c469a0cfd3d253c29c, type: 2}
   mobName: 
-  initialPost: {fileID: 279013464663287255}
   deathEffectPrefab: {fileID: 8449388853544896041, guid: 267cfcd11ddfba4449243a0a44e1ae22,
     type: 3}
   actorLayer:
@@ -774,8 +774,7 @@ MonoBehaviour:
   radiusSight: 0
   attackSight: 0
   moveSpeed: 0
-  attackTime: 3
-  attackRate: 1
+  initialPost: {fileID: 279013464663287255}
 --- !u!58 &4232068715572760129
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -791,7 +790,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.25
+  m_Radius: 0.2
 --- !u!50 &5438761738853231632
 Rigidbody2D:
   serializedVersion: 4
@@ -945,7 +944,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4232068715961559075}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.304, z: 0}
+  m_LocalPosition: {x: 0.16999996, y: -0.2916425, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
   m_Father: {fileID: 4232068715572760128}

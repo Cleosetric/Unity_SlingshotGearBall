@@ -34,15 +34,17 @@ public class SkillUI : MonoBehaviour
 
     void Refresh(){
         actor = party.GetLeader();
-        for (int i = 0; i < slot.Count; i++)
-        {
-            slot[i].isAbilityReady = true;
-            slot[i].isAbilityFinished = true;
-            if(i < actor.abilities.Count){
-                slot[i].Initialize(actor.gameObject,actor.abilities[i]);
-                slot[i].gameObject.SetActive(true);
-            }else{
-                slot[i].gameObject.SetActive(false);
+        if(actor != null){
+            for (int i = 0; i < slot.Count; i++)
+            {
+                slot[i].isAbilityReady = true;
+                slot[i].isAbilityFinished = true;
+                if(i < actor.abilities.Count){
+                    slot[i].Initialize(actor.gameObject,actor.abilities[i]);
+                    slot[i].gameObject.SetActive(true);
+                }else{
+                    slot[i].gameObject.SetActive(false);
+                }
             }
         }
     }

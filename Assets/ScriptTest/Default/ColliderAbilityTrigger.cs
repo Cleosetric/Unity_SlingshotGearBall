@@ -52,14 +52,17 @@ public class ColliderAbilityTrigger : MonoBehaviour
         {
             if(hitObj.CompareTag("Enemy")){
                 Mob targetAtk =  hitObj.GetComponent<Mob>();
-                if(targetAtk != null) targetAtk.ApplyDamage(actor);
-                Vector3 collisionPoint = hitObj.ClosestPoint(origin.position);
-                Vector3 collisionNormal = origin.position - collisionPoint;
-                hitObj.GetComponent<Rigidbody2D>().AddForce(-collisionNormal * ability.hitForce, ForceMode2D.Impulse);
+                if(targetAtk != null){
+                    targetAtk.ApplyDamage(actor);
+                    Rigidbody2D otherRb = targetAtk.rb;
+                    Vector3 collisionPoint = hitObj.ClosestPoint(origin.position);
+                    Vector3 collisionNormal = origin.position - collisionPoint;
+                    otherRb.AddForce(-collisionNormal * ability.hitForce, ForceMode2D.Impulse);
+                }
             }
 
             if(hitObj.CompareTag("Props")){
-                hitObj.GetComponent<Box>().ApplyDamage(Mathf.RoundToInt(actor.statATK.GetValue()));
+                hitObj.GetComponent<Props>().ApplyDamage(Mathf.RoundToInt(actor.statATK.GetValue()));
             }
         }
         ability.Deactivate();

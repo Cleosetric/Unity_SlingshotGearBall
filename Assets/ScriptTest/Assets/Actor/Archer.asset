@@ -54,5 +54,10 @@ MonoBehaviour:
   abilities:
   - {fileID: 11400000, guid: c1e4d224ca1f1b649bb6cbbb93766dfe, type: 2}
   - {fileID: 11400000, guid: 0561c1285c8399046bd6a457d31342ad, type: 2}
-  actionSight: 1.25
+  projectile: {fileID: 8839379561025394991, guid: 1959d4487dab2ca469390915497b5249,
+    type: 3}
+  projectileLife: 0.5
+  attackTime: 1
+  attackRate: 1
+  actionSight: 3
   actionCost: 5

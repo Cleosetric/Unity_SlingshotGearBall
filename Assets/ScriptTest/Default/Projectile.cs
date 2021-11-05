@@ -5,16 +5,18 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public GameObject destroyAnimPrefab; 
-    Actor actor;
+    Charachter charachter;
     HitType hitType;
     float speed;
     float impact;
+    bool shake;
 
-    public void Initialize(Actor actor, HitType hitType,float speed, float impact, Quaternion rotation){
-        this.actor = actor;
+    public void Initialize(Charachter charachter, HitType hitType,float speed, float impact,bool shake, Quaternion rotation){
+        this.charachter = charachter;
         this.hitType = hitType;
         this.speed = speed;
         this.impact = impact;
+        this.shake = shake;
         transform.rotation = rotation;
     }
 
@@ -46,10 +48,10 @@ public class Projectile : MonoBehaviour
         if(other.CompareTag("Enemy")){
             Mob targetAtk =  other.GetComponent<Mob>();
             if(targetAtk != null) {
-                TimeManager.Instance.StartImpactMotion();
-                targetAtk.ApplyDamage(actor);
+                if(shake) TimeManager.Instance.StartImpactMotion();
+                targetAtk.ApplyDamage(charachter);
 
-                Rigidbody2D otherRb = other.GetComponent<Rigidbody2D>();
+                Rigidbody2D otherRb = targetAtk.rb;
                 if(otherRb != null){
                     Debug.Log("Yes there is RB in "+ other.name);
                     Vector3 dir = (transform.position - other.transform.position).normalized;
@@ -65,37 +67,37 @@ public class Projectile : MonoBehaviour
         if(other.CompareTag("Enemy")){
             Mob targetAtk =  other.GetComponent<Mob>();
             if(targetAtk != null) {
-                TimeManager.Instance.StartImpactMotion();
-                targetAtk.ApplyDamage(actor);
+                if(shake) TimeManager.Instance.StartImpactMotion();
+                targetAtk.ApplyDamage(charachter);
 
-                Rigidbody2D otherRb = other.GetComponent<Rigidbody2D>();
+                Rigidbody2D otherRb = targetAtk.rb; //other.GetComponent<Rigidbody2D>();
                 if(otherRb != null){
                     Vector3 dir = (transform.position - other.transform.position).normalized;
                    otherRb.AddForce(-dir * impact, ForceMode2D.Impulse);
                 }
 
                 Instantiate(destroyAnimPrefab, other.transform.position, Quaternion.identity);
-                CameraManager.Instance.Shake(0.25f,0.05f);
+                if(shake) CameraManager.Instance.Shake(0.25f,1.5f);
             }
         }
     }
 
     void DestroyProps(Collider2D other){
         if(other.CompareTag("Props")){
-            other.GetComponent<Box>().ApplyDamage(Mathf.RoundToInt(actor.statATK.GetValue()));
+            other.GetComponent<Props>().ApplyDamage(Mathf.RoundToInt(charachter.statATK.GetValue()));
             OnProjectileDestroy(this.gameObject);
         }
     }
 
     void PierceProps(Collider2D other){
         if(other.CompareTag("Props")){
-            other.GetComponent<Box>().ApplyDamage(Mathf.RoundToInt(actor.statATK.GetValue()));
+            other.GetComponent<Props>().ApplyDamage(Mathf.RoundToInt(charachter.statATK.GetValue()));
             Instantiate(destroyAnimPrefab, other.transform.position, Quaternion.identity);
         }
     }
 
     private void OnProjectileDestroy(GameObject obj) {
-        CameraManager.Instance.Shake(0.25f,0.05f);
+        if(shake) CameraManager.Instance.Shake(0.25f,1.5f);
         Instantiate(destroyAnimPrefab, obj.transform.position, Quaternion.identity);
         Destroy(obj);
     }

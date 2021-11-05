@@ -78,20 +78,24 @@ public class Party : MonoBehaviour
     void EnableLeaderHitBox(){
         for (int i = 0; i < actors.Count; i++)
         {
-            if(i == 0){
-                // actors[i].gameObject.GetComponent<CircleCollider2D>().enabled = true;
-                // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
-                // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
-                actors.ToArray()[i].parent.GetComponentInChildren<TargetIndicator>().ShowIndicator();
-                actors.ToArray()[i].gameObject.GetComponentInParent<Rigidbody2D>().velocity = lastVel;
-                // actors[i].gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
-            }else{
-                // actors[i].gameObject.GetComponent<CircleCollider2D>().enabled = false;
-                // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
-                // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
-                actors.ToArray()[i].parent.GetComponentInChildren<TargetIndicator>().HideIndicator();
-                if(actors.ToArray()[i].gameObject.activeSelf) actors.ToArray()[i].StartRegen();
-                // actors[i].gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
+            if(actors.ToArray()[i] != null){
+                if(actors.ToArray()[i].parent.gameObject.activeSelf){
+                    if(i == 0){
+                        // actors[i].gameObject.GetComponent<CircleCollider2D>().enabled = true;
+                        // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
+                        // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
+                        actors.ToArray()[i].parent.GetComponentInChildren<TargetIndicator>().ShowIndicator();
+                        actors.ToArray()[i].gameObject.GetComponentInParent<Rigidbody2D>().velocity = lastVel;
+                        // actors[i].gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
+                    }else{
+                        // actors[i].gameObject.GetComponent<CircleCollider2D>().enabled = false;
+                        // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
+                        // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
+                        actors.ToArray()[i].parent.GetComponentInChildren<TargetIndicator>().HideIndicator();
+                        if(actors.ToArray()[i].parent.gameObject.activeSelf) actors.ToArray()[i].StartRegen();
+                        // actors[i].gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
+                    }
+                }
             }
         }
     }
@@ -99,6 +103,8 @@ public class Party : MonoBehaviour
     public void SwapLeader(){
         //check if actor count is alive > 1
         //not only check count
+        if(GetLeader().parent == null || !GetLeader().parent.gameObject.activeSelf || !GetLeader().isAlive) return;
+
         int aliveMemberCount = 0;
         foreach (Actor actor in actors)
         {
@@ -112,15 +118,17 @@ public class Party : MonoBehaviour
             Actor currentLeader = actors.Peek();
             actors.Dequeue();
             actors.Enqueue(currentLeader);
-            actorLeader = actors.Peek();
+            actorLeader = GetLeader();
             for (int i = 0; i < actors.Count; i++)
             {
-                if(actors.ToArray()[i].isAlive){
-                    actors.ToArray()[i].Init(i);
+                if(actors.ToArray()[i].parent != null){
+                    if(actors.ToArray()[i].isAlive){
+                        actors.ToArray()[i].Init(i);
+                        actors.ToArray()[i].MoveOnPath(path, 0f);
+                        actors.ToArray()[i].GetComponentInParent<Rigidbody2D>().velocity = Vector2.zero;
+                    }
                     actors.ToArray()[i].MoveOnPath(path, 0f);
-                    actors.ToArray()[i].GetComponentInParent<Rigidbody2D>().velocity = Vector2.zero;
                 }
-                actors.ToArray()[i].MoveOnPath(path, 0f);
                 
             }
 
@@ -190,7 +198,7 @@ public class Party : MonoBehaviour
         partyMemberList.AddRange(actors.ToArray());
         isPartyDefeated = !partyMemberList.Exists(x => x.isAlive == true);
         if(!isPartyDefeated){
-            if(!GetLeader().isAlive){
+            if(GetLeader().parent == null || !GetLeader().isAlive){
                 SwapLeader();
             }
         }else{
@@ -204,28 +212,30 @@ public class Party : MonoBehaviour
     }
 
     void Restart(){
-        EnemyManager.Instance.RestartGame();
+        GameManager.Instance.GameOver();
     }
 
     private void MoveLeader()
     {
-        // Measure the distance between the leader and the 'head' of that path
-        Vector2 headToLeader = ((Vector2)actorLeader.parent.position) - path.Head();
+        if(actorLeader != null){
+            // Measure the distance between the leader and the 'head' of that path
+            Vector2 headToLeader = ((Vector2)actorLeader.parent.position) - path.Head();
 
-        // Cache the precise distance so we can reuse it when we offset each minion
-        leaderDistance = headToLeader.magnitude;
+            // Cache the precise distance so we can reuse it when we offset each minion
+            leaderDistance = headToLeader.magnitude;
 
-        // When the distance between the leader and the 'head' of the path hits the threshold, spawn a new point in the path
-        if (leaderDistance >= actorsDistance)
-        {
-            // In case leader overshot, let's make sure all points are spaced exactly with 'RADIUS'
-            float leaderOvershoot = leaderDistance - actorsDistance;
-            Vector2 pushDir = headToLeader.normalized * leaderOvershoot;
+            // When the distance between the leader and the 'head' of the path hits the threshold, spawn a new point in the path
+            if (leaderDistance >= actorsDistance)
+            {
+                // In case leader overshot, let's make sure all points are spaced exactly with 'RADIUS'
+                float leaderOvershoot = leaderDistance - actorsDistance;
+                Vector2 pushDir = headToLeader.normalized * leaderOvershoot;
 
-            path.Add(((Vector2)actorLeader.parent.position) - pushDir);
+                path.Add(((Vector2)actorLeader.parent.position) - pushDir);
 
-            // Update head distance as there is a new point we have to measure from now
-            leaderDistance = (((Vector2)actorLeader.parent.position) - path.Head()).sqrMagnitude;
+                // Update head distance as there is a new point we have to measure from now
+                leaderDistance = (((Vector2)actorLeader.parent.position) - path.Head()).sqrMagnitude;
+            }
         }
     }
 
@@ -237,18 +247,20 @@ public class Party : MonoBehaviour
         {
             Actor actor = actors.ToArray()[i];
 
-            if(actor.isAlive){
+            if(actor != null){
                 // Move minion on the path
                 actor.MoveOnPath(path, headDistUnit);
 
-                // Extra push to avoid minions stepping on each other
-                Vector2 prevToNext = actors.ToArray()[i - 1].parent.position - actor.parent.position;
+                if(actor.parent != null && actors.ToArray()[i - 1].parent != null){
+                    // Extra push to avoid minions stepping on each other
+                    Vector2 prevToNext = actors.ToArray()[i - 1].parent.position - actor.parent.position;
 
-                float distance = prevToNext.magnitude;
-                if (distance < actorsDistance)
-                {
-                    float intersection = actorsDistance - distance;
-                    actor.Push(-prevToNext.normalized * actorsDistance * intersection);
+                    float distance = prevToNext.magnitude;
+                    if (distance < actorsDistance)
+                    {
+                        float intersection = actorsDistance - distance;
+                        actor.Push(-prevToNext.normalized * actorsDistance * intersection);
+                    }
                 }
             }
         }

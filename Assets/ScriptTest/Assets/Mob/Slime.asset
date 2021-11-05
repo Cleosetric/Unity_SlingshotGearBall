@@ -43,9 +43,11 @@ MonoBehaviour:
   statSRR:
     baseValue: 0
   elementType: 0
-  name: Limey
+  name: Umbel
   description: 'a slime '
   mobSprite: {fileID: -7854738478779454800, guid: b3449127b97d24c4ebe66fde1e3ce9c3,
     type: 3}
-  radiusSight: 1.5
-  attackSight: 1
+  radiusSight: 3
+  attackSight: 2.5
+  attackTime: 1
+  attackRate: 2

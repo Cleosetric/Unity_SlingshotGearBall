@@ -8,7 +8,8 @@ public class Mob : Charachter
     [Header("Mob Info")]
     public MobStats mob;
     public string mobName;
-    public Transform initialPost;
+    public int mobScore = 50;
+    public int mobExp = 20;
     public GameObject deathEffectPrefab;
 
     [Space]
@@ -18,7 +19,6 @@ public class Mob : Charachter
     public float attackSight;
     public float moveSpeed;
     private Vector2 lastVel;
-    protected Transform target;
     
     //shake
     private float time = 0.2f;
@@ -56,7 +56,6 @@ public class Mob : Charachter
     private void Start() {
         currentHP = Mathf.RoundToInt(statMHP.GetValue());
         currentSP = Mathf.RoundToInt(statMSP.GetValue());
-        initialPost.position = transform.position;
     }
 
     private void OnValidate()
@@ -67,6 +66,9 @@ public class Mob : Charachter
     private void Update() {
         lastVel = rb.velocity;
         DisplayHPBar();
+    }
+
+    private void FixedUpdate() {
         Move();
     }
 
@@ -78,6 +80,10 @@ public class Mob : Charachter
         }else{
             hpEffect.fillAmount = hpBar.fillAmount;
         }
+    }
+
+    void HideHPBar(){
+        hpBar.transform.parent.gameObject.SetActive(false);
     }
 
     public override void ApplyDamage(Charachter user)
@@ -93,13 +99,19 @@ public class Mob : Charachter
 
     public override void Die()
     {
+        HideHPBar();
+        charSprite.enabled = false;
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
         GetComponent<CircleCollider2D>().enabled = false;
+
+        GameManager.Instance.IncreaseTotalExp(mobExp);
+        ScoreCounter.Instance.IncreaseScore(mobScore);
+        TimeManager.Instance.StartImpactMotion();
         GameObject effect = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
         ParticleSystem particle = effect.GetComponent<ParticleSystem>();
         effect.transform.SetParent(transform);
-        Destroy(gameObject, particle.main.duration);
+        Destroy(parent.gameObject, particle.main.duration);
     }
 
     public virtual void OnCollisionEnter2D(Collision2D other) {

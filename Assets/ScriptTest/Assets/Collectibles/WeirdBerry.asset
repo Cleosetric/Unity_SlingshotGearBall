@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c2ef720acb01b5488e892849773e668, type: 3}
+  m_Name: WeirdBerry
+  m_EditorClassIdentifier: 
+  target: 0
+  sprite: {fileID: 4717103951190049488, guid: bd3aa582fce2c974887c07b06d8815f8, type: 3}
+  collectibles:
+  - {fileID: 11400000, guid: 388a845b74a2ab64687685dc3b1b3665, type: 2}
+  - {fileID: 11400000, guid: 5bb26da9e9168474a886dececb44abd4, type: 2}
+  - {fileID: 11400000, guid: 60cc81def65d1a54d837e5ef664ec3a7, type: 2}
+  - {fileID: 11400000, guid: 6a4d6e91186f4ac4898ab06477776a86, type: 2}
+  - {fileID: 11400000, guid: 3672a1be615e7b44b859a58540ef8a40, type: 2}

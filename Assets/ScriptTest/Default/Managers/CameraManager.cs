@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class CameraManager : MonoBehaviour
 {
@@ -18,17 +19,21 @@ public class CameraManager : MonoBehaviour
         }
     }
 	#endregion
-	private Transform camTransform;
-	private Vector3 originalPos;
+	public CinemachineVirtualCamera camera2D;
+    private CinemachineBasicMultiChannelPerlin noise;
 
 	void Start()
 	{
         // Application.targetFrameRate = 60;
         // QualitySettings.vSyncCount = 1;
-        
-        camTransform = Camera.main.transform;
-		originalPos = camTransform.localPosition;
+        noise = camera2D.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        noise.m_AmplitudeGain = 0;
+        noise.m_FrequencyGain = 0;
 	}
+
+    public CinemachineVirtualCamera GetCamera(){
+        return camera2D;
+    }
 
 	public void Shake(float duration, float magnitude)
 	{
@@ -39,10 +44,12 @@ public class CameraManager : MonoBehaviour
         float ellapsedTime = 0;
         while (ellapsedTime < duration)
         {
-            camTransform.localPosition = originalPos + Random.insideUnitSphere * amount;
+            noise.m_AmplitudeGain = amount;
+            noise.m_FrequencyGain = 2;
             ellapsedTime += Time.deltaTime;
             yield return null;
         }
-        camTransform.localPosition = originalPos;
+        noise.m_AmplitudeGain = 0;
+        noise.m_FrequencyGain = 0;
     }
 }

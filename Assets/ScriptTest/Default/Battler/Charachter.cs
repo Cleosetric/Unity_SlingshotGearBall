@@ -32,6 +32,7 @@ public class Charachter : MonoBehaviour
     [Space]
     [Header("Base Component")]
     public SpriteRenderer charSprite;
+    public Animator charAnim;
     public TextMeshProUGUI nameText;
     public Image hpBar;
     public Image hpEffect;
@@ -85,7 +86,21 @@ public class Charachter : MonoBehaviour
         }
     }
 
-    public virtual void Die(){
+    public void ApplyHeal(int healValue){
+        currentHP += healValue;
+        if(currentHP >= Mathf.RoundToInt(statMHP.GetValue())) {
+            currentHP = Mathf.RoundToInt(statMHP.GetValue());
+        }  
+    }
 
+    public void ApplyEnergy(float value){
+        currentSP += value;
+        if(currentSP >= statMHP.GetValue()) {
+            currentSP = statMHP.GetValue();
+        }
+    }
+
+    public virtual void Die(){
+        Debug.Log(parent.gameObject.name + "Died!");
     }
 }

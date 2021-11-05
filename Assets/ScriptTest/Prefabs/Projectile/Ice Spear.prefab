@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8339588247735586504}
   - component: {fileID: 7821485746738471367}
   - component: {fileID: 3194428603056182191}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 7094436536238866727}
   - component: {fileID: 5747120231656139555}
   - component: {fileID: 8602511289181372034}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ice Spear
   m_TagString: Untagged
   m_Icon: {fileID: 0}

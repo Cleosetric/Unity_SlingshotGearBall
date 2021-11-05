@@ -41,6 +41,7 @@ public class PlayerMoveController : MonoBehaviour
     private bool onSling = false;  
     private bool onSlowmo = false;  
     private bool isRegen = false;  
+    private bool isTouching = false;
     private float downClickTime;
     private float delayDeltaTime = 0.05f;  
     private float currentSlowTime;
@@ -69,7 +70,7 @@ public class PlayerMoveController : MonoBehaviour
 
         currentSlowTime = slowmotionTime;
         slowmotionBar.fillAmount = 1;
-        initialPos = transform.position;
+        initialPos = new Vector2( cam.transform.position.x, cam.transform.position.y-5f);
         cancelSprite.SetActive(false);
         // sprite.enabled = false;
     }
@@ -77,7 +78,8 @@ public class PlayerMoveController : MonoBehaviour
     private void RefreshParty()
     {
         actor = party.GetLeader();
-        actorRb = actor.GetComponentInParent<Rigidbody2D>();
+        if(actor != null)
+        actorRb = actor.parent.GetComponent<Rigidbody2D>();
     }
 
     private bool IsMouseOnArea(Vector3 MousePosition){
@@ -88,7 +90,7 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     private bool IsSlingable(){
-        if(actor.currentSP >= actor.actionCost) return true;
+        if(actor.currentSP >= actor.actionCost && isSlingValid) return true;
         return false;
     }
 
@@ -98,20 +100,27 @@ public class PlayerMoveController : MonoBehaviour
         CheckTouchControl();
         CheckPlayerMovement();
         CountdownSlomotion();
+        if(!isTouching) transform.position = new Vector2( cam.transform.position.x, cam.transform.position.y-5f);
     }
 
+    // private void LateUpdate() {
+    //     transform.position = new Vector2( cam.transform.position.x, cam.transform.position.y-5f);
+    // }
+
     private void FixedUpdate() {
-        if(actor.currentSP > 1f){
-            actorRb.velocity = actor.statAGI.GetValue() * (actorRb.velocity.normalized);
-        }
-        if(actorRb.velocity.magnitude > 0.5f){
-            actor.ApplyAction(1f * Time.fixedDeltaTime);
-        }else{
-            if(actor.gameObject.activeSelf && !isRegen){
-                actorRb.velocity = Vector2.zero;
-                actor.StartRegen();
-                isRegen = true;
-            } 
+        if(actor != null){
+            if(actor.currentSP > 1f){
+                actorRb.velocity = actor.statAGI.GetValue() * (actorRb.velocity.normalized);
+            }
+            if(actorRb.velocity.magnitude > 0.5f){
+                actor.ApplyAction(1f * Time.fixedDeltaTime);
+            }else{
+                if(actor.gameObject.activeSelf && !isRegen){
+                    actorRb.velocity = Vector2.zero;
+                    actor.StartRegen();
+                    isRegen = true;
+                } 
+            }
         }
     }
 
@@ -126,12 +135,14 @@ public class PlayerMoveController : MonoBehaviour
 
     private void CheckTouchControl()
     {
-        if (Input.touchCount > 0 && actor.gameObject.activeSelf && actor.isAlive)
+        // if (Input.touchCount > 0 && actor.gameObject.activeSelf && actor.isAlive)
+        if (Input.touchCount > 0 && actor != null)
         {
             touch = Input.GetTouch(0);
             // if(!EventSystem.current.IsPointerOverGameObject(touch.fingerId)){
                 switch (touch.phase) {
                 case TouchPhase.Began:
+                    isTouching = true;
                     if(!EventSystem.current.IsPointerOverGameObject(touch.fingerId)){
                         if(IsMouseOnArea(touch.position)){
                             downClickTime = Time.time;
@@ -139,7 +150,7 @@ public class PlayerMoveController : MonoBehaviour
                             startPoint.z = -4;
                         }else{
                             downClickTime = Time.time;
-                            startPoint = new Vector2( cam.transform.position.x, cam.transform.position.y-3.5f);
+                            startPoint = new Vector2( cam.transform.position.x, cam.transform.position.y-5f);
                             startPoint.z = -4;
                         }
                         currentSlowTime = slowmotionTime;
@@ -154,25 +165,18 @@ public class PlayerMoveController : MonoBehaviour
                 break;
 
                 case TouchPhase.Moved:
-                    if(isSlingValid){
-                        if(IsSlingable()){
-                            if((Time.time - downClickTime) >= delayDeltaTime){
-                                onSling = true;
-                                sprite.transform.position = startPoint;
-                                sprite.enabled = true;
-                                currentPoint = cam.ScreenToWorldPoint(touch.position);
-                                currentPoint.z = -4;
-                                ShowLine(startPoint,currentPoint);
-                                ShowTrajectory(startPoint, currentPoint);
-                                TimeManager.Instance.EnterSlowmotion();
-                            }else{
-                                onSlowmo = false;
-                            }
-                        }else{
-                            onSling = false;
-                            onSlowmo = false;
+                    if(IsSlingable()){
+                        if((Time.time - downClickTime) >= delayDeltaTime){
+                            onSling = true;
+                            transform.position = startPoint;
+                            currentPoint = cam.ScreenToWorldPoint(touch.position);
+                            currentPoint.z = -4;
+                            ShowLine(startPoint,currentPoint);
+                            ShowTrajectory(startPoint, currentPoint);
+                            TimeManager.Instance.EnterSlowmotion();
                         }
                     }else{
+                        onSling = false;
                         onSlowmo = false;
                     }
                 break;
@@ -196,6 +200,7 @@ public class PlayerMoveController : MonoBehaviour
         onSlowmo = false;
         isSlingValid = false;
         onSling = false;
+        isTouching = false;
 
         slowmotionBar.fillAmount = 1;
         cancelSprite.SetActive(false);
@@ -264,7 +269,7 @@ public class PlayerMoveController : MonoBehaviour
      void HideLine(){
         lr.positionCount = 0;
         trajectory.positionCount = 0;
-        transform.position = initialPos;
+        transform.position = new Vector2( cam.transform.position.x, cam.transform.position.y-5f);
         // sprite.enabled = false;
     }
 
@@ -298,6 +303,9 @@ public class PlayerMoveController : MonoBehaviour
                 DrawTrajectory(hit.point + reflectAngle, reflectAngle);
             }
             return true;
+        }else{
+            trajectory.startColor = Color.red;
+            trajectory.endColor = new Color(255,25,20, 0);
         }
         
         if(hit == false){
@@ -313,7 +321,8 @@ public class PlayerMoveController : MonoBehaviour
     {
         foreach (Actor actor in party.actors)
         {
-           actor.parent.GetComponent<ParticleSystem>().Stop();
+            if(actor != null)
+            actor.parent.GetComponent<ParticleSystem>().Stop();
         }
     }
 
@@ -321,7 +330,8 @@ public class PlayerMoveController : MonoBehaviour
     {
         foreach (Actor actor in party.actors)
         {
-           actor.parent.GetComponent<ParticleSystem>().Play();
+            if(actor != null)
+            actor.parent.GetComponent<ParticleSystem>().Play();
         }
     }
 }
