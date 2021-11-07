@@ -29,6 +29,7 @@ public class MapManager : MonoBehaviour
     private CinemachineVirtualCamera cam;
     private CameraManager cameraMgr;
     private EnemyManager enemyMgr;
+    private GameObject map;
     
     private void Start() {
         party = Party.Instance;
@@ -37,13 +38,19 @@ public class MapManager : MonoBehaviour
 
         cam = cameraMgr.GetCamera();
         actor = party.GetLeader();
+    }
 
-        SpawnNewStage();
+    public bool IsMapHasGoal(){
+        if(map != null){
+            if(FindGameObjectInChildWithTag(map, "Goal") != null){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void SpawnNewStage(){
         if(indexMapSpawn < stage.Count){
-            GameObject map;
             map = Instantiate(stage[indexMapSpawn]) as GameObject;
             map.transform.SetParent(transform);
             map.transform.position = Vector2.up * (upOffset * indexMapSpawn);
@@ -55,6 +62,7 @@ public class MapManager : MonoBehaviour
 
             enemyMgr.FloodEnemy();
             indexMapSpawn ++;
+            GameManager.Instance.isStageClear = false;
         }
     }
 

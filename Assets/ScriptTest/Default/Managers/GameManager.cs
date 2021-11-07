@@ -25,29 +25,34 @@ public class GameManager : MonoBehaviour
 
     [Header("Currency Info")]
     public int stageCoin = 0;
-    public int stageEmerald = 0;
     public TextMeshProUGUI textCoin;
-    public TextMeshProUGUI textEmerald;
 
     [Space]
     [Header("Battle Info")]
+    public int maxScore = 1000;
     public int totalExpGained = 0;
 
     [Space]
     public GameObject animPrefab;
     public GameObject stageClearText;
     public GameObject victoryPanel;
+    public GameObject GameoverPanel;
+
+    [Space]
+
     public bool isGamePaused = false;
+    public bool isStageClear = false;
 
     private int stageCount = 1;
-    private bool isStageClear = false;
     private bool isVictory = false;
 
     private void Start() {
         textCoin.SetText(stageCoin.ToString());
-        textEmerald.SetText(stageEmerald.ToString());
-
         stageClearText.SetActive(false);
+        victoryPanel.SetActive(false);
+        GameoverPanel.SetActive(false);
+        EnterNewStage();
+        // MapManager.Instance.SpawnNewStage();
     }
 
     public void IncreaseCoin(int number){
@@ -55,29 +60,23 @@ public class GameManager : MonoBehaviour
         textCoin.SetText(stageCoin.ToString());
     }
 
-    public void IncreaseEmerald(int number){
-        stageEmerald += number;
-        textEmerald.SetText(stageEmerald.ToString());
-    }
-
     public void IncreaseTotalExp(int exp){
         totalExpGained += exp;
     }
 
-
     // Update is called once per frame
     private void Update()
     {
-        if(EnemyManager.Instance.IsAllEnemyDead()){
-            if(stageCount < MapManager.Instance.stage.Count){
-                if(!isStageClear){
-                    StartCoroutine(StageClear());
-                    isStageClear = true;
-                }
-            }else{
-                if(!isVictory){
-                    Victory();
-                    isVictory = true;
+        if(!MapManager.Instance.IsMapHasGoal()){
+            if(EnemyManager.Instance.IsAllEnemyDead()){
+                if(stageCount <= MapManager.Instance.stage.Count){
+                    if(!isStageClear){
+                        StageCleared();
+                    }
+                }else{
+                    if(!isVictory){
+                        Victory();
+                    }
                 }
             }
         }
@@ -88,13 +87,24 @@ public class GameManager : MonoBehaviour
         victoryPanel.SetActive(true);
         VictoryUI victory = victoryPanel.GetComponent<VictoryUI>();
         victory.ShowBattleResult();
+
         isGamePaused = true;
+        isVictory = true;
         Debug.Log("Victory yey!");
     }
 
     public void GameOver(){
+        GameoverPanel.SetActive(true);
+        GameOverUI gameOverUI = GameoverPanel.GetComponent<GameOverUI>();
+        gameOverUI.ShowBattleResult();
+
         isGamePaused = true;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Debug.Log("Gameover yey!");
+    }
+
+    public void StageCleared(){
+        StartCoroutine(StageClear());
+        isStageClear = true;
     }
 
     IEnumerator StageClear(){
@@ -115,7 +125,6 @@ public class GameManager : MonoBehaviour
     void EnterNewStage(){
         MapManager.Instance.SpawnNewStage();
         stageCount ++;
-        isStageClear = false;
     }
 
     public void PlayTeleportAnimation(){

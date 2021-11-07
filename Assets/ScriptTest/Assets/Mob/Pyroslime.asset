@@ -17,7 +17,7 @@ MonoBehaviour:
   statMSP:
     baseValue: 0
   statATK:
-    baseValue: 20
+    baseValue: 30
   statDEF:
     baseValue: 5
   statMATK:

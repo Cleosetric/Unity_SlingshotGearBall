@@ -21,27 +21,25 @@ public class VictoryUI : MonoBehaviour
     public TextMeshProUGUI textExp;
 
     [Space]
+    public Animator uiAnim;
     public GameObject actorPanel;
     public List<VictoryActorUI> battleMembers = new List<VictoryActorUI>();
-
-    private float initialTime;
-    private Animator uiAnim;
 
     // Start is called before the first frame update
     void Start()
     {
-        initialTime = TimeManager.Instance.timeRemaining;
-        uiAnim = GetComponent<Animator>();
         battleMembers.AddRange(actorPanel.GetComponentsInChildren<VictoryActorUI>());
         Invoke("SetupBattleMembers",1f);
     }
 
     public void OnButtonDoubleReward(){
+        GameManager.Instance.stageCoin *= 2;
+        textCoin.SetText(GameManager.Instance.stageCoin.ToString());
         Debug.Log("SHow Ads then double the rewards");
     }
 
     public void OnButtonHome(){
-        GameManager.Instance.GameOver();
+       SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void OnButtonNextLevel(){
@@ -50,35 +48,103 @@ public class VictoryUI : MonoBehaviour
 
     public void ShowBattleResult(){
         uiAnim.SetBool("ShowUp", true);
-        textTime.SetText(TimeManager.Instance.GetDisplayTime(initialTime));
+        TimeManager.Instance.timerIsRunning = false;
+
+        textTime.SetText(TimeManager.Instance.GetDisplayTime());
         textScore.SetText(ScoreCounter.Instance.score.ToString());
         textCoin.SetText(GameManager.Instance.stageCoin.ToString());
         textExp.SetText(GameManager.Instance.totalExpGained.ToString());
+
         CalculateStar();
-        SetupGainedExp();
+        StartCoroutine(SetupGainedExp());
     }
 
     private void CalculateStar()
     {
+        int maxScore = GameManager.Instance.maxScore;
+        int totalScore = ScoreCounter.Instance.score + TimeManager.Instance.GetRemainingMinutes();
+        int scorePercentage = Mathf.FloorToInt((totalScore * 10) / maxScore);
+
+        Debug.Log(scorePercentage +" | "+ totalScore +" | "+ maxScore);
+
+        if(scorePercentage <= 4){
+            SetActiveStar(1);
+            //Star1
+        }else if(scorePercentage <= 7){
+            SetActiveStar(2);
+            //Star2
+        }else{
+            SetActiveStar(3);
+            //Star3
+        }
+
         //check overallscore
     }
 
-    private void SetupGainedExp()
+    private void SetActiveStar(int star){
+        switch (star)
+        {
+            case 1:
+                {
+                    star1.enabled = true;
+                    star2.enabled = false;
+                    star3.enabled = false;
+                    break;
+                }
+
+            case 2:
+                {
+                    star1.enabled = true;
+                    star2.enabled = true;
+                    star3.enabled = false;
+                    break;
+                }
+
+            case 3:
+                {
+                    star1.enabled = true;
+                    star2.enabled = true;
+                    star3.enabled = true;
+                    break;
+                }
+        }
+    }
+
+    IEnumerator SetupGainedExp()
     {
+        Actor[] members = Party.Instance.actors.ToArray();
+        int liveCount = 0;
+        foreach (Actor member in members)
+        {
+            if(member != null && member.isAlive){
+                liveCount++;
+            }
+        }
+        
+        int totalExpGained = GameManager.Instance.totalExpGained / liveCount;
+
+        yield return new WaitForSeconds(2f);
         foreach (Actor actor in Party.Instance.actors)
         {
-            actor.GainExp(GameManager.Instance.totalExpGained / Party.Instance.actors.Count);
+            if(actor.parent != null || actor != null){
+                actor.GainExp(totalExpGained);
+                SetupBattleMembers();
+                yield return new WaitForSeconds(0.5f);
+            }
         }
-
-        Invoke("SetupBattleMembers",2f);
     }
 
     private void SetupBattleMembers(){
         for (int i = 0; i < battleMembers.Count; i++)
         {
             if(i < Party.Instance.actors.Count){
-                battleMembers[i].Initialize(Party.Instance.actors.ToArray()[i]);
-                battleMembers[i].gameObject.SetActive(true);
+                if(Party.Instance.actors.ToArray()[i].parent != null)
+                {
+                    battleMembers[i].Initialize(Party.Instance.actors.ToArray()[i]);
+                    battleMembers[i].gameObject.SetActive(true);
+                }else{
+                    battleMembers[i].gameObject.SetActive(false);
+                }
             }else{
                 battleMembers[i].gameObject.SetActive(false);
             }

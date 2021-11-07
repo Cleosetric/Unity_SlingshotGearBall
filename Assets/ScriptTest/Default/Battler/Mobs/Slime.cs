@@ -84,7 +84,7 @@ public class Slime : Mob
             foreach (Collider2D hitObj in hitBox)
             {
                 if(hitObj != null && hitObj.CompareTag("Actors")){
-                    Actor targetAtk = target.GetComponent<Actor>();
+                    Actor targetAtk = target.GetComponentInChildren<Actor>();
                     if(targetAtk != null)
                     targetAtk.ApplyDamage(this);
                 }

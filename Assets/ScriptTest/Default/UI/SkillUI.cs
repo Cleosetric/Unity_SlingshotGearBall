@@ -33,6 +33,7 @@ public class SkillUI : MonoBehaviour
     }
 
     void Refresh(){
+        // WTF
         actor = party.GetLeader();
         if(actor != null){
             for (int i = 0; i < slot.Count; i++)

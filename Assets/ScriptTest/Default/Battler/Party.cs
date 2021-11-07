@@ -103,7 +103,7 @@ public class Party : MonoBehaviour
     public void SwapLeader(){
         //check if actor count is alive > 1
         //not only check count
-        if(GetLeader().parent == null || !GetLeader().parent.gameObject.activeSelf || !GetLeader().isAlive) return;
+        // if(GetLeader().parent == null || !GetLeader().parent.gameObject.activeSelf || !GetLeader().isAlive) return;
 
         int aliveMemberCount = 0;
         foreach (Actor actor in actors)
@@ -198,7 +198,7 @@ public class Party : MonoBehaviour
         partyMemberList.AddRange(actors.ToArray());
         isPartyDefeated = !partyMemberList.Exists(x => x.isAlive == true);
         if(!isPartyDefeated){
-            if(GetLeader().parent == null || !GetLeader().isAlive){
+            if(GetLeader() == null && GetLeader().parent == null && !GetLeader().isAlive){
                 SwapLeader();
             }
         }else{

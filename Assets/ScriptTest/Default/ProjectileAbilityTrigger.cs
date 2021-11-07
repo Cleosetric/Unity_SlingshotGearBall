@@ -137,6 +137,7 @@ public class ProjectileAbilityTrigger : MonoBehaviour
 
         Vector3 pos = origin.position + new Vector3(0,0.1f,0);
         GameObject anim = Instantiate(animationCast, pos, Quaternion.identity);
+        anim.transform.SetParent(origin.transform);
 
         yield return new WaitForSeconds(0.15f);
 

@@ -24,13 +24,16 @@ public class TimeManager : MonoBehaviour
 	public float timeRemaining = 300;
     public bool timerIsRunning = false;
 	public TextMeshProUGUI timerText;
+	private float timeInitial;
 
 	[Space]
 	[Header("Slowmotion")]
     public float slowdownFactor = 0.05f;
 	public float slowdownLength = 2f;
+	
 
 	private void Start() {
+		timeInitial = timeRemaining;
 		timerIsRunning = true;
 	}
 
@@ -46,6 +49,7 @@ public class TimeManager : MonoBehaviour
             else
             {
                 Debug.Log("Time has run out!");
+				GameManager.Instance.GameOver();
                 timeRemaining = 0;
                 timerIsRunning = false;
             }
@@ -62,15 +66,15 @@ public class TimeManager : MonoBehaviour
         timerText.SetText(string.Format("{0:00}:{1:00}", minutes, seconds));
     }
 
-	public string GetDisplayTime(float givenTime){
-		float clearedTime = givenTime - timeRemaining;
+	public string GetDisplayTime(){
+		float clearedTime = timeInitial - Mathf.Round(timeRemaining);
 		float minutes = Mathf.FloorToInt(clearedTime / 60); 
         float seconds = Mathf.FloorToInt(clearedTime % 60);
         return string.Format("{0:00}:{1:00}", minutes, seconds);
 	}
 
-	public float GetRemainingMinutes(){
-		return Mathf.FloorToInt(timeRemaining / 60); 
+	public int GetRemainingMinutes(){
+		return Mathf.FloorToInt(timeInitial - Mathf.Round(timeRemaining));
 	}
 
 	public void EnterSlowmotion()

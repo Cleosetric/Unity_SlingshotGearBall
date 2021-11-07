@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - Props
   - Actors
+  - Goal
   layers:
   - Default
   - TransparentFX

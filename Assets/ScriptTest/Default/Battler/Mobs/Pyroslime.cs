@@ -91,7 +91,7 @@ public class Pyroslime : Mob
         base.OnCollisionEnter2D(other);
 
         if(other.collider.CompareTag("Actors")){
-            Actor targetAtk = target.GetComponent<Actor>();
+            Actor targetAtk = target.GetComponentInChildren<Actor>();
             if(targetAtk != null){
                 targetAtk.ApplyDamage(this);
                 Vector3 hitPoint = other.contacts[0].point;

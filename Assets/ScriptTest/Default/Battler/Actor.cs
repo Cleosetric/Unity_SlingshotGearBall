@@ -41,7 +41,6 @@ public class Actor : Charachter
     public float actionSight;
     public int actionCost;
     private bool isDash = false;
-    private Vector2 lastVel;
     private Coroutine regen;
 
     [Space]
@@ -53,8 +52,6 @@ public class Actor : Charachter
     private float attackTime;
     private float nextAttackTime = 0;
 
-    public GameObject hitEffect;
-    public GameObject bounceEffect;
     private int index;
 
     private void Awake()
@@ -281,10 +278,6 @@ public class Actor : Charachter
         }
     }
 
-    private void FixedUpdate() {
-        lastVel = rb.velocity;
-    }
-
     public void GainExp(int experience){
         currentExp += experience;
         if(currentExp >= nextLevelExp[currentLevel] && currentLevel < maxLevel){
@@ -360,43 +353,6 @@ public class Actor : Charachter
                 impact += cp.normalImpulse;
         }
         return impact;
-    }
-
-
-    private void OnCollisionEnter2D(Collision2D other) {
-        // float impulse = calculateImpulse(other);
-
-        // if(other.collider.tag == "Enemy" && impulse > 0){ 
-        //     TimeManager.Instance.StartImpactMotion();
-        //     other.collider.GetComponent<Mob>().ApplyDamage(this);
-        //     Instantiate(hitEffect,other.transform.position,Quaternion.identity);
-        //     ActionAttack();
-        //     isDash = false;
-        // }
-        
-        if(other.collider.tag == "Props"){
-            Vector3 hitPoint = other.contacts[0].point;
-            Instantiate(bounceEffect,hitPoint,Quaternion.identity);
-            other.collider.GetComponent<Props>().ApplyDamage(1);
-            isDash = true;
-        }
-
-        if(other.collider.tag == "Wall"){
-            Vector3 hitPoint = other.contacts[0].point;
-            Instantiate(bounceEffect,hitPoint,Quaternion.identity);
-            isDash = true;
-        }
-
-        // if(other.collider.CompareTag("Actors")){
-        //     Physics2D.IgnoreCollision(other.collider, GetComponent<Collider2D>());
-        // }
-
-        Vector2 inNormal = other.contacts[0].normal;
-        Vector2 force = Vector3.Reflect(lastVel, inNormal);
-        Quaternion rotation = Quaternion.LookRotation(force, Vector3.up);
-        transform.rotation = rotation;
-        rb.velocity = force;
-        rb.velocity += inNormal * 2.0f;
     }
 
     IEnumerator HitEffect() {
