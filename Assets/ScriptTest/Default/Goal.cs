@@ -15,12 +15,14 @@ public class Goal : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
+        if(!SkillUI.Instance.CheckAbilityIsAllFinished()) return;
         if(other.CompareTag("Actors")){
             // float moveX = Mathf.Lerp(other.transform.position.x, transform.position.x, 1f);
             // float moveY = Mathf.Lerp(other.transform.position.y, transform.position.y, 1f);
             other.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             other.transform.position = transform.position;
             if(!isCleared){
+                SoundManager.Instance.Play("Laser");
                 GameManager.Instance.StageCleared();
                 isCleared = true;
             }

@@ -4,6 +4,9 @@ using TMPro;
 
 public class Charachter : MonoBehaviour
 {
+    public delegate void OnActorHPChanged();
+    public OnActorHPChanged onActorHPChanged;
+
     [Space]
     [Header("Base Parameter")]
     [Tooltip("Max Health Point")] public Statf statMHP;
@@ -37,12 +40,15 @@ public class Charachter : MonoBehaviour
     public Image hpBar;
     public Image hpEffect;
     public Image element;
+    public GameObject deathEffectPrefab;
+    
     [Space]
     public Transform parent;
     public Rigidbody2D rb;
 
     public virtual void ApplyDamage(Charachter user)
     {
+        SoundManager.Instance.Play("HitDamage");
         if(user != null){
             bool isActor = user is Actor;
             int damage = Mathf.RoundToInt(user.statATK.GetValue());
@@ -90,14 +96,16 @@ public class Charachter : MonoBehaviour
         currentHP += healValue;
         if(currentHP >= Mathf.RoundToInt(statMHP.GetValue())) {
             currentHP = Mathf.RoundToInt(statMHP.GetValue());
-        }  
+        }
+        if(onActorHPChanged != null) onActorHPChanged.Invoke();  
     }
 
     public void ApplyEnergy(float value){
         currentSP += value;
-        if(currentSP >= statMHP.GetValue()) {
-            currentSP = statMHP.GetValue();
+        if(currentSP >= statMSP.GetValue()) {
+            currentSP = statMSP.GetValue();
         }
+        if(onActorHPChanged != null) onActorHPChanged.Invoke();
     }
 
     public virtual void Die(){

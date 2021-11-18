@@ -20,7 +20,14 @@ public class ColliderAbilityTrigger : MonoBehaviour
         if((int)ability.chantType == 1 || (int)ability.chantType == 2) 
         actor.parent.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         
-        StartCoroutine(BeginAttack());
+        Debug.Log((int)ability.skillHitType + "Skill Hit Type");
+        if((int)ability.skillHitType == 0){
+            Debug.Log("Once");
+            StartCoroutine(BeginAttack());
+        }else{
+            Debug.Log("Update");
+            StartCoroutine(BeginContinousAttack());
+        }
 
         if((int)ability.chantType == 2){
             actor.parent.GetComponent<Rigidbody2D>().velocity = lastVel;
@@ -32,6 +39,7 @@ public class ColliderAbilityTrigger : MonoBehaviour
         
         Vector3 pos = actor.parent.position + new Vector3(0,0.1f,0);
         GameObject chantAnim = Instantiate(ability.chantAnimPrefab, pos, Quaternion.identity);
+        chantAnim.transform.SetParent(actor.parent);
         
         yield return new WaitForSeconds(0.15f);
         Destroy(chantAnim);
@@ -43,6 +51,47 @@ public class ColliderAbilityTrigger : MonoBehaviour
             CircleHitBox();
             yield return new WaitForSeconds(ability.repeatDelay);
         }
+
+        yield return new WaitForSeconds(0.15f);
+
+        Destroy(anim);
+        ability.Deactivate();
+        ability.isFinished = true;
+    }
+
+    private IEnumerator BeginContinousAttack(){
+        TimeManager.Instance.StartImpactMotion();
+        
+        Vector3 pos = actor.parent.position + new Vector3(0,0.1f,0);
+        GameObject chantAnim = Instantiate(ability.chantAnimPrefab, pos, Quaternion.identity);
+        chantAnim.transform.SetParent(actor.parent);
+
+        yield return new WaitForSeconds(0.15f);
+
+        Destroy(chantAnim);
+        GameObject anim = Instantiate(ability.abilityEffect, origin.position + ability.positionOffset, Quaternion.identity);
+        anim.transform.SetParent(actor.parent);
+
+        float ellapsedTime = 0;
+        float nextDashTime = 0;
+        while (ellapsedTime < ability.skillDuration)
+        {
+            if(ellapsedTime >= nextDashTime)
+            {
+                CircleHitBox();
+                nextDashTime = ellapsedTime + 1 / ability.repeatDelay;
+            }
+            ellapsedTime += Time.deltaTime;
+            Debug.Log("Skill Active! : " + ellapsedTime);
+            yield return null;
+        }
+        Debug.Log("Skill's Done!");
+
+        yield return new WaitForSeconds(0.15f);
+
+        Destroy(anim);
+        ability.Deactivate();
+        ability.isFinished = true;
     }
 
     private void CircleHitBox(){
@@ -65,8 +114,7 @@ public class ColliderAbilityTrigger : MonoBehaviour
                 hitObj.GetComponent<Props>().ApplyDamage(Mathf.RoundToInt(actor.statATK.GetValue()));
             }
         }
-        ability.Deactivate();
-        ability.isFinished = true;
+       
     }
 
 }

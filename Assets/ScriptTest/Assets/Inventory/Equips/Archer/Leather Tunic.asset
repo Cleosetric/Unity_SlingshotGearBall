@@ -30,13 +30,13 @@ MonoBehaviour:
     value: 0
     type: 0
   modDEF:
-    value: 5
+    value: 2
     type: 0
   modMATK:
     value: 0
     type: 0
   modMDEF:
-    value: 2
+    value: 0
     type: 0
   modAGI:
     value: 0

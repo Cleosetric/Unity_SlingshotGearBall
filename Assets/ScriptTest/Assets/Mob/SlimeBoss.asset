@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3033e0b484d1e469d2ff03a3812161, type: 3}
+  m_Name: SlimeBoss
+  m_EditorClassIdentifier: 
+  statMHP:
+    baseValue: 500
+  statMSP:
+    baseValue: 0
+  statATK:
+    baseValue: 20
+  statDEF:
+    baseValue: 7
+  statMATK:
+    baseValue: 0
+  statMDEF:
+    baseValue: 0
+  statAGI:
+    baseValue: 3
+  statLUK:
+    baseValue: 0
+  statHRG:
+    baseValue: 0
+  statSRG:
+    baseValue: 0
+  statHIT:
+    baseValue: 90
+  statCRI:
+    baseValue: 15
+  statEVA:
+    baseValue: 10
+  statHRR:
+    baseValue: 0
+  statSRR:
+    baseValue: 0
+  elementType: 0
+  name: Orok King
+  description: Slime king but weird
+  mobSprite: {fileID: -7854738478779454800, guid: b3449127b97d24c4ebe66fde1e3ce9c3,
+    type: 3}
+  score: 500
+  experience: 250
+  coin: 35
+  equip:
+  - {fileID: 2720542096370902188, guid: 7a3ad0c658c82b64d97374b9e20d696a, type: 3}
+  - {fileID: 6018072631386770130, guid: dd15b6e832e5e68469db1831435b9138, type: 3}
+  - {fileID: 7845280938530849784, guid: a115dc79383fe0246895af4da750e230, type: 3}
+  - {fileID: 5770608079792378407, guid: 11adf2ed04b561e4cb1786bef2afd74f, type: 3}
+  - {fileID: 422824992941540684, guid: 6c9b15a771af4b6498d1edc127a639e9, type: 3}
+  equipChance: 100
+  radiusSight: 7
+  attackSight: 5
+  attackTime: 3
+  attackRate: 1

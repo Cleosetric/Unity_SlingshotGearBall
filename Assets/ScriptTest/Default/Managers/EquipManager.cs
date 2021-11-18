@@ -74,6 +74,7 @@ public class EquipManager : MonoBehaviour
     }
 
     public void UnequipAll(){
+        SoundManager.Instance.Play("ButtonClick");
         for (int i = 0; i < party.GetActiveActor().equipment.Length; i++)
         {
             Unequip(i);
@@ -81,6 +82,7 @@ public class EquipManager : MonoBehaviour
     }
 
     public void RecomendedEquip(){
+        SoundManager.Instance.Play("ButtonClick");
         for (int i = inventory.items.Count - 1; i >= 0; i--)
         {
             if(inventory.items[i] is Equipment){

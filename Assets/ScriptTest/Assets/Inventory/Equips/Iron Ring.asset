@@ -24,8 +24,8 @@ MonoBehaviour:
     value: 5
     type: 0
   modMSP:
-    value: 5
-    type: 0
+    value: 30
+    type: 1
   modATK:
     value: 0
     type: 0

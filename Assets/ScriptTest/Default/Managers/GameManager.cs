@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     [Header("Currency Info")]
     public int stageCoin = 0;
     public TextMeshProUGUI textCoin;
+    public TextMeshProUGUI textStage;
 
     [Space]
     [Header("Battle Info")]
@@ -43,11 +44,13 @@ public class GameManager : MonoBehaviour
     public bool isGamePaused = false;
     public bool isStageClear = false;
 
-    private int stageCount = 1;
+    private int stageCount = 0;
     private bool isVictory = false;
 
     private void Start() {
         textCoin.SetText(stageCoin.ToString());
+        textStage.SetText(MapManager.Instance.GetStage());
+
         stageClearText.SetActive(false);
         victoryPanel.SetActive(false);
         GameoverPanel.SetActive(false);
@@ -67,17 +70,23 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if(!MapManager.Instance.IsMapHasGoal()){
-            if(EnemyManager.Instance.IsAllEnemyDead()){
-                if(stageCount <= MapManager.Instance.stage.Count){
-                    if(!isStageClear){
-                        StageCleared();
-                    }
-                }else{
-                    if(!isVictory){
-                        Victory();
-                    }
-                }
+        // if(!MapManager.Instance.IsMapHasGoal()){
+        //     if(EnemyManager.Instance.IsAllEnemyDead()){
+        //         if(stageCount <= MapManager.Instance.stage.Count){
+        //             if(!isStageClear){
+        //                 StageCleared();
+        //             }
+        //         }else{
+        //             if(!isVictory){
+        //                 Victory();
+        //             }
+        //         }
+        //     }
+        // }
+
+        if(stageCount > MapManager.Instance.stage.Count){
+            if(!isVictory){
+                Victory();
             }
         }
     }
@@ -103,6 +112,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void StageCleared(){
+        isGamePaused = true;
         StartCoroutine(StageClear());
         isStageClear = true;
     }
@@ -119,12 +129,20 @@ public class GameManager : MonoBehaviour
         TimeManager.Instance.ReleaseSlowmotion();
         PlayTeleportAnimation();
         yield return new WaitForSeconds(0.5f);
+        textStage.SetText(MapManager.Instance.GetStage());
         EnterNewStage();
     }
 
     void EnterNewStage(){
-        MapManager.Instance.SpawnNewStage();
-        stageCount ++;
+        if(stageCount >= MapManager.Instance.stage.Count){
+            if(!isVictory){
+                Victory();
+            }
+        }else{
+            MapManager.Instance.SpawnNewStage();
+            stageCount ++;
+            isGamePaused = false;
+        }
     }
 
     public void PlayTeleportAnimation(){

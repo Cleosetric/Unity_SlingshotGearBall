@@ -11,8 +11,11 @@ public class CanvasMoveController : MonoBehaviour
     public RectTransform directionTransform;
     public LayerMask layerHit;
     public LineRenderer trajectory;
+    // public GameObject touchEffect;
 
     [Space]
+    public float dashTime = 0.25f;
+    public float dashMultiplier = 4f;
     public float stopZone = 100f;
     public float slowmotionTime = 3f;
     [Range(1, 3)]
@@ -80,7 +83,8 @@ public class CanvasMoveController : MonoBehaviour
     }
 
     private bool IsSlingable(){
-        if(actor.currentSP >= actor.actionCost && isSlingValid) return true;
+        // if(actor.currentSP >= actor.actionCost && isSlingValid) return true;
+        if(isSlingValid) return true;
         return false;
     }
 
@@ -94,19 +98,31 @@ public class CanvasMoveController : MonoBehaviour
 
     private void FixedUpdate() {
         if(actor != null && actor.parent.gameObject.activeSelf && !GameManager.Instance.isGamePaused){
-            if(actor.currentSP > 1f){
-                actorRb.velocity = actor.statAGI.GetValue() * (actorRb.velocity.normalized);
-            }
-            if(actorRb.velocity.magnitude > 0.5f){
-                actor.ApplyAction(1f * Time.fixedDeltaTime);
-            }else{
+            actorRb.velocity = actor.statAGI.GetValue() * (actorRb.velocity.normalized);
+
+            if(actorRb.velocity.magnitude < 0.5f){
                 if(actor.parent != null && !isRegen){
                     actorRb.velocity = Vector2.zero;
                     actor.StartRegen();
                     isRegen = true;
-                } 
+                }
             }
         }
+        
+        // if(actor != null && actor.parent.gameObject.activeSelf && !GameManager.Instance.isGamePaused){
+        //     if(actor.currentSP > 1f){
+        //         actorRb.velocity = actor.statAGI.GetValue() * (actorRb.velocity.normalized);
+        //     }
+        //     if(actorRb.velocity.magnitude > 0.5f){
+        //         actor.ApplyAction(1f * Time.fixedDeltaTime);
+        //     }else{
+        //         if(actor.parent != null && !isRegen){
+        //             actorRb.velocity = Vector2.zero;
+        //             actor.StartRegen();
+        //             isRegen = true;
+        //         } 
+        //     }
+        // }
     }
 
     private void CheckPlayerMovement()
@@ -120,6 +136,14 @@ public class CanvasMoveController : MonoBehaviour
 
     private void CheckTouchControl()
     {
+        // if(!EventSystem.current.IsPointerOverGameObject(touch.fingerId)){
+        //     if (Input.touchCount > 0)
+        //     {
+        //         touch = Input.GetTouch(0);
+        //         Instantiate(touchEffect, touch.position, Quaternion.identity);
+        //     }
+        // }
+        
         if(actor != null && actor.parent.gameObject.activeSelf && !GameManager.Instance.isGamePaused){
             if (Input.touchCount > 0)
             {
@@ -278,9 +302,11 @@ public class CanvasMoveController : MonoBehaviour
 
     void DoDash(){
         if(EventSystem.current.IsPointerOverGameObject()) return;
+        if(onSling) return;
 
-        if(actor != null && IsSlingable()){
-            actor.ActionDash();
+        if(actor != null){
+            if(actorRb.velocity.magnitude > 0.5f)
+            actor.ActionDash(dashTime, dashMultiplier);
         }
     }
 

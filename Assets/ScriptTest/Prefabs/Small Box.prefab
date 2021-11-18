@@ -566,6 +566,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   durability: 3
+  score: 0
   coinLoot: 5
 --- !u!61 &5160178888580646031
 BoxCollider2D:

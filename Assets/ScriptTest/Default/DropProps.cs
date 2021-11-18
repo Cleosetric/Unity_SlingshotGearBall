@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class DropProps : Props
 {
-    public Collectibles collectibles;
     public GameObject colPrefab;
     [Space]
     [Range(0, 100)]
@@ -24,8 +23,8 @@ public class DropProps : Props
         if(rng <= dropChance){
             Vector2 pos = transform.position + offsetDrop;
             GameObject collect = Instantiate(colPrefab, pos, Quaternion.identity);
-            CollectiblesHolder holder = collect.GetComponent<CollectiblesHolder>();
-            holder.Initialize(collectibles);
+            // CollectiblesHolder holder = collect.GetComponent<CollectiblesHolder>();
+            // holder.Initialize(collectibles);
         }
     }
 }

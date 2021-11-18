@@ -152,6 +152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destroyAnimPrefab: {fileID: 8053951481101521132, guid: f972cca73c9aa104e88a57a6c37bd678,
     type: 3}
+  spriteTransform: {fileID: 2069452939750189290}
 --- !u!50 &1256682363456464564
 Rigidbody2D:
   serializedVersion: 4

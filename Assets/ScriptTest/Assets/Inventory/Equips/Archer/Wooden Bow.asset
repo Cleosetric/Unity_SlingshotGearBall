@@ -27,13 +27,13 @@ MonoBehaviour:
     value: 0
     type: 0
   modATK:
-    value: 5
+    value: 2
     type: 0
   modDEF:
     value: 0
     type: 0
   modMATK:
-    value: 2
+    value: 0
     type: 0
   modMDEF:
     value: 0
@@ -54,7 +54,7 @@ MonoBehaviour:
     value: 0
     type: 0
   modCRI:
-    value: 0
+    value: 5
     type: 0
   modEVA:
     value: 0

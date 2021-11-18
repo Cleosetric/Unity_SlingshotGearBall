@@ -72,7 +72,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0.5}
-  m_SizeDelta: {x: 0.85, y: 1}
+  m_SizeDelta: {x: 1.25, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &7295315832770493162
 Canvas:
@@ -117,7 +117,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &7295315832770492948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,7 +317,7 @@ GameObject:
   m_Layer: 8
   m_Name: Small Box
   m_TagString: Props
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -5360,8 +5360,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7449969517002438226}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalPosition: {x: 0, y: -0.65, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7295315833478310396}
   m_RootOrder: 0

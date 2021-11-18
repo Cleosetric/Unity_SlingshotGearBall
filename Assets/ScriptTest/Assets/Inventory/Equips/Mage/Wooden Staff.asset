@@ -28,13 +28,13 @@ MonoBehaviour:
     type: 0
   modATK:
     value: 2
-    type: 1
+    type: 0
   modDEF:
     value: 0
     type: 0
   modMATK:
-    value: 20
-    type: 1
+    value: 0
+    type: 0
   modMDEF:
     value: 0
     type: 0

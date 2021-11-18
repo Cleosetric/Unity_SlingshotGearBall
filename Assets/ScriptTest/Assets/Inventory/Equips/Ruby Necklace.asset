@@ -21,7 +21,7 @@ MonoBehaviour:
   equipSlot: 4
   equipClass: 0
   modMHP:
-    value: 0
+    value: 20
     type: 0
   modMSP:
     value: 0
@@ -51,17 +51,17 @@ MonoBehaviour:
     value: 0
     type: 0
   modHIT:
-    value: 25
-    type: 1
+    value: 0
+    type: 0
   modCRI:
-    value: 25
-    type: 1
+    value: 0
+    type: 0
   modEVA:
-    value: 25
-    type: 1
+    value: 0
+    type: 0
   modHRR:
     value: 0
     type: 0
   modSRR:
-    value: 0
+    value: 10
     type: 0

@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2318742083eeecc4b8c8f71724e860aa, type: 3}
+  m_Name: Ice Javelin
+  m_EditorClassIdentifier: 
+  abilityName: Ice Javelin
+  abilityDesc: Chant Ice spear to 3 direction, Add MATK +5
+  abilitySprite: {fileID: -411422762586772482, guid: 3633525da4fdc0048a59495ac285ce3c,
+    type: 3}
+  rotateProjectile: 0
+  bonusValue: 5
+  abilityBonus: 3
+  bonusType: 0
+  targetType: 0
+  chantType: 1
+  chantAnim: 0
+  chantAnimPrefab: {fileID: 6456666241661507271, guid: 314bbebe1d6c457469c9072b27ea8d13,
+    type: 3}
+  staminaCost: 10
+  cooldownTime: 5
+  isFinished: 0
+  actor: {fileID: 0}
+  target: 1
+  projectileSpeed: 10
+  projectileLife: 0.75
+  projectileImpact: 5
+  projectileCount: 1
+  projectileDelay: 0
+  hitType: 0
+  direction: 2
+  projectile: {fileID: 7094436536238866727, guid: 0a22dd9b9c8962c438a9b1bd86cb7ccc,
+    type: 3}

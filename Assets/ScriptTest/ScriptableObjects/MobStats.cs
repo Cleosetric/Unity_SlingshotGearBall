@@ -12,6 +12,14 @@ public class MobStats : CharachterStats
     public Sprite mobSprite;
 
     [Space]
+    [Header("Drop Info")] 
+    public int score = 50;
+    public int experience = 20;
+    [Range(1, 100)] public int coin;
+    public List<EquipmentHolder> equip = new List<EquipmentHolder>();
+    [Range(1, 100)] public int equipChance;
+
+    [Space]
     [Header("Movement")]
     public float radiusSight;
     public float attackSight;

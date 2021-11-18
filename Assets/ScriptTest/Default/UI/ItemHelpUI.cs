@@ -142,6 +142,7 @@ public class ItemHelpUI : MonoBehaviour
 
     public void EquipItem(){
         if(equip != null){
+            SoundManager.Instance.Play("ButtonClick");
             actor = Party.Instance.GetActiveActor();
             if((int)equip.equipClass == 0 || (int)equip.equipClass == (int)actor.actorClass){
                 Debug.Log("Equip " + equip.name);
@@ -154,6 +155,7 @@ public class ItemHelpUI : MonoBehaviour
 
     public void SellItem(){
         if(equip != null){
+            SoundManager.Instance.Play("ButtonClick");
             Debug.Log("Sell " + equip.name +" for "+ equip.sellingPrice);
             equip.RemoveItem();
             ResetUI();

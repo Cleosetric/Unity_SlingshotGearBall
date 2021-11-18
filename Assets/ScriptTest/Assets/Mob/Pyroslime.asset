@@ -17,7 +17,7 @@ MonoBehaviour:
   statMSP:
     baseValue: 0
   statATK:
-    baseValue: 30
+    baseValue: 15
   statDEF:
     baseValue: 5
   statMATK:
@@ -43,10 +43,31 @@ MonoBehaviour:
   statSRR:
     baseValue: 0
   elementType: 1
-  name: Pyroslime
+  name: Ingus
   description: dont touch it its hot
   mobSprite: {fileID: -2418892464093907319, guid: 5c3a5c3b0d3a0c341a6685146826e8cf,
     type: 3}
+  score: 75
+  experience: 40
+  coin: 5
+  equip:
+  - {fileID: 385953394364786169, guid: db4dda348e824464a95000d7b9543b7e, type: 3}
+  - {fileID: 2965912228291871576, guid: 6c05cf72c41567445b2a53f856681c88, type: 3}
+  - {fileID: 779877675503326195, guid: 6ff8a877d5e6e5842b1a5b872bbdeffd, type: 3}
+  - {fileID: 1334511769328935543, guid: 1518fa9dc34a7a44494004b878a21eb5, type: 3}
+  - {fileID: 4163542817216843670, guid: d724fc8ca70473146932798bc6a52c24, type: 3}
+  - {fileID: 938658331867968969, guid: d6d416a07105f7d4fbd1ad760154d9cc, type: 3}
+  - {fileID: 6178768075245102189, guid: 7147d2e600e76a94fac0a1c9b5ea0059, type: 3}
+  - {fileID: 1931832773270810277, guid: 260dfef1839f7974595f1a8a19996380, type: 3}
+  - {fileID: 2720542096370902188, guid: 7a3ad0c658c82b64d97374b9e20d696a, type: 3}
+  - {fileID: 5127871014584557747, guid: da10b6d37dccc8d4699b22c8c9316a07, type: 3}
+  - {fileID: 422824992941540684, guid: 6c9b15a771af4b6498d1edc127a639e9, type: 3}
+  - {fileID: 877050257355624257, guid: 1874fd552acb7064699b9c0a57d43eb4, type: 3}
+  - {fileID: 1141594159644117285, guid: 2dac400b6b057944bbac99b32d5d2d0c, type: 3}
+  - {fileID: 7845280938530849784, guid: a115dc79383fe0246895af4da750e230, type: 3}
+  - {fileID: 6018072631386770130, guid: dd15b6e832e5e68469db1831435b9138, type: 3}
+  - {fileID: 5770608079792378407, guid: 11adf2ed04b561e4cb1786bef2afd74f, type: 3}
+  equipChance: 40
   radiusSight: 2
   attackSight: 4
   attackTime: 1

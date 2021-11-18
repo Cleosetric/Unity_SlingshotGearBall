@@ -12,12 +12,16 @@ public enum TargetAttack{ closestEnemy, directionForward, directionUp, direction
 
 public enum ChantType{ move, stop, continous }
 
+public enum ChantAnimation {none, show}
+
 public class Ability : ScriptableObject
 {
     [Header("Ability Info")]
     public string abilityName = "New Ability";
     [TextArea] public string abilityDesc;
     public Sprite abilitySprite;
+    public bool rotateProjectile;
+
 
     [Space]
     [Header("Ability Effect")]
@@ -29,6 +33,7 @@ public class Ability : ScriptableObject
 
     [Space]
     [Header("Ability Animation")]
+    public ChantAnimation chantAnim;
     public GameObject chantAnimPrefab;
 
     [Space]
@@ -36,13 +41,14 @@ public class Ability : ScriptableObject
     public float staminaCost;
     public float cooldownTime;
     public bool isFinished = false;
-    protected Actor actor;
+    public Actor actor;
     protected StatModifier bonus;
 
     public virtual void Initialize(GameObject parent){
         actor = parent.GetComponent<Actor>();
         bonus = new StatModifier(bonusValue, bonusType);
         isFinished = false;
+        //wtf
     }
 
     public virtual void Activate(){
@@ -58,6 +64,7 @@ public class Ability : ScriptableObject
                 }
             break;
         }
+
         string bonusText = "+"+abilityBonus.ToString().ToUpper()+" UP";
         HitCounter.Instance.AddDamagePopup(actor.parent, 4, bonusText, abilityName);
     }

@@ -14,25 +14,28 @@ public class BounceHit : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
+
+        SoundManager.Instance.Play("Hit");
+
         if(other.collider.tag == "Props"){
-                Vector3 hitPoint = other.contacts[0].point;
-                Instantiate(bounceEffect,hitPoint,Quaternion.identity);
-                other.collider.GetComponent<Props>().ApplyDamage(1);
-            }
+            Vector3 hitPoint = other.contacts[0].point;
+            Instantiate(bounceEffect,hitPoint,Quaternion.identity);
+            other.collider.GetComponent<Props>().ApplyDamage(1);
+        }
 
-            if(other.collider.tag == "Wall"){
-                Vector3 hitPoint = other.contacts[0].point;
-                Instantiate(bounceEffect,hitPoint,Quaternion.identity);
-            }
+        if(other.collider.tag == "Wall"){
+            Vector3 hitPoint = other.contacts[0].point;
+            Instantiate(bounceEffect,hitPoint,Quaternion.identity);
+        }
 
-            Vector2 inNormal = other.contacts[0].normal;
-            Vector2 force = Vector3.Reflect(lastVel, inNormal);
-            
-            Quaternion rotation = Quaternion.LookRotation(force, Vector3.up);
-            actorLook.rotation = rotation;
+        Vector2 inNormal = other.contacts[0].normal;
+        Vector2 force = Vector3.Reflect(lastVel, inNormal);
+        
+        Quaternion rotation = Quaternion.LookRotation(force, Vector3.up);
+        actorLook.rotation = rotation;
 
-            rb.velocity = force;
-            rb.velocity += inNormal * 2.0f;
+        rb.velocity = force;
+        rb.velocity += inNormal * 2.0f;
     }
 
     private void FixedUpdate() {

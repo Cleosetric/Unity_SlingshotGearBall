@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3033e0b484d1e469d2ff03a3812161, type: 3}
+  m_Name: Cryoslime
+  m_EditorClassIdentifier: 
+  statMHP:
+    baseValue: 200
+  statMSP:
+    baseValue: 20
+  statATK:
+    baseValue: 15
+  statDEF:
+    baseValue: 5
+  statMATK:
+    baseValue: 0
+  statMDEF:
+    baseValue: 0
+  statAGI:
+    baseValue: 2
+  statLUK:
+    baseValue: 0
+  statHRG:
+    baseValue: 0
+  statSRG:
+    baseValue: 0
+  statHIT:
+    baseValue: 75
+  statCRI:
+    baseValue: 25
+  statEVA:
+    baseValue: 15
+  statHRR:
+    baseValue: 0
+  statSRR:
+    baseValue: 0
+  elementType: 1
+  name: Leak
+  description: 
+  mobSprite: {fileID: -2418892464093907319, guid: 5c3a5c3b0d3a0c341a6685146826e8cf,
+    type: 3}
+  score: 60
+  experience: 45
+  coin: 7
+  equip:
+  - {fileID: 1931832773270810277, guid: 260dfef1839f7974595f1a8a19996380, type: 3}
+  - {fileID: 938658331867968969, guid: d6d416a07105f7d4fbd1ad760154d9cc, type: 3}
+  - {fileID: 7845280938530849784, guid: a115dc79383fe0246895af4da750e230, type: 3}
+  - {fileID: 6018072631386770130, guid: dd15b6e832e5e68469db1831435b9138, type: 3}
+  equipChance: 45
+  radiusSight: 0
+  attackSight: 5
+  attackTime: 3
+  attackRate: 1

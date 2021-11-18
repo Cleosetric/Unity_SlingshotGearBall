@@ -23,6 +23,7 @@ public class VictoryUI : MonoBehaviour
     [Space]
     public Animator uiAnim;
     public GameObject actorPanel;
+    public Button buttonReward;
     public List<VictoryActorUI> battleMembers = new List<VictoryActorUI>();
 
     // Start is called before the first frame update
@@ -33,16 +34,21 @@ public class VictoryUI : MonoBehaviour
     }
 
     public void OnButtonDoubleReward(){
+        SoundManager.Instance.Play("ButtonClick");
         GameManager.Instance.stageCoin *= 2;
         textCoin.SetText(GameManager.Instance.stageCoin.ToString());
         Debug.Log("SHow Ads then double the rewards");
+        buttonReward.interactable = false;
     }
 
     public void OnButtonHome(){
-       SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SoundManager.Instance.Play("ButtonClick");
+        SoundManager.Instance.Stop("Battle");
+        LevelLoader.Instance.LoadScene("WorldScene");
     }
 
     public void OnButtonNextLevel(){
+        SoundManager.Instance.Play("ButtonCancel");
         Debug.Log("Next Level Yo!");
     }
 
@@ -138,9 +144,9 @@ public class VictoryUI : MonoBehaviour
         for (int i = 0; i < battleMembers.Count; i++)
         {
             if(i < Party.Instance.actors.Count){
-                if(Party.Instance.actors.ToArray()[i].parent != null)
+                if(Party.Instance.actors[i].parent != null)
                 {
-                    battleMembers[i].Initialize(Party.Instance.actors.ToArray()[i]);
+                    battleMembers[i].Initialize(Party.Instance.actors[i]);
                     battleMembers[i].gameObject.SetActive(true);
                 }else{
                     battleMembers[i].gameObject.SetActive(false);

@@ -47,6 +47,7 @@ public class Props : MonoBehaviour
     }
 
     protected virtual void OnDestroyedProps(){
+        SoundManager.Instance.Play("Break");
         HideBox();
         ScoreCounter.Instance.IncreaseScore(score);
     }

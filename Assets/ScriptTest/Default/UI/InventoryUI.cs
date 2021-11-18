@@ -13,7 +13,7 @@ public class InventoryUI : MonoBehaviour
     public Transform slotParentInventory;
     public Transform slotParentEquipment;
 
-    public GameObject inventoryUI;
+    public GameObject statusUI;
 
     InventroySlotUI[] inventorySlotUI;
     EquipmentSlotUI[] equipmentSlotUI;
@@ -68,5 +68,10 @@ public class InventoryUI : MonoBehaviour
             int slotIndex = (int)oldItem.equipSlot;
             equipmentSlotUI[slotIndex].ClearSlot();
         }
+    }
+
+    public void CloseButton(){
+        SoundManager.Instance.Play("ButtonClick");
+        statusUI.SetActive(false);
     }
 }

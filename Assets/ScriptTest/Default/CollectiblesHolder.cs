@@ -5,19 +5,23 @@ using UnityEngine.UI;
 
 public class CollectiblesHolder : MonoBehaviour
 {
-    private Collectibles collectibles;
+    public Collectibles collectibles;
     private SpriteRenderer sprite;
     private Rigidbody2D rb;
     private bool isSpawning = false;
 
-    public void Initialize(Collectibles collectibles){
-        this.collectibles = collectibles;
+    private void Start() {
+        rb = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
         Refresh();
     }
 
+    // public void Initialize(Collectibles collectibles){
+    //     this.collectibles = collectibles;
+    //     Refresh();
+    // }
+
     private void Refresh() {
-        rb = GetComponent<Rigidbody2D>();
-        sprite = GetComponent<SpriteRenderer>();
         sprite.sprite = collectibles.sprite;
         Invoke("SetSpawned", 0.75f);
     }
@@ -41,6 +45,7 @@ public class CollectiblesHolder : MonoBehaviour
 
             if (Vector3.Distance(leader.parent.position, transform.position) < 0.5f)
             {
+                SoundManager.Instance.Play("Collectible");
                 collectibles.ApplyEffect(leader.parent.transform);
                 Destroy(gameObject);
             }

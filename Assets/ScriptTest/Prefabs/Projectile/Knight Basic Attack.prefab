@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destroyAnimPrefab: {fileID: 1016318405675604155, guid: 081119053621d624aa56ed926e1222aa,
     type: 3}
+  spriteTransform: {fileID: 0}
 --- !u!212 &9023253408002274097
 SpriteRenderer:
   m_ObjectHideFlags: 0

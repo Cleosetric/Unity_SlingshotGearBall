@@ -12,6 +12,7 @@ public class PartyUI : MonoBehaviour
     void Start()
     {
         party = Party.Instance;
+        party.partyOnActorChanged += InitActorEvent;
         actorUI.AddRange(GetComponentsInChildren<ActorUI>());
         InitActorEvent();
         Refresh();
@@ -19,11 +20,11 @@ public class PartyUI : MonoBehaviour
 
     private void InitActorEvent()
     {
-        party.partyOnActorChanged += Refresh;
         foreach (Actor actor in party.actors)
         {
             actor.onActorHPChanged += Refresh;
         }
+        Refresh();
     }
 
     private void Refresh()
@@ -31,7 +32,7 @@ public class PartyUI : MonoBehaviour
         for (int i = 0; i < actorUI.Count; i++)
         {
             if(i < party.actors.Count){
-                actorUI[i].SetupActor(party.actors.ToArray()[i], i);
+                actorUI[i].SetupActor(party.actors[i], i);
                 actorUI[i].RefreshHud();
             }else{
                 actorUI[i].gameObject.SetActive(false);

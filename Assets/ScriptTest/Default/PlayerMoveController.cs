@@ -241,7 +241,7 @@ public class PlayerMoveController : MonoBehaviour
         if(EventSystem.current.IsPointerOverGameObject()) return;
 
         if(actor != null && IsSlingable()){
-            actor.ActionDash();
+            // actor.ActionDash();
         }
     }
 

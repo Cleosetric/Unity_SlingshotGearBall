@@ -43,7 +43,7 @@ MonoBehaviour:
   statSRR:
     baseValue: 1
   elementType: 0
-  name: Sir Ian Phage
+  name: Felgrand
   description: A Knight
   actorClass: 1
   actorSprite: {fileID: 3303528763351885255, guid: 6efd47325e8fa7c4c9bb4a20d89275c4,
@@ -54,10 +54,11 @@ MonoBehaviour:
   abilities:
   - {fileID: 11400000, guid: 385efa43560d7e840ba83a73cfc19814, type: 2}
   - {fileID: 11400000, guid: 8e59ce39e7c553e4790d5ff972856ce8, type: 2}
+  - {fileID: 11400000, guid: f1f010f24fcca574f90fcf2899824105, type: 2}
   projectile: {fileID: 232009922525029158, guid: 539c2f3b6bd7d474ea36f73c4f5c02a2,
     type: 3}
-  projectileLife: 0.25
+  projectileLife: 0.3
   attackTime: 1
   attackRate: 1
-  actionSight: 1
+  actionSight: 1.25
   actionCost: 5

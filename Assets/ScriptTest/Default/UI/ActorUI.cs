@@ -52,6 +52,7 @@ public class ActorUI : MonoBehaviour
     }
 
     public void ShowActorStatus(){
+        SoundManager.Instance.Play("ButtonClick");
         Party.Instance.SetActor(actorIndex);
         actorStatusUI.SetActive(true);
     }

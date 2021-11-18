@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Mob : Charachter
 {
@@ -8,9 +9,14 @@ public class Mob : Charachter
     [Header("Mob Info")]
     public MobStats mob;
     public string mobName;
-    public int mobScore = 50;
-    public int mobExp = 20;
-    public GameObject deathEffectPrefab;
+
+    [Space]
+    [Header("Mob Drop")]
+    public int mobScore;
+    public int mobExp;
+    [Range(1, 100)] public int mobCoinDrop;
+    public List<EquipmentHolder> dropEquip = new List<EquipmentHolder>();
+    [Range(1, 100)] public int equipDropChanche;
 
     [Space]
     [Header("Mob Movement")]
@@ -46,6 +52,12 @@ public class Mob : Charachter
         currentHP = Mathf.RoundToInt(statMHP.GetValue());
         currentSP = Mathf.RoundToInt(statMSP.GetValue());
 
+        mobScore = mob.score;
+        mobExp = mob.experience;
+        mobCoinDrop = mob.coin;
+        dropEquip = mob.equip;
+        equipDropChanche = mob.equipChance;
+
         moveSpeed = mob.statAGI.GetValue();
         radiusSight = mob.radiusSight;
         attackSight = mob.attackSight;
@@ -53,7 +65,7 @@ public class Mob : Charachter
         nameText.SetText(mob.name);
     }
 
-    private void Start() {
+    protected virtual void Start() {
         currentHP = Mathf.RoundToInt(statMHP.GetValue());
         currentSP = Mathf.RoundToInt(statMSP.GetValue());
     }
@@ -66,9 +78,6 @@ public class Mob : Charachter
     private void Update() {
         lastVel = rb.velocity;
         DisplayHPBar();
-    }
-
-    private void FixedUpdate() {
         Move();
     }
 
@@ -93,28 +102,73 @@ public class Mob : Charachter
         StartCoroutine(HitEffect());
     }
 
-    public virtual void Move(){}
+    public virtual void Move(){
+        if(GameManager.Instance.isGamePaused) return;
+    }
 
-    public virtual void Attack(){}
+    protected void MoveToward(Transform selectedTarget)
+    {
+        if(rb.bodyType == RigidbodyType2D.Static) return;
+        Vector2 newPosition = Vector2.MoveTowards(transform.position, selectedTarget.position, Time.deltaTime * moveSpeed);
+        rb.MovePosition(newPosition);
+    }
+
+    protected Transform CheckTargetsInSight(float range)
+    {
+        Collider2D[] hitBox = Physics2D.OverlapCircleAll(transform.position, range, actorLayer);
+        hitBox.OrderBy((d) => (d.transform.position - transform.position).sqrMagnitude).ToArray();
+        if(hitBox.Length > 0){
+            return hitBox[0].transform;
+        }
+        return null;
+    }
 
     public override void Die()
     {
+        SoundManager.Instance.Play("Explosion");
         HideHPBar();
         charSprite.enabled = false;
-        rb.velocity = Vector2.zero;
-        rb.isKinematic = true;
+        rb.bodyType = RigidbodyType2D.Static;
         GetComponent<CircleCollider2D>().enabled = false;
 
         GameManager.Instance.IncreaseTotalExp(mobExp);
         ScoreCounter.Instance.IncreaseScore(mobScore);
         TimeManager.Instance.StartImpactMotion();
+
         GameObject effect = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
         ParticleSystem particle = effect.GetComponent<ParticleSystem>();
         effect.transform.SetParent(transform);
+
+        SpawnPoolCoin(mobCoinDrop);
+        SpawnMobDrop();
+
         Destroy(parent.gameObject, particle.main.duration);
+    }
+    
+
+    private void SpawnMobDrop()
+    {
+        float randChance = UnityEngine.Random.Range(0, 100f);
+        if (randChance <= equipDropChanche)
+        {
+            int dropIndex = UnityEngine.Random.Range(0, dropEquip.Count);
+            Instantiate(dropEquip[dropIndex], transform.position, Quaternion.identity);
+        }
+    }
+
+    void SpawnPoolCoin(int total)
+    {
+        for (int i = 0; i < total; i++)
+        {
+            GameObject coin = ObjectPooling.Instance.GetPooledObject("Coin");
+            if(coin != null){
+                coin.GetComponent<Coin>().CoinSpawn(transform.position);
+            }
+        }
     }
 
     public virtual void OnCollisionEnter2D(Collision2D other) {
+        if(rb.bodyType == RigidbodyType2D.Static) return;
         Vector2 inNormal = other.contacts[0].normal;
         rb.velocity = Vector3.Reflect(lastVel, inNormal);
         rb.velocity += inNormal * 2.0f;

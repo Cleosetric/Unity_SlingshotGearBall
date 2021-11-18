@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum HitAreaType { circle, box}
+public enum SkillHitType {Once, Update}
 
 [CreateAssetMenu(fileName = "Ability", menuName = "Ability/Collider Ability", order = 3)]
 public class ColliderAbility : Ability
@@ -11,6 +12,9 @@ public class ColliderAbility : Ability
     [Header("Collider Effect")]
     public float repeatTime;
     public float repeatDelay;
+    public SkillHitType skillHitType;
+    public float skillDuration;
+
     [Space]
     public float range;
     public float hitForce;

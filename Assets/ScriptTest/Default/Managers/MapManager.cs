@@ -30,14 +30,35 @@ public class MapManager : MonoBehaviour
     private CameraManager cameraMgr;
     private EnemyManager enemyMgr;
     private GameObject map;
+    private bool isGoalShow = false;
     
     private void Start() {
         party = Party.Instance;
         cameraMgr = CameraManager.Instance;
         enemyMgr = EnemyManager.Instance;
+        party.partyOnActorChanged += RefreshParty;
 
         cam = cameraMgr.GetCamera();
         actor = party.GetLeader();
+    }
+
+    private void RefreshParty()
+    {
+        actor = party.GetLeader();
+    }
+
+    private void Update() {
+        if(EnemyManager.Instance.IsAllEnemyDead()){
+            if(!isGoalShow){
+                GameObject mapGoal = FindGameObjectInChildWithTag(map, "Goal");
+                if(mapGoal != null) mapGoal.SetActive(true);
+                isGoalShow = true;
+            }
+        }
+    }
+
+    public string GetStage(){
+        return "Stage "+(indexMapSpawn+1)+"/"+stage.Count;
     }
 
     public bool IsMapHasGoal(){
@@ -53,16 +74,29 @@ public class MapManager : MonoBehaviour
         if(indexMapSpawn < stage.Count){
             map = Instantiate(stage[indexMapSpawn]) as GameObject;
             map.transform.SetParent(transform);
-            map.transform.position = Vector2.up * (upOffset * indexMapSpawn);
+            map.transform.localPosition = Vector2.up * (upOffset * indexMapSpawn);
             map.gameObject.name = "Stage "+indexMapSpawn;
+            GameObject mapGoal = FindGameObjectInChildWithTag(map, "Goal");
+            if(mapGoal != null) mapGoal.SetActive(false);
 
             Transform spawnPos = FindGameObjectInChildWithTag(map, "Respawn").transform;
             Vector3 endPos = new Vector3(spawnPos.position.x, spawnPos.position.y, -10);
             StartCoroutine(MoveCameraToNewMap(endPos));
 
             enemyMgr.FloodEnemy();
-            indexMapSpawn ++;
+            isGoalShow = false;
             GameManager.Instance.isStageClear = false;
+            
+            GameObject lastMap = GameObject.Find("Stage "+(indexMapSpawn-1));
+            DestroyLastMap(lastMap);
+
+            indexMapSpawn ++;
+        }
+    }
+
+    void DestroyLastMap(GameObject map){
+        if(indexMapSpawn > 0){
+            Destroy(map, 5);
         }
     }
 
@@ -79,13 +113,17 @@ public class MapManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        // yield return new WaitForSeconds(duration);
-        // for (float t = 0f; t < duration; t += Time.deltaTime)
-        // {
-        //     Camera.main.transform.position = Vector3.Lerp(pos1, pos2, t / duration);
-        //     yield return 0;
-        // }
-        // Camera.main.transform.position = pos2;
+        float duration = 2f;
+        yield return new WaitForSeconds(duration);
+        
+        for (float t = 0f; t < duration; t += Time.deltaTime)
+        {   
+            if(actor != null && actor.isAlive){
+                actor.parent.position = Vector3.Lerp(actor.parent.position, endPos, t / duration);
+            }
+            yield return null;
+        }
+        actor.parent.position = endPos;
 
         Vector2 spawnPos = new Vector2(endPos.x,endPos.y);
         party.transform.position = spawnPos;

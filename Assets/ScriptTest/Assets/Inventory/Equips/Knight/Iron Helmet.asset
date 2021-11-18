@@ -21,7 +21,7 @@ MonoBehaviour:
   equipSlot: 3
   equipClass: 1
   modMHP:
-    value: 10
+    value: 30
     type: 0
   modMSP:
     value: 0

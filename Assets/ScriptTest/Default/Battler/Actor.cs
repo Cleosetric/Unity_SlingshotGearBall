@@ -7,9 +7,6 @@ public class Actor : Charachter
     public delegate void OnActorStatChanged();
     public OnActorStatChanged onActorStatChanged;
 
-    public delegate void OnActorHPChanged();
-    public OnActorHPChanged onActorHPChanged;
-
     [Space]
     [Header("Actor Info")]
     public ActorStats charachter;
@@ -40,8 +37,8 @@ public class Actor : Charachter
     [Header("Control Parameter")]
     public float actionSight;
     public int actionCost;
-    private bool isDash = false;
     private Coroutine regen;
+    private Coroutine dash;
 
     [Space]
     [Header("Combat Info")]
@@ -49,8 +46,11 @@ public class Actor : Charachter
     public Projectile projectile;
     public float projectileLife;
     private float attackRate;
+    private float dashRate = 1;
     private float attackTime;
+    private float dashTime = 1;
     private float nextAttackTime = 0;
+    private float nextDashTime = 0;
 
     private int index;
 
@@ -190,26 +190,34 @@ public class Actor : Charachter
         // rb.velocity = Vector2.zero;
         // rb.AddForce(force * statAGI.GetValue(), ForceMode2D.Impulse);
         // ApplyAction(actionCost);
-        isDash = true;
     }
 
-    public virtual void ActionDash(){
-        if(isDash && gameObject.activeSelf){
-            Transform closestEnemy = EnemyManager.Instance.EnemyNearbyTransform(parent.transform.position);
-            if (closestEnemy != null){
-                float distance = Vector3.Distance(closestEnemy.position, parent.transform.position); 
-                float maxDistance = 3f;  
-                if(distance < maxDistance){
-                    rb.velocity = Vector2.zero;         
-                    Vector3 direction = (closestEnemy.position - parent.transform.position).normalized;
-                    rb.AddForce(direction * 20f, ForceMode2D.Impulse);
-                    // ApplyAction(actionCost);
-                    TimeManager.Instance.StartImpactMotion();
-                    isDash = false;
-                }
-                
-            }
+    public virtual void ActionDash(float dashDuration, float dashMultiplier){
+        Debug.Log("Dash My Boy");
+        if(Time.time >= nextDashTime)
+        {
+            SoundManager.Instance.Play("Dash");
+            if(dash != null) StopCoroutine(dash);
+            dash = StartCoroutine(Dash(dashDuration, dashMultiplier));
+            nextDashTime = Time.time + dashTime / dashRate;
         }
+           
+        // if(isDash && gameObject.activeSelf){
+            // Transform closestEnemy = EnemyManager.Instance.EnemyNearbyTransform(parent.transform.position);
+            // if (closestEnemy != null){
+            //     float distance = Vector3.Distance(closestEnemy.position, parent.transform.position); 
+            //     float maxDistance = 3f;  
+            //     if(distance < maxDistance){
+            //         rb.velocity = Vector2.zero;         
+            //         Vector3 direction = (closestEnemy.position - parent.transform.position).normalized;
+            //         rb.AddForce(direction * 20f, ForceMode2D.Impulse);
+            //         // ApplyAction(actionCost);
+            //         TimeManager.Instance.StartImpactMotion();
+            //         isDash = false;
+            //     }
+                
+            // }
+        // }
     }
 
     public virtual void ActionAttack(GameObject target){
@@ -217,7 +225,7 @@ public class Actor : Charachter
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
         Projectile projClone = Instantiate(projectile, parent.position, Quaternion.Euler(0,0,angle -90)) as Projectile;
-        projClone.Initialize(this, 0, 10, 5, false, Quaternion.Euler(0,0,angle -90));
+        projClone.Initialize(this, 0, 10, 5, false, false, Quaternion.Euler(0,0,angle -90));
         Destroy(projClone.gameObject, projectileLife);
 
         // Mob targetAtk =  target.GetComponent<Mob>();
@@ -226,7 +234,6 @@ public class Actor : Charachter
         //     Instantiate(hitEffect,target.transform.position,Quaternion.identity);
         //     targetAtk.ApplyDamage(this);
         // }
-        isDash = false;
     }
 
     void CheckAttackDistance(){
@@ -337,12 +344,28 @@ public class Actor : Charachter
         regen = null;
     }
 
+    private IEnumerator Dash(float duration, float multiplier){
+        // Vector2 normalSpeed = statAGI.GetValue() * (rb.velocity.normalized);
+        float originalSpeed = statAGI.GetValue();
+        float ellapsedTime = 0;
+        while (ellapsedTime < duration)
+        {
+            statAGI.SetValue(originalSpeed * multiplier);
+            // rb.velocity = normalSpeed * 2;
+            ellapsedTime += Time.unscaledDeltaTime;
+            yield return null;
+        }
+        statAGI.SetValue(originalSpeed);
+        dash = null;
+    }
+
     public override void Die()
     {
         isAlive = false;
-        // parent.gameObject.SetActive(false);
+        if(onActorHPChanged != null) onActorHPChanged.Invoke();
         Destroy(parent.gameObject);
         Debug.Log(actorName + " Died");
+        // parent.gameObject.SetActive(false);
         // rb.velocity = Vector2.zero;
         // GetComponent<CircleCollider2D>().enabled = false;
     }

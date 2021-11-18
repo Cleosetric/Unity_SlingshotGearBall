@@ -29,17 +29,18 @@ public class Party : MonoBehaviour
     public float actorsDistance = 1;
     public float leaderDistance = 0f;
     public Path path = new Path(1);
-    public Queue<Actor> actors = new Queue<Actor>();
+    public List<Actor> actors = new List<Actor>();
     public bool isPartyDefeated = false;
 
-    Vector2 moveDir = Vector2.zero;
     private Vector2 lastVel;
-
     private Actor actorLeader;
     private int currentIndex = 0;
 
-    void Init()
+    public void Init()
     {
+        isPartyDefeated = false;
+        actors.RemoveAll(actor => actor == null);
+
         Actor[] actorInParty = gameObject.GetComponentsInChildren<Actor>();
         if(actorInParty.Length != 0){
             path.Add(transform.position);
@@ -50,25 +51,28 @@ public class Party : MonoBehaviour
             }
             actorLeader = GetLeader();
         }
+        Start();
     }
 
     private void Start() {
         EnableLeaderHitBox();
+        transform.position = GetLeader().parent.position;
+        if(partyOnActorChanged != null) partyOnActorChanged.Invoke();
     }
 
     public Actor GetActiveActor(){
-        return actors.ToArray()[currentIndex];
+        return actors[currentIndex];
     }
 
     public Actor GetLeader(){
-        return actors.Peek();
+        return actors[0];
     }
 
     void AddActor(Actor actor)
     {
         // Initialize a minion and give it an index (0,1,2) which is used as offset later on
         actor.Init(actors.Count);
-        actors.Enqueue(actor);
+        actors.Add(actor);
         actor.MoveOnPath(path, 0f);
 
         // Resize the capacity of the path if there are more minions in the snake than the path
@@ -78,21 +82,21 @@ public class Party : MonoBehaviour
     void EnableLeaderHitBox(){
         for (int i = 0; i < actors.Count; i++)
         {
-            if(actors.ToArray()[i] != null){
-                if(actors.ToArray()[i].parent.gameObject.activeSelf){
+            if(actors[i] != null){
+                if(actors[i].parent.gameObject.activeSelf){
                     if(i == 0){
                         // actors[i].gameObject.GetComponent<CircleCollider2D>().enabled = true;
-                        // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
-                        // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
-                        actors.ToArray()[i].parent.GetComponentInChildren<TargetIndicator>().ShowIndicator();
-                        actors.ToArray()[i].gameObject.GetComponentInParent<Rigidbody2D>().velocity = lastVel;
+                        // actors[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
+                        // actors[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
+                        actors[i].parent.GetComponentInChildren<TargetIndicator>().ShowIndicator();
+                        actors[i].gameObject.GetComponentInParent<Rigidbody2D>().velocity = lastVel;
                         // actors[i].gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
                     }else{
                         // actors[i].gameObject.GetComponent<CircleCollider2D>().enabled = false;
-                        // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
-                        // actors.ToArray()[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
-                        actors.ToArray()[i].parent.GetComponentInChildren<TargetIndicator>().HideIndicator();
-                        if(actors.ToArray()[i].parent.gameObject.activeSelf) actors.ToArray()[i].StartRegen();
+                        // actors[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
+                        // actors[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
+                        actors[i].parent.GetComponentInChildren<TargetIndicator>().HideIndicator();
+                        if(actors[i].parent.gameObject.activeSelf) actors[i].StartRegen();
                         // actors[i].gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
                     }
                 }
@@ -104,7 +108,8 @@ public class Party : MonoBehaviour
         //check if actor count is alive > 1
         //not only check count
         // if(GetLeader().parent == null || !GetLeader().parent.gameObject.activeSelf || !GetLeader().isAlive) return;
-
+        if(GameManager.Instance.isGamePaused) return;
+        
         int aliveMemberCount = 0;
         foreach (Actor actor in actors)
         {
@@ -115,19 +120,21 @@ public class Party : MonoBehaviour
 
         if(SkillUI.Instance.CheckAbilityIsAllReady()){
             if(GetLeader().isAlive) lastVel = GetLeader().GetComponentInParent<Rigidbody2D>().velocity;
-            Actor currentLeader = actors.Peek();
-            actors.Dequeue();
-            actors.Enqueue(currentLeader);
+
+            Actor currentLeader = GetLeader();
+            actors.RemoveAt(0);
+            actors.Add(currentLeader);
             actorLeader = GetLeader();
+
             for (int i = 0; i < actors.Count; i++)
             {
-                if(actors.ToArray()[i].parent != null){
-                    if(actors.ToArray()[i].isAlive){
-                        actors.ToArray()[i].Init(i);
-                        actors.ToArray()[i].MoveOnPath(path, 0f);
-                        actors.ToArray()[i].GetComponentInParent<Rigidbody2D>().velocity = Vector2.zero;
+                if(actors[i].parent != null){
+                    if(actors[i].isAlive){
+                        actors[i].Init(i);
+                        actors[i].MoveOnPath(path, 0f);
+                        actors[i].GetComponentInParent<Rigidbody2D>().velocity = Vector2.zero;
                     }
-                    actors.ToArray()[i].MoveOnPath(path, 0f);
+                    actors[i].MoveOnPath(path, 0f);
                 }
                 
             }
@@ -139,7 +146,13 @@ public class Party : MonoBehaviour
 
     }
 
+    public void SetActor(int index){
+        currentIndex = index;
+        if(partyOnActorChanged != null) partyOnActorChanged.Invoke();
+    }
+
     public void NextActor(){
+        SoundManager.Instance.Play("ButtonClick");
         if(currentIndex < (actors.Count - 1))
         {
             currentIndex ++;
@@ -148,12 +161,8 @@ public class Party : MonoBehaviour
         if(partyOnActorChanged != null) partyOnActorChanged.Invoke();
     }
 
-    public void SetActor(int index){
-        currentIndex = index;
-        if(partyOnActorChanged != null) partyOnActorChanged.Invoke();
-    }
-
     public void PrevActor(){
+        SoundManager.Instance.Play("ButtonClick");
         if(currentIndex > 0)
         {
             currentIndex --;
@@ -170,11 +179,10 @@ public class Party : MonoBehaviour
     private void Update() {
         if(!isPartyDefeated){
             CheckMemberAlive();
-            // CheckGameOver();
         }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if(actors.Count != 0){
             MoveLeader();
@@ -182,18 +190,7 @@ public class Party : MonoBehaviour
         }
     }
 
-    void CheckGameOver(){
-        int aliveMemberCount = 0;
-        foreach (Actor actor in actors)
-        {
-            if(actor.isAlive) aliveMemberCount++;
-        }
-        if(aliveMemberCount == 1 && actors.Peek().currentSP < actors.Peek().actionCost){
-            GameOver();
-        }
-    }
-
-    void CheckMemberAlive(){
+    private void CheckMemberAlive(){
         List<Actor> partyMemberList = new List<Actor>();
         partyMemberList.AddRange(actors.ToArray());
         isPartyDefeated = !partyMemberList.Exists(x => x.isAlive == true);
@@ -206,12 +203,12 @@ public class Party : MonoBehaviour
         }
     }
 
-    void GameOver(){
+    private void GameOver(){
         Invoke("Restart",3f);
         Debug.Log("Game Over!");
     }
 
-    void Restart(){
+    private void Restart(){
         GameManager.Instance.GameOver();
     }
 
@@ -239,13 +236,13 @@ public class Party : MonoBehaviour
         }
     }
 
-    void MoveFollower()
+    private void MoveFollower()
     {
         float headDistUnit = leaderDistance / actorsDistance;
 
         for (int i = 1; i < actors.Count; i++)
         {
-            Actor actor = actors.ToArray()[i];
+            Actor actor = actors[i];
 
             if(actor != null){
                 // Move minion on the path
@@ -264,5 +261,10 @@ public class Party : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SwapLeaderButton(){
+        SoundManager.Instance.Play("ButtonClick");
+        SwapLeader();
     }
 }

@@ -55,6 +55,7 @@ public class Coin : MonoBehaviour
 
             if (Vector3.Distance(leader.parent.position, transform.position) < 0.5f)
             {
+                SoundManager.Instance.Play("Coin");
                 gm.IncreaseCoin(coinValue);
                 gameObject.SetActive(false);
                 isSpawning = false;

@@ -17,11 +17,13 @@ public class SkillSlotUI : MonoBehaviour
     public TextMeshProUGUI cooldownText;
     public TextMeshProUGUI staminaCost;
     public Button abilityTrigger;
+    public SkillCutinUI skillCutin;
     private float coolDownDuration;
     private float nextReadyTime;
     private float coolDownTimeLeft;
     public bool isAbilityReady = true;
     public bool isAbilityFinished = true;
+    private Vector2 lastVel;
 
     public void Initialize(GameObject holder, Ability ability){
         this.holder = holder;
@@ -65,22 +67,39 @@ public class SkillSlotUI : MonoBehaviour
     }
 
     public void AbilityTrigger(){
+        if(!Party.Instance.GetLeader().gameObject.activeSelf || 
+        !Party.Instance.GetLeader().parent.gameObject.activeSelf) return;
+
+        SoundManager.Instance.Play("Ability");
+
         if(SkillUI.Instance.CheckAbilityIsAllFinished()){
-            if(isAbilityReady && actor.currentSP > ability.staminaCost){
-                ability.Activate();
-                actor.ApplyAction(ability.staminaCost);
-
-                isAbilityReady = false;
-                isAbilityFinished = false;
-                abilityTrigger.interactable = false;
-                casting.SetActive(true);
-               
-                backgroundSprite.color = new Color32(100,10,0,255);
-
-                nextReadyTime = coolDownDuration + Time.unscaledTime;
-                coolDownTimeLeft = coolDownDuration;
+            if(isAbilityReady && actor.currentSP >= ability.staminaCost){
+                if((int)ability.chantAnim == 1){
+                    lastVel = ability.actor.rb.velocity;
+                    ability.actor.rb.velocity = Vector2.zero;
+                    skillCutin.Initialize(ability);
+                    Invoke("StartAbility",0.35f);
+                }else{
+                    StartAbility();
+                }
             }
         }
+    }
+
+    void StartAbility(){
+        ability.actor.rb.velocity = lastVel;
+        ability.Activate();
+        actor.ApplyAction(ability.staminaCost);
+
+        isAbilityReady = false;
+        isAbilityFinished = false;
+        abilityTrigger.interactable = false;
+        casting.SetActive(true);
+        
+        backgroundSprite.color = new Color32(150,150,150,255);
+
+        nextReadyTime = coolDownDuration + Time.unscaledTime;
+        coolDownTimeLeft = coolDownDuration;
     }
 
     private void AbilityCoolDown()
@@ -112,7 +131,7 @@ public class SkillSlotUI : MonoBehaviour
         casting.SetActive(false);
         abilityTrigger.interactable = true;
 
-        backgroundSprite.color = new Color32(36,36,36,255);
+        backgroundSprite.color = new Color32(255,255,255,255);
     }
 
     // private void AbilityActive(){

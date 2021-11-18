@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2318742083eeecc4b8c8f71724e860aa, type: 3}
+  m_Name: Cyclones
+  m_EditorClassIdentifier: 
+  abilityName: Cyclones
+  abilityDesc: 
+  abilitySprite: {fileID: -7656983647785588919, guid: 3633525da4fdc0048a59495ac285ce3c,
+    type: 3}
+  rotateProjectile: 1
+  bonusValue: 5
+  abilityBonus: 3
+  bonusType: 0
+  targetType: 0
+  chantType: 1
+  chantAnim: 1
+  chantAnimPrefab: {fileID: 3130289515074883870, guid: 89cffe54b3039994492cdc67576166fb,
+    type: 3}
+  staminaCost: 20
+  cooldownTime: 5
+  isFinished: 0
+  actor: {fileID: 0}
+  target: 2
+  projectileSpeed: 5
+  projectileLife: 1
+  projectileImpact: 20
+  projectileCount: 8
+  projectileDelay: 0
+  hitType: 0
+  direction: 3
+  projectile: {fileID: 3164970399982641303, guid: 6dfd42ada65c6f64fa7431b3c1d0a316,
+    type: 3}

@@ -5347,8 +5347,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   durability: 1000
   score: 500
-  collectibles: {fileID: 11400000, guid: 388a845b74a2ab64687685dc3b1b3665, type: 2}
-  colPrefab: {fileID: 8255461609589889986, guid: f2b2aaa6415a572428595a79f0e43bae,
+  colPrefab: {fileID: 8059367477977680109, guid: 3a270da4baafaad408c3c4531980d614,
     type: 3}
   dropChance: 10
   offsetDrop: {x: 0, y: -1.5, z: 0}

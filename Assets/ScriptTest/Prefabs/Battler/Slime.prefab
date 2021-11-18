@@ -40,8 +40,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.17, y: 0.61}
-  m_SizeDelta: {x: 0.75, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0.5}
+  m_SizeDelta: {x: 0.9329, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &279013464508476070
 Canvas:
@@ -128,7 +128,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 279013464663287254}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.17000008, y: 0.20835733, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 279013466517328827}
@@ -192,14 +192,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.08040838, b: 0.015686274, a: 1}
+  m_Color: {r: 0.6745098, g: 0.19607845, b: 0.19607845, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ad4148593b05d0f47980774815c325fe, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f4c1214f0d88f2a4495a37e281eb4577, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -266,7 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: a7b989f9764bb854e9c144156b6b9db0, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -274,7 +274,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ad4148593b05d0f47980774815c325fe, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f4c1214f0d88f2a4495a37e281eb4577, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -301,7 +301,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &279013465682245427
 RectTransform:
   m_ObjectHideFlags: 0
@@ -475,7 +475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: a7b989f9764bb854e9c144156b6b9db0, type: 2}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -483,7 +483,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: f4c1214f0d88f2a4495a37e281eb4577, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -618,7 +618,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6454223769264087123
 RectTransform:
   m_ObjectHideFlags: 0
@@ -762,12 +762,17 @@ MonoBehaviour:
   hpBar: {fileID: 279013464686745638}
   hpEffect: {fileID: 279013465152546369}
   element: {fileID: 0}
+  deathEffectPrefab: {fileID: 8449388853544896041, guid: 267cfcd11ddfba4449243a0a44e1ae22,
+    type: 3}
   parent: {fileID: 4232068715572760128}
   rb: {fileID: 5438761738853231632}
   mob: {fileID: 11400000, guid: 661a665d4c8aa1c469a0cfd3d253c29c, type: 2}
   mobName: 
-  deathEffectPrefab: {fileID: 8449388853544896041, guid: 267cfcd11ddfba4449243a0a44e1ae22,
-    type: 3}
+  mobScore: 0
+  mobExp: 0
+  mobCoinDrop: 1
+  dropEquip: []
+  equipDropChanche: 1
   actorLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -852,7 +857,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Positions: []
   m_Parameters:
     serializedVersion: 3
@@ -944,7 +949,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4232068715961559075}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.16999996, y: -0.2916425, z: 0}
+  m_LocalPosition: {x: 0.007999942, y: -0.39964253, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
   m_Father: {fileID: 4232068715572760128}
@@ -990,7 +995,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: -7854738478779454800, guid: b3449127b97d24c4ebe66fde1e3ce9c3,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

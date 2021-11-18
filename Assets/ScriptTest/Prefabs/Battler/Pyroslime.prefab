@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4577984111846357064}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.49, y: 0.20499992, z: 0}
+  m_LocalPosition: {x: -1.5, y: 0.20499992, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4688180810168111635}
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: a7b989f9764bb854e9c144156b6b9db0, type: 2}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: f4c1214f0d88f2a4495a37e281eb4577, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -155,7 +155,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4688180810455791259
 RectTransform:
   m_ObjectHideFlags: 0
@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: a7b989f9764bb854e9c144156b6b9db0, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -337,7 +337,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ad4148593b05d0f47980774815c325fe, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f4c1214f0d88f2a4495a37e281eb4577, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -387,8 +387,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.26, y: 0.61}
-  m_SizeDelta: {x: 0.75, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0.5}
+  m_SizeDelta: {x: 0.95, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4688180811363216142
 Canvas:
@@ -509,14 +509,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.08040838, b: 0.015686274, a: 1}
+  m_Color: {r: 0.6745098, g: 0.19607845, b: 0.19607845, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ad4148593b05d0f47980774815c325fe, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f4c1214f0d88f2a4495a37e281eb4577, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -550,7 +550,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4688180811751564414}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.97, y: 0.20499992, z: 0}
+  m_LocalPosition: {x: 1.5, y: 0.20499992, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4688180810168111635}
@@ -649,7 +649,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1964273731040780795
 RectTransform:
   m_ObjectHideFlags: 0
@@ -724,7 +724,7 @@ GameObject:
   m_Layer: 9
   m_Name: Mob
   m_TagString: Enemy
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -792,12 +792,17 @@ MonoBehaviour:
   hpBar: {fileID: 4688180811726002574}
   hpEffect: {fileID: 4688180811000227817}
   element: {fileID: 4895179640491648091}
+  deathEffectPrefab: {fileID: 8449388853544896041, guid: 8da9d26aeb365124f901f008bdfe42b5,
+    type: 3}
   parent: {fileID: 8677265280588402664}
   rb: {fileID: 696613335123783096}
   mob: {fileID: 11400000, guid: 6d96a1c4f2cf7e04ab59805af1315cc5, type: 2}
   mobName: 
-  deathEffectPrefab: {fileID: 8449388853544896041, guid: 8da9d26aeb365124f901f008bdfe42b5,
-    type: 3}
+  mobScore: 0
+  mobExp: 0
+  mobCoinDrop: 1
+  dropEquip: []
+  equipDropChanche: 1
   actorLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -872,7 +877,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8677265280740747659}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.25999975, y: -0.2949999, z: 0}
+  m_LocalPosition: {x: 0.013, y: -0.355, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
   m_Father: {fileID: 8677265280588402664}

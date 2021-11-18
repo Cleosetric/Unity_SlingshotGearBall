@@ -27,7 +27,7 @@ MonoBehaviour:
     value: 0
     type: 0
   modATK:
-    value: 10
+    value: 3
     type: 0
   modDEF:
     value: 0
