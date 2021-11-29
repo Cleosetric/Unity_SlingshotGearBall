@@ -69,7 +69,7 @@ public class Cryoslime : Mob
         base.OnCollisionEnter2D(other);
 
         if(other.collider.CompareTag("Actors")){
-            Actor targetAtk = other.gameObject.GetComponentInChildren<Actor>();
+            Actor targetAtk = other.gameObject.GetComponent<Actor>();
             if(targetAtk != null){
                 targetAtk.ApplyDamage(this);
                 Vector3 hitPoint = other.contacts[0].point;

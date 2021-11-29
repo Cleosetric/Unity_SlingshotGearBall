@@ -6,6 +6,7 @@ using UnityEngine;
 public enum BossPhase{
     Phase1, Phase2, Phase3
 }
+
 public class SlimeBoss : Mob
 {
     [Space]
@@ -57,16 +58,16 @@ public class SlimeBoss : Mob
                 {
                     case MobState.Idle:
                         target = CheckTargetsInSight(radiusSight);
-                        if(target != null){
+                        if(target != null && target.gameObject.activeSelf){
                             state = MobState.Attack;
                         }
                     break;
                     case MobState.Move:
-                        if(Vector2.Distance(parent.position, initialPost.position) > 0){
+                        if(Vector2.Distance(transform.position, initialPost.position) > 0){
                             MoveToward(initialPost);
                         }
 
-                        if(Vector2.Distance(parent.position, initialPost.position) < 0.2f){
+                        if(Vector2.Distance(transform.position, initialPost.position) < 0.2f){
                             state = MobState.Idle;
                         }
                     break;
@@ -81,7 +82,7 @@ public class SlimeBoss : Mob
                     case MobState.Idle:
                         target = CheckTargetsInSight(radiusSight);
 
-                        if(target != null){
+                        if(target != null && target.gameObject.activeSelf){
                             state = MobState.Move;
                         }else{
                             MoveToward(initialPost);
@@ -92,9 +93,9 @@ public class SlimeBoss : Mob
                             isShootAttack = false;
                             state = MobState.Idle;
                         } else {
-                            if(Vector2.Distance(parent.position, target.position) < (attackSight/2)){
+                            if(Vector2.Distance(transform.position, target.position) < (attackSight/2)){
                                 state = MobState.Attack;
-                            }else if(Vector2.Distance(parent.position, target.position) > (radiusSight + 1f)){
+                            }else if(Vector2.Distance(transform.position, target.position) > (radiusSight + 1f)){
                                 state = MobState.Idle;
                             }else{
                                 MoveToward(target);
@@ -125,17 +126,17 @@ public class SlimeBoss : Mob
                 {
                     case MobState.Idle:
                         target = CheckTargetsInSight(radiusSight);
-                        if(target != null){
+                        if(target != null && target.gameObject.activeSelf){
                             state = MobState.Attack;
                         }
                     break;
                     case MobState.Move:
                         if(target == null) state = MobState.Idle;
-                        if(Vector2.Distance(parent.position, initialPost.position) > 0){
+                        if(Vector2.Distance(transform.position, initialPost.position) > 0){
                             MoveToward(initialPost);
                         }
 
-                        if(Vector2.Distance(parent.position, initialPost.position) < 0.2f){
+                        if(Vector2.Distance(transform.position, initialPost.position) < 0.2f){
                             state = MobState.Idle;
                         }
                     break;
@@ -218,16 +219,16 @@ public class SlimeBoss : Mob
 
         for (int i = 0; i <= 10 - 1; i++) {
             
-            float projectileDirXposition = parent.position.x + Mathf.Sin ((angle * Mathf.PI) / 180) * 5f;
-            float projectileDirYposition = parent.position.y + Mathf.Cos ((angle * Mathf.PI) / 180) * 5f;
+            float projectileDirXposition = transform.position.x + Mathf.Sin ((angle * Mathf.PI) / 180) * 5f;
+            float projectileDirYposition = transform.position.y + Mathf.Cos ((angle * Mathf.PI) / 180) * 5f;
 
             Vector3 projectileVector = new Vector2 (projectileDirXposition, projectileDirYposition);
-            Vector2 projectileMoveDirection = (projectileVector - parent.position).normalized;
+            Vector2 projectileMoveDirection = (projectileVector - transform.position).normalized;
 
             Vector3 directionAngle = Quaternion.Euler(0, 0, 90) * projectileMoveDirection;
             Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, directionAngle);
 
-            GameObject shoot = Instantiate(projectile.gameObject, parent.position, Quaternion.identity);
+            GameObject shoot = Instantiate(projectile.gameObject, transform.position, Quaternion.identity);
             shoot.GetComponent<Projectile>().Initialize(this, 0, 10f, 5f, true,false, Quaternion.Euler(0, 0, angle + -90f));
             Destroy(shoot, 1f);
 

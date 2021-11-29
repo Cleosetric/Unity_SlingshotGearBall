@@ -42,9 +42,16 @@ public class Charachter : MonoBehaviour
     public Image element;
     public GameObject deathEffectPrefab;
     
-    [Space]
-    public Transform parent;
-    public Rigidbody2D rb;
+    // [Space]
+    // public Transform parent;
+    // public Rigidbody2D rb;
+    protected Rigidbody2D rb;
+
+    protected virtual void Start() {
+        rb = GetComponent<Rigidbody2D>();
+        currentHP = Mathf.RoundToInt(statMHP.GetValue());
+        currentSP = Mathf.RoundToInt(statMSP.GetValue());
+    }
 
     public virtual void ApplyDamage(Charachter user)
     {
@@ -59,7 +66,7 @@ public class Charachter : MonoBehaviour
             // Debug.Log("Hit - Rand:"+rand+" <= "+hitRate);
             if(rand <= hitRate){
                 if(damage <= Mathf.RoundToInt(this.statDEF.GetValue())){
-                    HitCounter.Instance.AddDamagePopup(parent, 2, "0", "NEGATE");
+                    HitCounter.Instance.AddDamagePopup(transform, 2, "0", "NEGATE");
                 }else{
                     damage -= Mathf.RoundToInt(this.statDEF.GetValue());
                     damage = Mathf.Clamp(damage, 0, int.MaxValue);
@@ -71,13 +78,13 @@ public class Charachter : MonoBehaviour
                         // Debug.Log("CRand:"+damage+" | "+damageVariance);
                         damage = Mathf.RoundToInt(damage + (damage * damageVariance));
                         currentHP -= damage;
-                        HitCounter.Instance.AddDamagePopup(parent, 3, damage.ToString(), "CRITICAL");
+                        HitCounter.Instance.AddDamagePopup(transform, 3, damage.ToString(), "CRITICAL");
                     }else{
                         float damageVariance = Random.Range(0.0f,0.5f);
                         // Debug.Log("NRand:"+damage+" | "+damageVariance);
                         damage = Mathf.RoundToInt(damage + (damage * damageVariance));
                         currentHP -= damage;
-                        HitCounter.Instance.AddDamagePopup(parent, 1, damage.ToString(), "");
+                        HitCounter.Instance.AddDamagePopup(transform, 1, damage.ToString(), "");
                     }
 
                     if(currentHP <= 0){
@@ -87,7 +94,7 @@ public class Charachter : MonoBehaviour
                     if(isActor) HitCounter.Instance.AddHitCounter(1,damage);
                 }
             }else{
-                HitCounter.Instance.AddDamagePopup(parent, 2, "0", "MISS");
+                HitCounter.Instance.AddDamagePopup(transform, 2, "0", "MISS");
             }
         }
     }
@@ -109,6 +116,6 @@ public class Charachter : MonoBehaviour
     }
 
     public virtual void Die(){
-        Debug.Log(parent.gameObject.name + "Died!");
+        Debug.Log(transform.gameObject.name + "Died!");
     }
 }

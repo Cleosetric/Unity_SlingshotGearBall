@@ -34,6 +34,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         bool isActor = charachter is Actor;
+        Debug.Log(isActor);
         if(isActor){
             switch ((int)hitType)
             {
@@ -61,12 +62,12 @@ public class Projectile : MonoBehaviour
     {
         if(other.CompareTag("Actors")){
             if(other != null){
-                Actor targetAtk = other.GetComponentInChildren<Actor>();
+                Actor targetAtk = other.GetComponent<Actor>();
                 if(targetAtk != null) {
                     if(shake) TimeManager.Instance.StartImpactMotion();
                     targetAtk.ApplyDamage(charachter);
 
-                    Rigidbody2D otherRb = targetAtk.rb;
+                    Rigidbody2D otherRb = targetAtk.GetComponent<Rigidbody2D>();
                     if(otherRb != null){
                         Vector3 dir = (transform.position - other.transform.position).normalized;
                         otherRb.AddForce(-dir * impact, ForceMode2D.Impulse);
@@ -88,7 +89,7 @@ public class Projectile : MonoBehaviour
                 if(shake) TimeManager.Instance.StartImpactMotion();
                 targetAtk.ApplyDamage(charachter);
 
-                Rigidbody2D otherRb = targetAtk.rb;
+                Rigidbody2D otherRb = targetAtk.GetComponent<Rigidbody2D>();
                 if(otherRb != null){
                     if(otherRb.bodyType == RigidbodyType2D.Static) return;
                     Vector3 dir = (transform.position - other.transform.position).normalized;
@@ -107,7 +108,7 @@ public class Projectile : MonoBehaviour
                 if(shake) TimeManager.Instance.StartImpactMotion();
                 targetAtk.ApplyDamage(charachter);
 
-                Rigidbody2D otherRb = targetAtk.rb; //other.GetComponent<Rigidbody2D>();
+                Rigidbody2D otherRb = targetAtk.GetComponent<Rigidbody2D>(); //other.GetComponent<Rigidbody2D>();
                 if(otherRb != null){
                     if(otherRb.bodyType == RigidbodyType2D.Static) return;
                     Vector3 dir = (transform.position - other.transform.position).normalized;

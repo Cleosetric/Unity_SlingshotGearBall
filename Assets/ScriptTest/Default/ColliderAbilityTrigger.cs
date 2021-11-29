@@ -16,9 +16,9 @@ public class ColliderAbilityTrigger : MonoBehaviour
     }
 
     public void Active(){
-        lastVel = actor.parent.GetComponent<Rigidbody2D>().velocity;
+        lastVel = actor.GetComponent<Rigidbody2D>().velocity;
         if((int)ability.chantType == 1 || (int)ability.chantType == 2) 
-        actor.parent.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        actor.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         
         Debug.Log((int)ability.skillHitType + "Skill Hit Type");
         if((int)ability.skillHitType == 0){
@@ -30,21 +30,21 @@ public class ColliderAbilityTrigger : MonoBehaviour
         }
 
         if((int)ability.chantType == 2){
-            actor.parent.GetComponent<Rigidbody2D>().velocity = lastVel;
+            actor.GetComponent<Rigidbody2D>().velocity = lastVel;
         }
     }
 
     private IEnumerator BeginAttack(){
         TimeManager.Instance.StartImpactMotion();
         
-        Vector3 pos = actor.parent.position + new Vector3(0,0.1f,0);
+        Vector3 pos = actor.transform.position + new Vector3(0,0.1f,0);
         GameObject chantAnim = Instantiate(ability.chantAnimPrefab, pos, Quaternion.identity);
-        chantAnim.transform.SetParent(actor.parent);
+        chantAnim.transform.SetParent(actor.transform);
         
         yield return new WaitForSeconds(0.15f);
         Destroy(chantAnim);
         GameObject anim = Instantiate(ability.abilityEffect, origin.position + ability.positionOffset, Quaternion.identity);
-        anim.transform.SetParent(actor.parent);
+        anim.transform.SetParent(actor.transform);
 
         for (int i = 0; i < ability.repeatTime; i++)
         {
@@ -62,15 +62,15 @@ public class ColliderAbilityTrigger : MonoBehaviour
     private IEnumerator BeginContinousAttack(){
         TimeManager.Instance.StartImpactMotion();
         
-        Vector3 pos = actor.parent.position + new Vector3(0,0.1f,0);
+        Vector3 pos = actor.transform.position + new Vector3(0,0.1f,0);
         GameObject chantAnim = Instantiate(ability.chantAnimPrefab, pos, Quaternion.identity);
-        chantAnim.transform.SetParent(actor.parent);
+        chantAnim.transform.SetParent(actor.transform);
 
         yield return new WaitForSeconds(0.15f);
 
         Destroy(chantAnim);
         GameObject anim = Instantiate(ability.abilityEffect, origin.position + ability.positionOffset, Quaternion.identity);
-        anim.transform.SetParent(actor.parent);
+        anim.transform.SetParent(actor.transform);
 
         float ellapsedTime = 0;
         float nextDashTime = 0;
@@ -103,7 +103,7 @@ public class ColliderAbilityTrigger : MonoBehaviour
                 Mob targetAtk =  hitObj.GetComponent<Mob>();
                 if(targetAtk != null){
                     targetAtk.ApplyDamage(actor);
-                    Rigidbody2D otherRb = targetAtk.rb;
+                    Rigidbody2D otherRb = targetAtk.GetComponent<Rigidbody2D>();
                     Vector3 collisionPoint = hitObj.ClosestPoint(origin.position);
                     Vector3 collisionNormal = origin.position - collisionPoint;
                     otherRb.AddForce(-collisionNormal * ability.hitForce, ForceMode2D.Impulse);

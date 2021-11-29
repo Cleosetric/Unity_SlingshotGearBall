@@ -54,9 +54,28 @@ public class Party : MonoBehaviour
         Start();
     }
 
+    public void Refresh(){
+        if(actors.Count > 0){
+            Actor currentLeader = GetLeader();
+            actors.RemoveAt(0);
+            actors.Add(currentLeader);
+            
+            for (int i = 0; i < actors.Count; i++)
+            {
+                actors[i].Init(i);
+                actors[i].MoveOnPath(path, 0f);
+            }
+
+            actorLeader = GetLeader();
+            EnableLeaderHitBox();
+        }
+
+        if(partyOnActorChanged != null) partyOnActorChanged.Invoke();
+    }
+
     private void Start() {
         EnableLeaderHitBox();
-        transform.position = GetLeader().parent.position;
+        transform.position = GetLeader().transform.position;
         if(partyOnActorChanged != null) partyOnActorChanged.Invoke();
     }
 
@@ -66,6 +85,10 @@ public class Party : MonoBehaviour
 
     public Actor GetLeader(){
         return actors[0];
+    }
+
+    public void SetLeader(){
+        actorLeader = GetLeader();
     }
 
     void AddActor(Actor actor)
@@ -83,20 +106,22 @@ public class Party : MonoBehaviour
         for (int i = 0; i < actors.Count; i++)
         {
             if(actors[i] != null){
-                if(actors[i].parent.gameObject.activeSelf){
+                if(actors[i].transform.gameObject.activeSelf){
                     if(i == 0){
                         // actors[i].gameObject.GetComponent<CircleCollider2D>().enabled = true;
                         // actors[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
                         // actors[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
-                        actors[i].parent.GetComponentInChildren<TargetIndicator>().ShowIndicator();
-                        actors[i].gameObject.GetComponentInParent<Rigidbody2D>().velocity = lastVel;
+                        actors[i].GetComponentInChildren<TargetIndicator>().ShowIndicator();
+                        actors[i].directionFace.gameObject.SetActive(true);
+                        actors[i].gameObject.GetComponent<Rigidbody2D>().velocity = lastVel;
                         // actors[i].gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
                     }else{
                         // actors[i].gameObject.GetComponent<CircleCollider2D>().enabled = false;
                         // actors[i].gameObject.GetComponent<CircleCollider2D>().radius = 0.25f;
                         // actors[i].gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
-                        actors[i].parent.GetComponentInChildren<TargetIndicator>().HideIndicator();
-                        if(actors[i].parent.gameObject.activeSelf) actors[i].StartRegen();
+                        actors[i].GetComponentInChildren<TargetIndicator>().HideIndicator();
+                        actors[i].directionFace.gameObject.SetActive(false);
+                        if(actors[i].gameObject.activeSelf) actors[i].StartRegen();
                         // actors[i].gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
                     }
                 }
@@ -107,7 +132,8 @@ public class Party : MonoBehaviour
     public void SwapLeader(){
         //check if actor count is alive > 1
         //not only check count
-        // if(GetLeader().parent == null || !GetLeader().parent.gameObject.activeSelf || !GetLeader().isAlive) return;
+        // if(GetLeader().transform == null || !GetLeader().transform.gameObject.activeSelf || !GetLeader().isAlive) return;
+        if(GameManager.Instance.isGamePaused && !GetLeader().gameObject.activeSelf) return;
         if(GameManager.Instance.isGamePaused) return;
         
         int aliveMemberCount = 0;
@@ -121,26 +147,26 @@ public class Party : MonoBehaviour
         if(SkillUI.Instance.CheckAbilityIsAllReady()){
             if(GetLeader().isAlive) lastVel = GetLeader().GetComponentInParent<Rigidbody2D>().velocity;
 
+            // actors.RemoveAll(actor => actor.isAlive == false);
             Actor currentLeader = GetLeader();
             actors.RemoveAt(0);
             actors.Add(currentLeader);
-            actorLeader = GetLeader();
+
+            // List<Actor> actorlist = actors;
+            // actorlist.Sort((a1,a2)=>a1.isAlive.CompareTo(a2.isAlive));
+            // actors = actorlist;
 
             for (int i = 0; i < actors.Count; i++)
             {
-                if(actors[i].parent != null){
-                    if(actors[i].isAlive){
-                        actors[i].Init(i);
-                        actors[i].MoveOnPath(path, 0f);
-                        actors[i].GetComponentInParent<Rigidbody2D>().velocity = Vector2.zero;
-                    }
-                    actors[i].MoveOnPath(path, 0f);
-                }
-                
+                actors[i].Init(i);
+                actors[i].MoveOnPath(path, 0f);
+                if(i == 0)
+                actors[i].GetComponentInParent<Rigidbody2D>().velocity = Vector2.zero;
             }
-
-            EnableLeaderHitBox();
             if (path.Capacity <= actors.Count) path.Resize();
+
+            actorLeader = GetLeader();
+            EnableLeaderHitBox();
             if(partyOnActorChanged != null) partyOnActorChanged.Invoke();
         }
 
@@ -195,7 +221,8 @@ public class Party : MonoBehaviour
         partyMemberList.AddRange(actors.ToArray());
         isPartyDefeated = !partyMemberList.Exists(x => x.isAlive == true);
         if(!isPartyDefeated){
-            if(GetLeader() == null && GetLeader().parent == null && !GetLeader().isAlive){
+            // if(GetLeader() == null && GetLeader().transform == null && !GetLeader().isAlive){
+            if(!GetLeader().isAlive){
                 SwapLeader();
             }
         }else{
@@ -216,7 +243,7 @@ public class Party : MonoBehaviour
     {
         if(actorLeader != null){
             // Measure the distance between the leader and the 'head' of that path
-            Vector2 headToLeader = ((Vector2)actorLeader.parent.position) - path.Head();
+            Vector2 headToLeader = ((Vector2)actorLeader.transform.position) - path.Head();
 
             // Cache the precise distance so we can reuse it when we offset each minion
             leaderDistance = headToLeader.magnitude;
@@ -228,10 +255,10 @@ public class Party : MonoBehaviour
                 float leaderOvershoot = leaderDistance - actorsDistance;
                 Vector2 pushDir = headToLeader.normalized * leaderOvershoot;
 
-                path.Add(((Vector2)actorLeader.parent.position) - pushDir);
+                path.Add(((Vector2)actorLeader.transform.position) - pushDir);
 
                 // Update head distance as there is a new point we have to measure from now
-                leaderDistance = (((Vector2)actorLeader.parent.position) - path.Head()).sqrMagnitude;
+                leaderDistance = (((Vector2)actorLeader.transform.position) - path.Head()).sqrMagnitude;
             }
         }
     }
@@ -248,9 +275,9 @@ public class Party : MonoBehaviour
                 // Move minion on the path
                 actor.MoveOnPath(path, headDistUnit);
 
-                if(actor.parent != null && actors.ToArray()[i - 1].parent != null){
+                if(actor.transform != null && actors.ToArray()[i - 1].transform != null){
                     // Extra push to avoid minions stepping on each other
-                    Vector2 prevToNext = actors.ToArray()[i - 1].parent.position - actor.parent.position;
+                    Vector2 prevToNext = actors.ToArray()[i - 1].transform.position - actor.transform.position;
 
                     float distance = prevToNext.magnitude;
                     if (distance < actorsDistance)
@@ -264,7 +291,32 @@ public class Party : MonoBehaviour
     }
 
     public void SwapLeaderButton(){
-        SoundManager.Instance.Play("ButtonClick");
+        if(!GameManager.Instance.isGamePaused || !SkillUI.Instance.CheckAbilityIsAllReady()){
+            SoundManager.Instance.Play("ButtonCancel");
+        }else{
+            SoundManager.Instance.Play("ButtonClick");
+        }
         SwapLeader();
+    }
+
+    private void OnDrawGizmos() {
+        if(actors.Count > 0){
+            if( path != null && path.Points.Length > 1){
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(GetLeader().transform.position, 0.35f);
+
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawSphere(path.Head(), 0.35f);
+
+                foreach (Vector2 point in path.Points)
+                {
+                    Gizmos.color = Color.yellow;
+                    Gizmos.DrawSphere(point, 0.25f);
+                }
+
+                Gizmos.color = Color.blue;
+                Gizmos.DrawSphere(path.Tail(), 0.35f);
+            }
+        }
     }
 }

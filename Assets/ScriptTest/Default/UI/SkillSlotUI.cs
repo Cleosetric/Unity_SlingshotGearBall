@@ -68,15 +68,16 @@ public class SkillSlotUI : MonoBehaviour
 
     public void AbilityTrigger(){
         if(!Party.Instance.GetLeader().gameObject.activeSelf || 
-        !Party.Instance.GetLeader().parent.gameObject.activeSelf) return;
+        !Party.Instance.GetLeader().gameObject.activeSelf) return;
 
         SoundManager.Instance.Play("Ability");
 
         if(SkillUI.Instance.CheckAbilityIsAllFinished()){
             if(isAbilityReady && actor.currentSP >= ability.staminaCost){
                 if((int)ability.chantAnim == 1){
-                    lastVel = ability.actor.rb.velocity;
-                    ability.actor.rb.velocity = Vector2.zero;
+                    Rigidbody2D rb = ability.actor.GetComponent<Rigidbody2D>();
+                    lastVel = rb.velocity;
+                    rb.velocity = Vector2.zero;
                     skillCutin.Initialize(ability);
                     Invoke("StartAbility",0.35f);
                 }else{
@@ -87,7 +88,7 @@ public class SkillSlotUI : MonoBehaviour
     }
 
     void StartAbility(){
-        ability.actor.rb.velocity = lastVel;
+        ability.actor.GetComponent<Rigidbody2D>().velocity = lastVel;
         ability.Activate();
         actor.ApplyAction(ability.staminaCost);
 

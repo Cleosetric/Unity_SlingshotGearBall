@@ -43,7 +43,10 @@ public class Actor : Charachter
     [Space]
     [Header("Combat Info")]
     public LayerMask enemyLayers;
+    public Transform directionFace;
+    public GameObject bounceEffect;
     public Projectile projectile;
+
     public float projectileLife;
     private float attackRate;
     private float dashRate = 1;
@@ -52,7 +55,8 @@ public class Actor : Charachter
     private float nextAttackTime = 0;
     private float nextDashTime = 0;
 
-    private int index;
+    public int index;
+    Vector2 lastVel;
 
     private void Awake()
     {
@@ -98,7 +102,7 @@ public class Actor : Charachter
         //Setup Control Param
         actionSight = charachter.actionSight;
         actionCost = charachter.actionCost;
-        nameText.SetText(actorName);
+        // nameText.SetText(actorName);
         isAlive = true;
 
         abilities = charachter.abilities;
@@ -116,7 +120,7 @@ public class Actor : Charachter
         currentLevel = 1;
 
         Quaternion rotation = Quaternion.LookRotation(Vector3.up, Vector3.up);
-        transform.rotation = rotation;
+        directionFace.rotation = rotation;
     }
 
     public void OnItemEquiped(Equipment newItem)
@@ -185,7 +189,7 @@ public class Actor : Charachter
 
     public virtual void ActionMove(Vector2 force){
         Quaternion rotation = Quaternion.LookRotation(force, Vector3.up);
-        transform.rotation = rotation;
+        directionFace.rotation = rotation;
         rb.velocity = statAGI.GetValue() * force;
         // rb.velocity = Vector2.zero;
         // rb.AddForce(force * statAGI.GetValue(), ForceMode2D.Impulse);
@@ -203,13 +207,13 @@ public class Actor : Charachter
         }
            
         // if(isDash && gameObject.activeSelf){
-            // Transform closestEnemy = EnemyManager.Instance.EnemyNearbyTransform(parent.transform.position);
+            // Transform closestEnemy = EnemyManager.Instance.EnemyNearbyTransform(transform.position);
             // if (closestEnemy != null){
-            //     float distance = Vector3.Distance(closestEnemy.position, parent.transform.position); 
+            //     float distance = Vector3.Distance(closestEnemy.position, transform.position); 
             //     float maxDistance = 3f;  
             //     if(distance < maxDistance){
             //         rb.velocity = Vector2.zero;         
-            //         Vector3 direction = (closestEnemy.position - parent.transform.position).normalized;
+            //         Vector3 direction = (closestEnemy.position - transform.position).normalized;
             //         rb.AddForce(direction * 20f, ForceMode2D.Impulse);
             //         // ApplyAction(actionCost);
             //         TimeManager.Instance.StartImpactMotion();
@@ -221,10 +225,10 @@ public class Actor : Charachter
     }
 
     public virtual void ActionAttack(GameObject target){
-        Vector2 direction = (target.transform.position - parent.position).normalized;
+        Vector2 direction = (target.transform.position - transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-        Projectile projClone = Instantiate(projectile, parent.position, Quaternion.Euler(0,0,angle -90)) as Projectile;
+        Projectile projClone = Instantiate(projectile, transform.position, Quaternion.Euler(0,0,angle -90)) as Projectile;
         projClone.Initialize(this, 0, 10, 5, false, false, Quaternion.Euler(0,0,angle -90));
         Destroy(projClone.gameObject, projectileLife);
 
@@ -237,7 +241,7 @@ public class Actor : Charachter
     }
 
     void CheckAttackDistance(){
-        Collider2D[] hitBox = Physics2D.OverlapCircleAll(parent.transform.position, actionSight, enemyLayers);
+        Collider2D[] hitBox = Physics2D.OverlapCircleAll(transform.position, actionSight, enemyLayers);
         foreach (Collider2D hitObj in hitBox)
         {
             if(hitObj.CompareTag("Enemy")){
@@ -255,6 +259,10 @@ public class Actor : Charachter
         DisplayHPBar();
     }
 
+    private void FixedUpdate() {
+        lastVel = rb.velocity;
+    }
+
     public void Init(int index)
     {
         this.index = index;
@@ -266,13 +274,13 @@ public class Actor : Charachter
         Vector2 next = path.Head(-index + 1);
 
         // Interpolate the position of the minion between the previous and the next point within the path. 'dist' is the distance between the 'head' of the path and the leader
-        if(parent != null)
-        parent.position = Vector2.Lerp(prev, next, dist);
+        if(transform != null)
+        transform.position = Vector2.Lerp(prev, next, dist);
     }
 
     public void Push(Vector2 dir)
     {
-        parent.transform.position += (Vector3)dir;
+        transform.position += (Vector3)dir;
     }
     
     private void DisplayHPBar()
@@ -322,7 +330,7 @@ public class Actor : Charachter
     }
 
     public void StartRegen(){
-        if(parent.gameObject.activeSelf){
+        if(gameObject.activeSelf){
             if(regen != null) StopCoroutine(regen);
             regen = StartCoroutine(RegenerateStamina());
         }
@@ -359,13 +367,36 @@ public class Actor : Charachter
         dash = null;
     }
 
+    public void Revive(){
+        isAlive = true;
+        currentHP = Mathf.RoundToInt(statMHP.GetValue());
+        currentSP = Mathf.RoundToInt(statMSP.GetValue());
+
+        Shader shaderSpritesDefault = Shader.Find("Sprites/Default");
+        charSprite.material.shader = shaderSpritesDefault;
+        charSprite.color = Color.white;
+
+        gameObject.SetActive(true);
+        if(onActorHPChanged != null) onActorHPChanged.Invoke();
+    }
+
     public override void Die()
     {
-        isAlive = false;
         if(onActorHPChanged != null) onActorHPChanged.Invoke();
-        Destroy(parent.gameObject);
+
+        isAlive = false;
+        gameObject.SetActive(false);
+
+        Party.Instance.partyOnActorChanged();
+        Party.Instance.actors.Remove(this);
+
+        if(Party.Instance.actors.Count > 0) Party.Instance.Refresh();
+        
+        //     // Party.Instance.SetLeader();
+        // }
+
         Debug.Log(actorName + " Died");
-        // parent.gameObject.SetActive(false);
+        // Destroy(gameObject);
         // rb.velocity = Vector2.zero;
         // GetComponent<CircleCollider2D>().enabled = false;
     }
@@ -390,8 +421,33 @@ public class Actor : Charachter
         yield return new WaitForSeconds(0.1f);
     }
 
+    private void OnCollisionEnter2D(Collision2D other) {
+
+        SoundManager.Instance.Play("Hit");
+
+        if(other.collider.tag == "Props"){
+            Vector3 hitPoint = other.contacts[0].point;
+            Instantiate(bounceEffect,hitPoint,Quaternion.identity);
+            other.collider.GetComponent<Props>().ApplyDamage(1);
+        }
+
+        if(other.collider.tag == "Wall"){
+            Vector3 hitPoint = other.contacts[0].point;
+            Instantiate(bounceEffect,hitPoint,Quaternion.identity);
+        }
+
+        Vector2 inNormal = other.contacts[0].normal;
+        Vector2 force = Vector3.Reflect(lastVel, inNormal);
+        
+        Quaternion rotation = Quaternion.LookRotation(force, Vector3.up);
+        directionFace.rotation = rotation;
+
+        rb.velocity = force;
+        rb.velocity += inNormal * 2.0f;
+    }
+
     private void OnDrawGizmos() {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(parent.transform.position, actionSight);
+        Gizmos.DrawWireSphere(transform.position, actionSight);
     }
 }

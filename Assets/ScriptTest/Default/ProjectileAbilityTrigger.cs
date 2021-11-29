@@ -53,10 +53,10 @@ public class ProjectileAbilityTrigger : MonoBehaviour
                 Vector3 targetPos = closestEnemy.position;
                 direction = (targetPos - origin.position).normalized;
             }else{
-                direction = origin.forward;
+                direction = origin.GetComponent<Actor>().directionFace.forward;
             }
         }else if((int)target == 1){
-            direction = origin.forward;
+            direction = origin.GetComponent<Actor>().directionFace.forward;
         }else if((int)target == 2){
             direction = Vector2.up;
         }else if((int)target == 3){

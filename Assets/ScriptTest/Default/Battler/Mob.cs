@@ -65,11 +65,6 @@ public class Mob : Charachter
         nameText.SetText(mob.name);
     }
 
-    protected virtual void Start() {
-        currentHP = Mathf.RoundToInt(statMHP.GetValue());
-        currentSP = Mathf.RoundToInt(statMSP.GetValue());
-    }
-
     private void OnValidate()
     {
         if (delayShake > time) delayShake = time;
@@ -142,7 +137,7 @@ public class Mob : Charachter
         SpawnPoolCoin(mobCoinDrop);
         SpawnMobDrop();
 
-        Destroy(parent.gameObject, particle.main.duration);
+        Destroy(gameObject, particle.main.duration);
     }
     
 

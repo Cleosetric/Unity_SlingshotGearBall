@@ -33,7 +33,7 @@ public class CameraFollow : MonoBehaviour
     {
         int d = duration;
         Vector3 c = transform.position;
-        Vector3 t = Party.Instance.GetLeader().parent.position + offset;
+        Vector3 t = Party.Instance.GetLeader().transform.position + offset;
         Vector3 track = new Vector3((c.x * (d - 1) + t.x) / d, (c.y * (d - 1) + t.y) / d, -10);
         transform.position = track;
         transform.LookAt(track);
@@ -41,7 +41,7 @@ public class CameraFollow : MonoBehaviour
 
     bool Boundary()
     {
-        Vector3 pl = Party.Instance.GetLeader().parent.position;
+        Vector3 pl = Party.Instance.GetLeader().transform.position;
         if (bound)
         {
             float sx = bound.position.x - rect;

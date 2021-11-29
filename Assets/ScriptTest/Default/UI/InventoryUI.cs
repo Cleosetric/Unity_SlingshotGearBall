@@ -31,6 +31,8 @@ public class InventoryUI : MonoBehaviour
 
         inventorySlotUI = slotParentInventory.GetComponentsInChildren<InventroySlotUI>();
         equipmentSlotUI = slotParentEquipment.GetComponentsInChildren<EquipmentSlotUI>();
+
+        statusUI.SetActive(false);
     }
 
     void UpdateUI()

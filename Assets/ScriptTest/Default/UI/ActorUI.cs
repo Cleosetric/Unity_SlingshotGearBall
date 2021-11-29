@@ -8,6 +8,7 @@ using TMPro;
 public class ActorUI : MonoBehaviour
 {
     public Sprite death;
+    public Button button;
     public Image actorFace;
     public Image hpBar;
     public Image spBar;
@@ -21,22 +22,24 @@ public class ActorUI : MonoBehaviour
     public void SetupActor(Actor actor, int index){ 
         this.actor = actor;
         this.actorIndex = index;
-        RefreshHud();
+        AliveHUD();
     }
 
-    public void RefreshHud()
+    public void AliveHUD()
     {
         DisplayHPBar();
         DisplaySPBar();
-        if(actor.isAlive){
-            actorFace.sprite = actor.actorSprite;
-        }else{
-            actorFace.sprite = death;
-            textHP.SetText("-");
-            textSP.SetText("-");
-            hpBar.fillAmount = 0;
-            spBar.fillAmount = 0;
-        }
+        actorFace.sprite = actor.actorSprite;
+        button.interactable = true;
+    }
+
+    public void DeadHUD(){
+        actorFace.sprite = death;
+        textHP.SetText("-");
+        textSP.SetText("-");
+        hpBar.fillAmount = 0;
+        spBar.fillAmount = 0;
+        button.interactable = false;
     }
 
     private void DisplayHPBar()

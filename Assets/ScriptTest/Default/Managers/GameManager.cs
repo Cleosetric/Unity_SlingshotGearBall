@@ -93,6 +93,7 @@ public class GameManager : MonoBehaviour
 
     private void Victory()
     {
+        SoundManager.Instance.Stop("Battle");
         victoryPanel.SetActive(true);
         VictoryUI victory = victoryPanel.GetComponent<VictoryUI>();
         victory.ShowBattleResult();
@@ -103,6 +104,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void GameOver(){
+        SoundManager.Instance.Stop("Battle");
         GameoverPanel.SetActive(true);
         GameOverUI gameOverUI = GameoverPanel.GetComponent<GameOverUI>();
         gameOverUI.ShowBattleResult();
@@ -148,9 +150,9 @@ public class GameManager : MonoBehaviour
     public void PlayTeleportAnimation(){
         foreach (Actor actor in Party.Instance.actors)
         {
-            if(actor != null && actor.parent != null && actor.parent.gameObject.activeSelf && actor.isAlive){
-                GameObject effect = Instantiate(animPrefab, actor.parent.position, Quaternion.identity);
-                effect.transform.SetParent(actor.parent);
+            if(actor != null && actor.gameObject.activeSelf && actor.isAlive){
+                GameObject effect = Instantiate(animPrefab, actor.transform.position, Quaternion.identity);
+                effect.transform.SetParent(actor.transform);
             }
         }
     }

@@ -54,7 +54,7 @@ public class CanvasMoveController : MonoBehaviour
         party.partyOnActorChanged += RefreshParty;
 
         cam = Camera.main;
-        actorRb = actor.GetComponentInParent<Rigidbody2D>();
+        actorRb = actor.GetComponent<Rigidbody2D>();
         controlTransform = GetComponent<RectTransform>();
 
         initialPos = new Vector3(0, -370, 0);
@@ -70,9 +70,10 @@ public class CanvasMoveController : MonoBehaviour
 
     private void RefreshParty()
     {
+        Debug.Log("CanvMovCon Done");
         actor = party.GetLeader();
         if(actor != null)
-        actorRb = actor.parent.GetComponent<Rigidbody2D>();
+        actorRb = actor.GetComponent<Rigidbody2D>();
     }
 
     private bool IsMouseOnArea(Vector3 MousePosition){
@@ -97,11 +98,11 @@ public class CanvasMoveController : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        if(actor != null && actor.parent.gameObject.activeSelf && !GameManager.Instance.isGamePaused){
+        if(actor != null && actor.gameObject.activeSelf && !GameManager.Instance.isGamePaused){
             actorRb.velocity = actor.statAGI.GetValue() * (actorRb.velocity.normalized);
 
             if(actorRb.velocity.magnitude < 0.5f){
-                if(actor.parent != null && !isRegen){
+                if(actor != null && !isRegen){
                     actorRb.velocity = Vector2.zero;
                     actor.StartRegen();
                     isRegen = true;
@@ -144,7 +145,7 @@ public class CanvasMoveController : MonoBehaviour
         //     }
         // }
         
-        if(actor != null && actor.parent.gameObject.activeSelf && !GameManager.Instance.isGamePaused){
+        if(actor != null && actor.gameObject.activeSelf && !GameManager.Instance.isGamePaused){
             if (Input.touchCount > 0)
             {
                 touch = Input.GetTouch(0);
@@ -193,8 +194,8 @@ public class CanvasMoveController : MonoBehaviour
                                 
                                 count = 0;
                                 trajectory.positionCount = 1;
-                                trajectory.SetPosition(0, actor.parent.position);
-                                DrawTrajectory(actor.parent.position, -direction);
+                                trajectory.SetPosition(0, actor.transform.position);
+                                DrawTrajectory(actor.transform.position, -direction);
 
                                 TimeManager.Instance.EnterSlowmotion();
                             }
@@ -315,7 +316,7 @@ public class CanvasMoveController : MonoBehaviour
         foreach (Actor actor in party.actors)
         {
             if(actor != null)
-            actor.parent.GetComponent<ParticleSystem>().Stop();
+            actor.GetComponent<ParticleSystem>().Stop();
         }
     }
 
@@ -324,7 +325,7 @@ public class CanvasMoveController : MonoBehaviour
         foreach (Actor actor in party.actors)
         {
             if(actor != null)
-            actor.parent.GetComponent<ParticleSystem>().Play();
+            actor.GetComponent<ParticleSystem>().Play();
         }
     }
 }

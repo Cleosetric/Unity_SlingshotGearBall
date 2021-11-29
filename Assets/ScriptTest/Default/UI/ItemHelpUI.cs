@@ -32,6 +32,7 @@ public class ItemHelpUI : MonoBehaviour
     public TextMeshProUGUI itemStat;
     public TextMeshProUGUI itemClass;
     public TextMeshProUGUI itemPrice;
+    public TextMeshProUGUI itemRarity;
     public Button btnEquip;
     public Button btnSell;
 
@@ -50,6 +51,7 @@ public class ItemHelpUI : MonoBehaviour
         itemStat.SetText("");
         itemClass.SetText("");
         itemPrice.SetText("");
+        itemRarity.SetText("");
         btnEquip.gameObject.SetActive(false);
         btnSell.gameObject.SetActive(false);
         frame.SetActive(false);
@@ -63,33 +65,35 @@ public class ItemHelpUI : MonoBehaviour
         switch ((int)item.rarity)
         {
             case 0:
-                itemName.SetText("<sup><color=#727a7f>["+item.rarity+"]</color></sup> "+item.name);
+                itemRarity.SetText("<color=#5C5C5C>["+item.rarity+"]</color>");
             break;
             case 1:
-                itemName.SetText("<sup><color=#2d940e>["+item.rarity+"]</color></sup> "+item.name);
+                itemRarity.SetText("<color=#3CF800>["+item.rarity+"]</color>");
             break;
             case 2:
-                itemName.SetText("<sup><color=#0c539d>["+item.rarity+"]</color></sup> "+item.name);
+                itemRarity.SetText("<color=#0c539d>["+item.rarity+"]</color>");
             break;
             case 3:
-                itemName.SetText("<sup><color=#64109f>["+item.rarity+"]</color></sup> "+item.name);
+                itemRarity.SetText("<color=#64109f>["+item.rarity+"]</color>");
             break;
             case 4:
-                itemName.SetText("<sup><color=#937f11>["+item.rarity+"]</color></sup> "+item.name);
+                itemRarity.SetText("<color=#937f11>["+item.rarity+"]</color>");
             break;
             case 5:
-                itemName.SetText("<sup><color=#c70b3f>["+item.rarity+"]</color></sup> "+item.name);
+                itemRarity.SetText("<color=#c70b3f>["+item.rarity+"]</color>");
             break;
 
             default:
-                itemName.SetText("<sup><color=#727a7f>["+item.rarity+"]</color></sup> "+item.name);
+                itemRarity.SetText("<color=#727a7f>["+item.rarity+"]</color>");
             break;
         }
+
+        itemName.SetText(item.name);
         itemDesc.SetText(item.description);
-        itemPrice.SetText("Sell:"+item.sellingPrice.ToString());
+        itemPrice.SetText("Price : \n"+item.sellingPrice.ToString());
         
         if((int)item.equipClass != 0){
-            itemClass.SetText("["+item.equipClass.ToString()+"]");
+            itemClass.SetText("[ "+item.equipClass.ToString()+" ]");
         }else{
             itemClass.SetText("");
         }
@@ -130,7 +134,7 @@ public class ItemHelpUI : MonoBehaviour
                 }else{
                     value = Mathf.RoundToInt(allStat[i].value).ToString() + "%";
                 }
-                allstring += statLabel[i]+"\t: "+"<color=#2d940e>+"+value+"</color>\t";
+                allstring += statLabel[i]+"\t: "+"<color=#3CF800>+"+value+"</color>\t";
                 if(counter >= 2){
                     counter = 0;
                     allstring += "\n";
@@ -156,6 +160,7 @@ public class ItemHelpUI : MonoBehaviour
     public void SellItem(){
         if(equip != null){
             SoundManager.Instance.Play("ButtonClick");
+            GameManager.Instance.IncreaseCoin(equip.sellingPrice);
             Debug.Log("Sell " + equip.name +" for "+ equip.sellingPrice);
             equip.RemoveItem();
             ResetUI();

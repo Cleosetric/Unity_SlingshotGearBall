@@ -21,14 +21,14 @@ public class CinemachineFollow : MonoBehaviour
         party = Party.Instance;
         party.partyOnActorChanged += OnActorChanged;
         actor = party.GetLeader();
-        camera2D.Follow = actor.parent.transform;
+        camera2D.Follow = actor.transform;
     }
 
     private void OnActorChanged()
     {
         actor = party.GetLeader();
         if(actor != null)
-        camera2D.Follow = actor.parent.transform;
+        camera2D.Follow = actor.transform;
     }
 
     public void StartZoomIn(){

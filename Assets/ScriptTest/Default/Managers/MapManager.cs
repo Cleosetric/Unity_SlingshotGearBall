@@ -51,10 +51,16 @@ public class MapManager : MonoBehaviour
         if(EnemyManager.Instance.IsAllEnemyDead()){
             if(!isGoalShow){
                 GameObject mapGoal = FindGameObjectInChildWithTag(map, "Goal");
-                if(mapGoal != null) mapGoal.SetActive(true);
+                if(mapGoal != null) StartCoroutine(ShowGoal(mapGoal));
                 isGoalShow = true;
             }
         }
+    }
+
+    private IEnumerator ShowGoal(GameObject mapGoal){
+        mapGoal.SetActive(false);
+        yield return new WaitForSeconds(3f);
+        mapGoal.SetActive(true);
     }
 
     public string GetStage(){
@@ -99,7 +105,6 @@ public class MapManager : MonoBehaviour
             Destroy(map, 5);
         }
     }
-
     IEnumerator MoveCameraToNewMap(Vector3 endPos)
     {
         cam.GetComponent<CinemachineFollow>().StartZoomOut();
@@ -108,7 +113,7 @@ public class MapManager : MonoBehaviour
         foreach (Actor actor in Party.Instance.actors)
         {
             if(actor != null && actor.isAlive)
-            actor.parent.gameObject.SetActive(false);
+            actor.transform.gameObject.SetActive(false);
         }
 
         yield return new WaitForSeconds(0.5f);
@@ -119,19 +124,19 @@ public class MapManager : MonoBehaviour
         for (float t = 0f; t < duration; t += Time.deltaTime)
         {   
             if(actor != null && actor.isAlive){
-                actor.parent.position = Vector3.Lerp(actor.parent.position, endPos, t / duration);
+                actor.transform.position = Vector3.Lerp(actor.transform.position, endPos, t / duration);
             }
             yield return null;
         }
-        actor.parent.position = endPos;
+        actor.transform.position = endPos;
 
         Vector2 spawnPos = new Vector2(endPos.x,endPos.y);
         party.transform.position = spawnPos;
         foreach (Actor actor in party.actors)
         {
             if(actor != null && actor.isAlive){
-                actor.parent.position = spawnPos;
-                actor.parent.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                actor.transform.position = spawnPos;
+                actor.transform.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             }
         }
 
@@ -140,7 +145,7 @@ public class MapManager : MonoBehaviour
         foreach (Actor actor in party.actors)
         {
             if(actor != null && actor.isAlive)
-            actor.parent.gameObject.SetActive(true);
+            actor.transform.gameObject.SetActive(true);
         }
 
         yield return new WaitForSeconds(0.25f);

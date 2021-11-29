@@ -44,7 +44,7 @@ public class Slime : Mob
         {
             case MobState.Idle:
                 target = CheckTargetsInSight(radiusSight);
-                if(target != null){
+                if(target != null && target.gameObject.activeSelf){
                     state = MobState.Move;
                 }else{
                     MoveToward(initialPost);
@@ -52,14 +52,14 @@ public class Slime : Mob
             break;
             case MobState.Move:
                 // target = CheckTargetsInSight(radiusSight);
-                if(target != null){
+                if(target != null && target.gameObject.activeSelf){
                     Vector2 direction = target.position - transform.position;
                     Vector2 dir_c =  new Vector2(transform.position.x,transform.position.y) + (direction.normalized * attackSight);
                     Debug.DrawLine(transform.position, dir_c, Color.green);
 
-                    if(Vector2.Distance(parent.position, target.position) < attackSight){
+                    if(Vector2.Distance(transform.position, target.position) < attackSight){
                         state = MobState.Attack;
-                    }else if(Vector2.Distance(parent.position, target.position) > (radiusSight + 1f)){
+                    }else if(Vector2.Distance(transform.position, target.position) > (radiusSight + 1f)){
                         state = MobState.Idle;
                     }else{
                         MoveToward(target);
@@ -67,9 +67,9 @@ public class Slime : Mob
 
                     
                 }else{
-                    if(Vector2.Distance(parent.position, initialPost.position) > 0){
+                    if(Vector2.Distance(transform.position, initialPost.position) > 0){
                         MoveToward(initialPost);
-                        if(Vector2.Distance(parent.position, initialPost.position) < 0.1f){
+                        if(Vector2.Distance(transform.position, initialPost.position) < 0.1f){
                             state = MobState.Idle;
                         }
                     }
@@ -140,12 +140,18 @@ public class Slime : Mob
         isAttacking = false;
     }
 
+    public override void Die()
+    {
+        attackLine.positionCount = 0;
+        base.Die();
+    }
+
     public override void OnCollisionEnter2D(Collision2D other)
     {
-        base.OnCollisionEnter2D(other);
+        base.OnCollisionEnter2D(other); 
         if(onAttack){
             if(other != null && other.gameObject.CompareTag("Actors")){
-                Actor targetAtk = other.gameObject.GetComponentInChildren<Actor>();
+                Actor targetAtk = other.gameObject.GetComponent<Actor>();
                 if(targetAtk != null)
                 targetAtk.ApplyDamage(this);
             }

@@ -50,10 +50,10 @@ public class Coin : MonoBehaviour
     {
         Actor leader = Party.Instance.GetLeader();
         if(leader != null){
-            Vector3 moveVector  = (leader.parent.position - transform.position).normalized;
+            Vector3 moveVector  = (leader.transform.position - transform.position).normalized;
             rb.MovePosition(transform.position + moveVector * Time.unscaledDeltaTime * 10f);
 
-            if (Vector3.Distance(leader.parent.position, transform.position) < 0.5f)
+            if (Vector3.Distance(leader.transform.position, transform.position) < 0.5f)
             {
                 SoundManager.Instance.Play("Coin");
                 gm.IncreaseCoin(coinValue);
@@ -64,11 +64,13 @@ public class Coin : MonoBehaviour
     }
     
     private bool CoinInActorDistance(){
-        Actor leader = Party.Instance.GetLeader();
-        if(leader != null){
-            if (Vector3.Distance(leader.parent.position, transform.position) < 2f)
-            {
-                return true;
+        if(Party.Instance.actors.Count > 0 ){
+            Actor leader = Party.Instance.GetLeader();
+            if(leader != null){
+                if (Vector3.Distance(leader.transform.position, transform.position) < 2f)
+                {
+                    return true;
+                }
             }
         }
         return false;

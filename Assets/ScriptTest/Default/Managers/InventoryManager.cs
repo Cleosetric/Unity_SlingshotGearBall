@@ -21,6 +21,7 @@ public class InventoryManager : MonoBehaviour
 
     public delegate void OnItemChanged();
     public OnItemChanged onItemChangedCallback;
+    
     public List<Items> randItem = new List<Items>();
     public int maxSlot = 20;
 

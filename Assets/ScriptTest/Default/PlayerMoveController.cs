@@ -79,7 +79,7 @@ public class PlayerMoveController : MonoBehaviour
     {
         actor = party.GetLeader();
         if(actor != null)
-        actorRb = actor.parent.GetComponent<Rigidbody2D>();
+        actorRb = actor.transform.GetComponent<Rigidbody2D>();
     }
 
     private bool IsMouseOnArea(Vector3 MousePosition){
@@ -322,7 +322,7 @@ public class PlayerMoveController : MonoBehaviour
         foreach (Actor actor in party.actors)
         {
             if(actor != null)
-            actor.parent.GetComponent<ParticleSystem>().Stop();
+            actor.GetComponent<ParticleSystem>().Stop();
         }
     }
 
@@ -331,7 +331,7 @@ public class PlayerMoveController : MonoBehaviour
         foreach (Actor actor in party.actors)
         {
             if(actor != null)
-            actor.parent.GetComponent<ParticleSystem>().Play();
+            actor.GetComponent<ParticleSystem>().Play();
         }
     }
 }

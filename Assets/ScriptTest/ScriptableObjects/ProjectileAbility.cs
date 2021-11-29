@@ -32,8 +32,7 @@ public class ProjectileAbility : Ability
     public override void Activate(){
         base.Activate();
         // string bonusText = "+"+bonusValue.ToString() +" "+abilityBonus.ToString().ToUpper();
-
-        projectileAbility.Initialize(this, projectile, origin.transform, projectileSpeed, 
+        projectileAbility.Initialize(this, projectile, actor.transform, projectileSpeed, 
         projectileLife, projectileImpact, projectileCount, projectileDelay, target, chantType, hitType,
         direction, chantAnimPrefab);
 

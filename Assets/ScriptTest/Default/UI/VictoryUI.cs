@@ -132,7 +132,7 @@ public class VictoryUI : MonoBehaviour
         yield return new WaitForSeconds(2f);
         foreach (Actor actor in Party.Instance.actors)
         {
-            if(actor.parent != null || actor != null){
+            if(actor != null || actor != null){
                 actor.GainExp(totalExpGained);
                 SetupBattleMembers();
                 yield return new WaitForSeconds(0.5f);
@@ -143,10 +143,10 @@ public class VictoryUI : MonoBehaviour
     private void SetupBattleMembers(){
         for (int i = 0; i < battleMembers.Count; i++)
         {
-            if(i < Party.Instance.actors.Count){
-                if(Party.Instance.actors[i].parent != null)
+            if(i < PartyManager.Instance.party.Count){
+                if(Party.Instance.actors[i] != null)
                 {
-                    battleMembers[i].Initialize(Party.Instance.actors[i]);
+                    battleMembers[i].Initialize(PartyManager.Instance.party[i]);
                     battleMembers[i].gameObject.SetActive(true);
                 }else{
                     battleMembers[i].gameObject.SetActive(false);

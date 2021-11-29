@@ -1,5 +1,8 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
+[System.Serializable]
 public class Path
 {
     public Vector2[] Points { get; private set; }
@@ -35,8 +38,15 @@ public class Path
 
         int next = Mod(head, Capacity);
 
-        Points[next].x = pos.x;
-        Points[next].y = pos.y;
+        Points[next] = pos;
+        // Points[next].x = pos.x;
+        // Points[next].y = pos.y;
+    }
+
+    public void Remove(int index){
+        List<Vector2> pointsPos = new List<Vector2>(Points);
+        pointsPos.RemoveAt(index);
+        Points = pointsPos.ToArray();
     }
 
     public Vector2 Head()

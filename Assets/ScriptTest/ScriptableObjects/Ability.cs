@@ -66,7 +66,7 @@ public class Ability : ScriptableObject
         }
 
         string bonusText = "+"+abilityBonus.ToString().ToUpper()+" UP";
-        HitCounter.Instance.AddDamagePopup(actor.parent, 4, bonusText, abilityName);
+        HitCounter.Instance.AddDamagePopup(actor.transform, 4, bonusText, abilityName);
     }
 
     public virtual void Deactivate(){

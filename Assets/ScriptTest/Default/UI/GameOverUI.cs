@@ -14,11 +14,13 @@ public class GameOverUI : MonoBehaviour
 
     public void Revive(){
         if(TimeManager.Instance.timeRemaining <= 1) return;
-        SoundManager.Instance.Play("ButtonClick");
         Debug.Log("Show Ads then revive");
+
+        SoundManager.Instance.Play("ButtonClick");
         PartyManager.Instance.Revive();
-        Reset();
         buttonRevive.interactable = false;
+        SoundManager.Instance.Play("Battle");
+        Reset();
     }
 
     public void Restart(){
